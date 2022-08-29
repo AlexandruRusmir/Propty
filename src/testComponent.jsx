@@ -8,7 +8,7 @@ function TestComponent(props) {
 
     let contract = '';
     const [number, setNumber] = useState(0);
-    const [newNumber, setNewNumber] = useState();
+    const [newNumber, setNewNumber] = useState('');
 
     useEffect(() => {
         loadContract();
@@ -45,8 +45,12 @@ function TestComponent(props) {
             console.log('Invalid value');
             return;
         }
-        setContractNumber(newNumber);
-        setNumber(newNumber);
+        setContractNumber(newNumber).then( () => {
+            setNumber(newNumber);
+            setNewNumber('');
+        }).catch( err => {
+            console.log(err);
+        });
     }
 
 	return (
@@ -61,6 +65,7 @@ function TestComponent(props) {
                 name="message"
                 onChange={handleChange}
                 autoComplete="off"
+                value={newNumber}
             />
             <button onClick={numberChangeClick}>Change number</button>
 		</div>

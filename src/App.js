@@ -53,7 +53,12 @@ function App() {
 				<p>
 					You are connected to the {network} network and your balance is {balance}.
 				</p>
-				<TestComponent account={account} balance={balance} network={network}></TestComponent>
+				{
+					account ?
+					<TestComponent account={account} balance={balance} network={network}></TestComponent> :
+					<p> Please connect to Metamask </p>
+				}
+				
 			</div>
 		</>
 	);
