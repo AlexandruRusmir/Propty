@@ -11,4 +11,8 @@ contract TestContract {
   function setNumber(uint256 _number) public {
     number = _number;
   }
+
+  function getNumber() public view returns (uint256) {
+    return number;
+  }
 }

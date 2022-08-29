@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import './App.css'
 import Web3 from 'web3'
+import TestComponent from './testComponent';
 
 function App() {
 	const web3 = new Web3(Web3.givenProvider || 'https://localhost:8545');
 	
-	const [account, setAccount] = useState();
-	const [balance, setBalance] = useState();
-	const [network, setNetwork] = useState();
+	const [account, setAccount] = useState('');
+	const [balance, setBalance] = useState('');
+	const [network, setNetwork] = useState('');
 
 	useEffect(() => {
 		loadBalance().catch(err => {
@@ -23,7 +24,11 @@ function App() {
 		window.ethereum.on('chainChanged', (chainId) => {
 			window.location.reload();
 		});
-		loadAccounts();
+		loadAccounts().then(() => {
+			console.log('signed in');
+		}).catch( err => {
+			console.log(err);
+		});
 	}, [])
 
 	async function loadAccounts() {
@@ -40,14 +45,17 @@ function App() {
 	}
 
 	return (
-		<div className="App">
-			<p>
-				Your account address is: {account}
-			</p>
-			<p>
-				You are connected to the {network} network and your balance is {balance}.
-			</p>
-		</div>
+		<>
+			<div className="App">
+				<p>
+					Your account address is: {account}
+				</p>
+				<p>
+					You are connected to the {network} network and your balance is {balance}.
+				</p>
+				<TestComponent account={account} balance={balance} network={network}></TestComponent>
+			</div>
+		</>
 	);
 }
 
