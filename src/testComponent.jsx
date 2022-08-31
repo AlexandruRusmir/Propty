@@ -26,7 +26,7 @@ function TestComponent(props) {
         if(contract === '') {
             await loadContract();
         }
-        return contract.methods.getNumber().call()
+        return contract.methods.getNumber().call();
     }
 
     async function setContractNumber(number) {

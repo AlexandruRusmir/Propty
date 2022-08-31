@@ -9,7 +9,8 @@ enum HousingTenure {
     COOPERATIVE,
     CONDOMIUM,
     PUBLIC_HOUSING,
-    SQUATTING
+    SQUATTING,
+    LAND_TRUST
 }
 
 struct PropertyDetails {
@@ -19,12 +20,17 @@ struct PropertyDetails {
     uint256 squareMetres;
 }
 
+struct Debts {
+    bool ANAFCool;
+}
+
 
 contract PropertyTitle {
     address public creator;
     address public owner;
     PropertyTitleContractState public contractState;
     PropertyDetails public propertyDetails;
+    uint256 public sellingPrice;
 
     constructor(address _creator, address _owner, string memory _propertyAddress) {
         creator = _creator;
@@ -37,8 +43,9 @@ contract PropertyTitle {
         address _owner, 
         PropertyTitleContractState _contractState
     ) 
+        external
         public 
-        onlyCreator
+        onlyIfUserIsRegistrar
     {
         owner = _owner;
         contractState = _contractState;
@@ -49,6 +56,7 @@ contract PropertyTitle {
         HousingTenure _tenureType,
         uint256 _squareMetres
     )
+        external
         public
         onlyOwner
         onlyIfLegallyAllowed
@@ -58,22 +66,26 @@ contract PropertyTitle {
         propertyDetails.squareMetres = _squareMetres;
     }
 
-    function modifyPropertyAdress(string memory _address) public onlyIfLegallyAllowed onlyOwner {
+    function modifyPropertyAdress(string memory _address) external public onlyIfLegallyAllowed onlyOwner {
         propertyDetails.propertyAddress = _address;
     }
 
-    function modifyPropertyDescription(string memory _description) public onlyIfLegallyAllowed onlyOwner {
+    function modifyPropertyDescription(string memory _description) external public onlyIfLegallyAllowed onlyOwner {
         propertyDetails.propertyDescription = _description;
     }
 
-    function modifyPropertyTenureType(HousingTenure _tenureType) public onlyIfLegallyAllowed onlyOwner {
+    function modifyPropertyTenureType(HousingTenure _tenureType) external public onlyIfLegallyAllowed onlyOwner {
         propertyDetails.tenureType = _tenureType;
     }
 
-    function modifyPropertySquareMetres(uint256 _squareMetres) public onlyIfLegallyAllowed onlyOwner {
+    function modifyPropertySquareMetres(uint256 _squareMetres) external public onlyIfLegallyAllowed onlyOwner {
         propertyDetails.squareMetres = _squareMetres;
     }
 
+    function buyProperty() external payable public onlyIfPropertyForSale {
+        owner.transfer(sellingPrice);
+        onlyIfPropertyForSale = PropertyTitleContractState.OWNED;
+    }
 
     function getContractDetails() public view returns (address, address, PropertyTitleContractState) {
         return (creator, owner, contractState);
@@ -86,6 +98,17 @@ contract PropertyTitle {
         }
         return false;
         /// TODO
+    }
+
+    function checkIfUserIsRegistrar() public view returns (bool) {
+        currentUser = msg.sender;
+        // registrarsArray = CentralContract.getRegistrarsArray();
+        // for (uint256 i = 0; i < registrarsArray.length; i++) {
+        //     if (currentUser == registrarsArray[i]) {
+        //         return true;
+        //     }
+        // }
+        return false;
     }
 
     function checkStringsEquality(string memory firstString, string memory secondString) public pure returns (bool) {
@@ -113,6 +136,7 @@ contract PropertyTitle {
         return false;
     }
 
+
     modifier onlyCreator {
         require(msg.sender == creator, "Only the creator of the Contract has access to this!");
         _;
@@ -125,6 +149,18 @@ contract PropertyTitle {
 
     modifier onlyIfLegallyAllowed {
         require(validatePropertyDebts(), "The property is not legally alright.");
+        _;
+    }
+
+    modifier onlyIfUserIsRegistrar {
+        require(checkIfUserIsRegistrar(), "Only a registered registrar has access to this action.");
+        _;
+    }
+
+    modifier onlyIfPropertyForSale {
+        require(propertyDetails.tenureType == HousingTenure.OWNED || propertyDetails.tenureType == HousingTenure.CONDOMIUM,
+            "This property's tenure type does not support being sold");
+        require(contractState == PropertyTitleContractState.FOR_SALE, "This property is not for sale.");
         _;
     }
 }
