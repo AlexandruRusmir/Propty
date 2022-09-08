@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import Web3 from 'web3';
 import testContractBuild from 'contracts/TestContract.json';
-import PropertyDetailsEdit from './propertyDetailsEdit';
-import TestComponent2 from './testComponent2';
+import testEnumBuild from 'contracts/TestEnum.json';
 
-function TestComponent(props) {
+function TestComponent2(props) {
     const web3 = new Web3(Web3.givenProvider || 'https://localhost:7545');
 
     let contract = '';
-    const [number, setNumber] = useState(0);
+    const [number, setNumber] = useState();
     const [newNumber, setNewNumber] = useState('');
 
     useEffect(() => {
@@ -19,23 +18,33 @@ function TestComponent(props) {
     async function loadContract() {
         const networkId = await web3.eth.net.getId();
 
-        contract = new web3.eth.Contract(testContractBuild.abi, testContractBuild.networks[networkId].address);
+        contract = new web3.eth.Contract(testEnumBuild.abi, testEnumBuild.networks[networkId].address);
         let number = await getContractNumber();
         setNumber(number);
+
+        let contractAddress = testEnumBuild.networks[networkId].address;
+        const enumValue = await web3.eth.getStorageAt(contractAddress, 1);
+        console.log(web3.utils.hexToString(enumValue));
+
+
+        const testVal = await web3.eth.getStorageAt(contractAddress, 0);
+        console.log('Test value: ' + web3.utils.hexToString(testVal));
     }
 
     async function getContractNumber() {
-        if(contract === '') {
+        if (contract === '') {
             await loadContract();
         }
-        return contract.methods.getNumber().call();
+        let enumValue = await contract.methods.getProp().call();
+        console.log(enumValue);
+        setNumber(enumValue);
     }
 
     async function setContractNumber(number) {
-        if(contract === '') {
+        if (contract === '') {
             await loadContract();
         }
-        return contract.methods.setNumber(number).send({ from: props.account });
+        return contract.methods.setProp(number).send({ from: props.account });
     }
 
     const handleChange = (event) => {
@@ -47,19 +56,19 @@ function TestComponent(props) {
             console.log('Invalid value');
             return;
         }
-        setContractNumber(newNumber).then( () => {
+        setContractNumber(newNumber).then(() => {
             setNumber(newNumber);
             setNewNumber('');
-        }).catch( err => {
+        }).catch(err => {
             console.log(err);
         });
     }
 
-	return (
-		<div className="App">
-			<p>
+    return (
+        <div className="App">
+            <p>
                 The number: {number}
-			</p>
+            </p>
             <span>Change the number:{"\u00a0"}</span>
             <input
                 type="number"
@@ -70,8 +79,8 @@ function TestComponent(props) {
                 value={newNumber}
             />
             <button onClick={numberChangeClick}>Change number</button>
-		</div>
-	);
+        </div>
+    );
 }
 
-export default TestComponent;
+export default TestComponent2;

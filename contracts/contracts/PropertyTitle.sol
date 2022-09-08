@@ -20,19 +20,24 @@ struct PropertyDetails {
     uint256 squareMetres;
 }
 
-struct Debts {
-    bool ANAFCool;
+struct RequiredPropertySellingDocuments {
+    bool proofOfIdentity;
+    bool propertyTitleDeeds;
+    bool energyPerformanceCertificate;
+    bool extensionsAndAlterationsDocumentation;
+    bool utilityBillsPaid;
 }
 
 
 contract PropertyTitle {
     address public creator;
-    address public owner;
+    address payable public owner;
     PropertyTitleContractState public contractState;
     PropertyDetails public propertyDetails;
     uint256 public sellingPrice;
+    RequiredPropertySellingDocuments public requiredDocuments;
 
-    constructor(address _creator, address _owner, string memory _propertyAddress) {
+    constructor(address _creator, address payable _owner, string memory _propertyAddress) {
         creator = _creator;
         owner = _owner;
         contractState = PropertyTitleContractState.INITIALIZED;
@@ -40,11 +45,10 @@ contract PropertyTitle {
     }
 
     function modifyContractState(
-        address _owner, 
+        address payable _owner, 
         PropertyTitleContractState _contractState
-    ) 
-        external
-        public 
+    )
+        external 
         onlyIfUserIsRegistrar
     {
         owner = _owner;
@@ -57,7 +61,6 @@ contract PropertyTitle {
         uint256 _squareMetres
     )
         external
-        public
         onlyOwner
         onlyIfLegallyAllowed
     {
@@ -66,25 +69,32 @@ contract PropertyTitle {
         propertyDetails.squareMetres = _squareMetres;
     }
 
-    function modifyPropertyAdress(string memory _address) external public onlyIfLegallyAllowed onlyOwner {
+    function modifyPropertyAdress(string memory _address) external onlyIfLegallyAllowed onlyOwner {
         propertyDetails.propertyAddress = _address;
     }
 
-    function modifyPropertyDescription(string memory _description) external public onlyIfLegallyAllowed onlyOwner {
+    function modifyPropertyDescription(string memory _description) external onlyIfLegallyAllowed onlyOwner {
         propertyDetails.propertyDescription = _description;
     }
 
-    function modifyPropertyTenureType(HousingTenure _tenureType) external public onlyIfLegallyAllowed onlyOwner {
+    function modifyPropertyTenureType(HousingTenure _tenureType) external onlyIfLegallyAllowed onlyOwner {
         propertyDetails.tenureType = _tenureType;
     }
 
-    function modifyPropertySquareMetres(uint256 _squareMetres) external public onlyIfLegallyAllowed onlyOwner {
+    function modifyPropertySquareMetres(uint256 _squareMetres) external onlyIfLegallyAllowed onlyOwner {
         propertyDetails.squareMetres = _squareMetres;
     }
 
-    function buyProperty() external payable public onlyIfPropertyForSale {
-        owner.transfer(sellingPrice);
-        onlyIfPropertyForSale = PropertyTitleContractState.OWNED;
+    function addPropertyAsForSale(uint256 _sellingPrice) external onlyIfLegallyAllowed onlyOwner {
+        sellingPrice = _sellingPrice;
+        contractState = PropertyTitleContractState.FOR_SALE;
+    }
+
+    function buyProperty() external payable onlyIfPropertyForSale {
+        (bool sent, bytes memory data) = owner.call{value: sellingPrice}("");
+        require(sent, "Failed to send Ether.");
+        contractState = PropertyTitleContractState.OWNED;
+        owner = payable(msg.sender);
     }
 
     function getContractDetails() public view returns (address, address, PropertyTitleContractState) {
@@ -101,14 +111,14 @@ contract PropertyTitle {
     }
 
     function checkIfUserIsRegistrar() public view returns (bool) {
-        currentUser = msg.sender;
+        //address currentUser = msg.sender;
         // registrarsArray = CentralContract.getRegistrarsArray();
         // for (uint256 i = 0; i < registrarsArray.length; i++) {
         //     if (currentUser == registrarsArray[i]) {
         //         return true;
         //     }
         // }
-        return false;
+        return true;
     }
 
     function checkStringsEquality(string memory firstString, string memory secondString) public pure returns (bool) {
@@ -158,7 +168,7 @@ contract PropertyTitle {
     }
 
     modifier onlyIfPropertyForSale {
-        require(propertyDetails.tenureType == HousingTenure.OWNED || propertyDetails.tenureType == HousingTenure.CONDOMIUM,
+        require(propertyDetails.tenureType == HousingTenure.OWNER_OCCUPANCY || propertyDetails.tenureType == HousingTenure.CONDOMIUM,
             "This property's tenure type does not support being sold");
         require(contractState == PropertyTitleContractState.FOR_SALE, "This property is not for sale.");
         _;

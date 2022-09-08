@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import './App.css'
 import Web3 from 'web3'
 import TestComponent from './testComponent';
+import PropertyDetailsEdit from './propertyDetailsEdit';
+import TestComponent2 from './testComponent2';
 
 function App() {
-	const web3 = new Web3(Web3.givenProvider || 'https://localhost:8545');
+	const web3 = new Web3(Web3.givenProvider || 'https://localhost:7545');
 	
 	const [account, setAccount] = useState('');
 	const [balance, setBalance] = useState('');
@@ -37,7 +39,7 @@ function App() {
 	}
 
 	async function loadBalance() {
-		const network = await web3.eth.net.getNetworkType()
+		const network = await web3.eth.net.getNetworkType();
 		const balance = await web3.eth.getBalance(account);
 
 		setBalance((balance/1e18).toFixed(4));
@@ -55,7 +57,10 @@ function App() {
 				</p>
 				{
 					account ?
-					<TestComponent account={account} balance={balance} network={network}></TestComponent> :
+					<>
+						<PropertyDetailsEdit account={account} balance={balance} network={network}/>
+						<TestComponent2 account={account} balance={balance} network={network}/>
+					</>:
 					<p> Please connect to Metamask </p>
 				}
 				
