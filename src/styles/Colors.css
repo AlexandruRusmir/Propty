@@ -40,3 +40,12 @@
 .bg-orange-900 {
     background-color: rgb(22, 8, 1);
 }
+
+.light-text {
+    color: #eae9e7 !important;
+    text-decoration: none;
+}
+
+.light-text:hover {
+    color: #F9F6EE !important;
+}

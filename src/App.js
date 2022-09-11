@@ -2,8 +2,14 @@ import React, { useEffect, useState } from 'react';
 import './App.css'
 import Web3 from 'web3'
 import TestComponent from './testComponent';
-import PropertyDetailsEdit from './propertyDetailsEdit';
+import PropertyDetailsEdit from './Components/PropertyDetailsEdit';
 import TestComponent2 from './testComponent2';
+import Container from 'react-bootstrap/Container';
+import NavBar from './Components/NavBar';
+import { Route, Routes } from 'react-router-dom';
+import Home from './Components/Home';
+import AllProperties from './Components/AllProperties';
+import MyProperties from './Components/MyProperties';
 
 function App() {
 	const web3 = new Web3(Web3.givenProvider || 'https://localhost:7545');
@@ -48,21 +54,30 @@ function App() {
 
 	return (
 		<>
+			<NavBar account={account} balance={balance} network={network}/>
+
 			<div className="App">
-				<p>
-					Your account address is: {account}
-				</p>
-				<p>
-					You are connected to the {network} network and your balance is {balance}.
-				</p>
-				{
+				<Routes>
+					<Route path="/" element={<Home account={account} balance={balance} network={network}/>} />
+					<Route path="/allproperties" element={
+						<Container>
+							<AllProperties account={account} balance={balance} network={network}/>
+						</Container>
+					} />
+					<Route path="/myproperties" element={
+						<Container>
+							<MyProperties account={account} balance={balance} network={network}/>
+						</Container>
+					} />
+				</Routes>
+				{/* {
 					account ?
 					<>
 						<PropertyDetailsEdit account={account} balance={balance} network={network}/>
 						<TestComponent2 account={account} balance={balance} network={network}/>
 					</>:
 					<p> Please connect to Metamask </p>
-				}
+				} */}
 				
 			</div>
 		</>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import Web3 from 'web3';
 import testContractBuild from 'contracts/TestContract.json';
-import PropertyDetailsEdit from './propertyDetailsEdit';
+import PropertyDetailsEdit from './Components/PropertyDetailsEdit';
 import TestComponent2 from './testComponent2';
 
 function TestComponent(props) {

@@ -1,0 +1,53 @@
+.wrapper {
+    margin: 0;
+}
+
+.bgimg-1 {
+    background-image: url("../images/modern_building.jpg");
+    min-height: 100vh;
+    position: relative;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.bgimg-2 {
+    background-image: url("../images/web3_wallet.jpg");
+    min-height: 550px;
+    position: relative;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.bgimg-3 {
+    background-image: url("../images/person_on_laptop.jpg");
+    min-height: 800px;
+    position: relative;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.bgimg-4 {
+    background-image: url("../images/web3_wallet_2.jpg");
+    min-height: 800px;
+    position: relative;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.caption {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    color: #ffffff;
+    text-shadow: 3px 1px 4px #00262f;
+}
