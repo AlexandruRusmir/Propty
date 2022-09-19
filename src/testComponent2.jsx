@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import Web3 from 'web3';
-import testContractBuild from 'contracts/TestContract.json';
 import testEnumBuild from 'contracts/TestEnum.json';
 
 function TestComponent2(props) {
-    const web3 = new Web3(Web3.givenProvider || 'https://localhost:7545');
+    const web3 = new Web3(Web3.givenProvider || 'https://localhost:8545');
 
     let contract = '';
     const [number, setNumber] = useState();
@@ -23,11 +22,11 @@ function TestComponent2(props) {
         setNumber(number);
 
         let contractAddress = testEnumBuild.networks[networkId].address;
-        const enumValue = await web3.eth.getStorageAt(contractAddress, 1);
-        console.log(web3.utils.hexToString(enumValue));
+        const enumValue = await web3.eth.getStorageAt(contractAddress, 0);
+        console.log('enum value: ' + web3.utils.hexToNumberString(enumValue));
 
 
-        const testVal = await web3.eth.getStorageAt(contractAddress, 0);
+        const testVal = await web3.eth.getStorageAt(contractAddress, 1);
         console.log('Test value: ' + web3.utils.hexToString(testVal));
     }
 

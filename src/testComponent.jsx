@@ -6,7 +6,7 @@ import PropertyDetailsEdit from './Components/PropertyDetailsEdit';
 import TestComponent2 from './testComponent2';
 
 function TestComponent(props) {
-    const web3 = new Web3(Web3.givenProvider || 'https://localhost:7545');
+    const web3 = new Web3(Web3.givenProvider || 'https://localhost:8545');
 
     let contract = '';
     const [number, setNumber] = useState(0);

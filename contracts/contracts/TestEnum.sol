@@ -8,15 +8,15 @@ struct PropertyDetails {
     uint256 squareMetres;
 }
 contract TestEnum {
-  string oakd;
   PropertyTitleContractState prop;
+  string oakd;
 
   constructor() {
-    prop = PropertyTitleContractState.INITIALIZED;
+    prop = PropertyTitleContractState.FOR_SALE;
+    oakd = 'uhfrdihiutw';
   }
 
   function setProp(PropertyTitleContractState _prop) public {
-    oakd = 'jfgajgmnjeg';
     prop = _prop;
   }
 

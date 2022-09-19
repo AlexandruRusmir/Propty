@@ -15,16 +15,13 @@ function Home() {
             </div>
 
             <div className="bg-dark text-light text-center">
-                <h2 className="text-light py-3">Create your home workout!</h2>
+                <h2 className="text-light py-3">The future of real estate is now with Propty!</h2>
                 <div className="mx-5 pb-3">
                     <p>
-                        Once you start working out from home, you may never want to return to the gym again. Think about it: there’s no need to get in a cold car, change into gym clothes, wait for machines, or breathe in all those curious aromas.
+                    Most real estate transactions are still conducted through wire transfers and require costly verification processes that can take days to complete. Blockchain-based transactions enable a streamlined process which delivers quickly and reduces costs.
                     </p>
                     <p>
-                        You spend a lot of time preparing for a workout: you have to pack your gym bag, get in the car, drive to the gym, park, change, and then, finally, hit the floor. Exercising at home allows you to bypass all those inconveniences and focus your time and energy on your workout routine.
-                    </p>
-                    <p>
-                        Exercising around others can be exhilarating, but it can also be intimidating and discouraging. When working out at home, you can go at your own pace, and you don’t have to worry about the judgement of others.
+                        Agents, buyers and sellers from all over the world love the simplicity and security of Propty.
                     </p>
                 </div>
             </div>
@@ -32,18 +29,19 @@ function Home() {
             <div className="bgimg-2">
                 <div className="caption">
                     <div>
-                        <h1 className="text-light">Powered by <span className="text-warning">Web3</span> Techonology</h1>
+                        <h1 className="text-light">Powered by <span className="text-info">Web3</span> Techonology</h1>
                     </div>
                 </div>
             </div>
 
             <div className="bg-dark text-light text-center">
-                <h2 className="text-light py-3">No excuses!</h2>
+                <h2 className="text-light py-3">Blockchain technology is here!</h2>
                 <div className="mx-5 pb-3">
                     <p>
-                        Exercising from home allows you to fit in a workout whenever you’re feeling particularly inspired or energized. Many websites offer pre-recorded classNamees, which means no more fretting over the className filling up. You can also fit in fitness throughout your day, by getting in a couple of quick sets while you wait for your coffee to brew, oatmeal to cook, or Zoom meeting to start.        </p>
+                        Blockchain technology offers a form of shared record-keeping which is designed to be difficult to tamper with. Blockchain technology operates through decentralized peer-to-peer platforms, building resilience against the spread of corrupted information and boosting resistance to fraud.
+                    </p>
                     <p>
-                        A cold night or a particularly difficult day at work may be enough to keep you from going to the gym. But when it comes to meeting your personal fitness goals, consistency is key. A home exercise routine provides the convenience necessary to never miss a workout.
+                        With data distributed across a peer-to-peer network, brokers are able to have more control over their data, as it would be more difficult for it to be interfered with by any third parties. Market participants access more reliable data at a lower cost.
                     </p>
                 </div>
             </div>
@@ -51,7 +49,7 @@ function Home() {
             <div className="bgimg-3">
                 <div className="caption">
                     <div>
-                        <h1 className="text-light">Challenge Yourself!</h1>
+                        <h1 className="text-light">It has never been so <span className="text-info">safe</span> and <span className="text-info">easy</span> to handle your properties.</h1>
                     </div>
                 </div>
             </div>

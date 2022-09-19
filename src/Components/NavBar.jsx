@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import '../App.css';
-import '../styles/Colors.css'
+import '../styles/Colors.css';
+import '../styles/style.css';
 import Web3 from 'web3';
 import propertyTitleBuild from 'contracts/PropertyTitle.json';
 import { Navbar, NavDropdown, Nav, Container, Popover, OverlayTrigger, Toast, NavLink } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 function NavBar(props) {
-    const web3 = new Web3(Web3.givenProvider || 'https://localhost:7545');
+    const web3 = new Web3(Web3.givenProvider || 'https://localhost:8545');
 
     return (
         <Navbar bg="dark"  variant="dark" expand="lg" sticky="top">
@@ -24,14 +25,16 @@ function NavBar(props) {
                         key='bottom'
                         placement='bottom'
                         overlay={
-                            <Popover id={'nav-popover'}>
+                            <Popover id={'nav-popover'} className='popover-custom'>
                             <Popover.Header as="h3">Account Information</Popover.Header>
                                 <Popover.Body>
                                     {
                                         props.account ?
                                             <div>
-                                                <strong>{props.account}</strong><br/>
-                                                <strong>Current balance: <i>{props.balance}</i> ETH </strong><br/>
+                                                <strong>
+                                                    Address: {props.account}<br/>
+                                                    Current balance: <i>{props.balance}</i> ETH<br/>
+                                                </strong>
                                             </div> 
                                             :
                                             <strong>You are not connected to any account!</strong>

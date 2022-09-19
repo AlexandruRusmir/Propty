@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import './App.css'
+import './App.css';
+import './styles/style.css';
 import Web3 from 'web3'
 import TestComponent from './testComponent';
 import PropertyDetailsEdit from './Components/PropertyDetailsEdit';
@@ -12,7 +13,7 @@ import AllProperties from './Components/AllProperties';
 import MyProperties from './Components/MyProperties';
 
 function App() {
-	const web3 = new Web3(Web3.givenProvider || 'https://localhost:7545');
+	const web3 = new Web3(Web3.givenProvider || 'https://localhost:8545');
 	
 	const [account, setAccount] = useState('');
 	const [balance, setBalance] = useState('');
@@ -46,6 +47,9 @@ function App() {
 
 	async function loadBalance() {
 		const network = await web3.eth.net.getNetworkType();
+		if (!account) {
+			await loadAccounts();
+		}
 		const balance = await web3.eth.getBalance(account);
 
 		setBalance((balance/1e18).toFixed(4));
@@ -56,7 +60,7 @@ function App() {
 		<>
 			<NavBar account={account} balance={balance} network={network}/>
 
-			<div className="App">
+			<>
 				<Routes>
 					<Route path="/" element={<Home account={account} balance={balance} network={network}/>} />
 					<Route path="/allproperties" element={
@@ -79,7 +83,7 @@ function App() {
 					<p> Please connect to Metamask </p>
 				} */}
 				
-			</div>
+			</>
 		</>
 	);
 }

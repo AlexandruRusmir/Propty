@@ -14,9 +14,13 @@ enum HousingTenure {
 }
 
 struct PropertyDetails {
-    string propertyAddress;
-    string propertyDescription;
     HousingTenure tenureType;
+    string country;
+    string city;
+    string street;
+    string streetNumber;
+    uint256 streetApartment;
+    string propertyDescription;
     uint256 squareMetres;
 }
 
@@ -30,18 +34,35 @@ struct RequiredPropertySellingDocuments {
 
 
 contract PropertyTitle {
+    PropertyTitleContractState public contractState;
+    uint256 public sellingPriceIntegralPart;
+    uint256 public sellingPriceFractionalPart;
+    uint256 public sellingPriceFractionalPartLength;
     address public creator;
     address payable public owner;
-    PropertyTitleContractState public contractState;
     PropertyDetails public propertyDetails;
-    uint256 public sellingPrice;
     RequiredPropertySellingDocuments public requiredDocuments;
 
-    constructor(address _creator, address payable _owner, string memory _propertyAddress) {
+    constructor(
+        address _creator,
+        address payable _owner,
+        string memory _country,
+        string memory _city,
+        string memory _street,
+        string memory _streeNumber
+    )
+    {
         creator = _creator;
         owner = _owner;
-        contractState = PropertyTitleContractState.INITIALIZED;
-        propertyDetails.propertyAddress = _propertyAddress;
+        contractState = PropertyTitleContractState.FOR_SALE;
+        propertyDetails.country = _country;
+        propertyDetails.city = _city;
+        propertyDetails.street = _street;
+        propertyDetails.streetNumber = _streeNumber;
+
+        sellingPriceIntegralPart = 7;
+        sellingPriceFractionalPart = 534;
+        sellingPriceFractionalPartLength = 3;
     }
 
     function modifyContractState(
@@ -69,8 +90,9 @@ contract PropertyTitle {
         propertyDetails.squareMetres = _squareMetres;
     }
 
-    function modifyPropertyAdress(string memory _address) external onlyIfLegallyAllowed onlyOwner {
-        propertyDetails.propertyAddress = _address;
+    function modifyPropertyAdress(string memory _street, string memory _streeNumber) external onlyIfLegallyAllowed onlyOwner {
+        propertyDetails.street = _street;
+        propertyDetails.streetNumber = _streeNumber;
     }
 
     function modifyPropertyDescription(string memory _description) external onlyIfLegallyAllowed onlyOwner {
@@ -85,13 +107,24 @@ contract PropertyTitle {
         propertyDetails.squareMetres = _squareMetres;
     }
 
-    function addPropertyAsForSale(uint256 _sellingPrice) external onlyIfLegallyAllowed onlyOwner {
-        sellingPrice = _sellingPrice;
+    function addPropertyAsForSale(
+        uint256 _sellingPriceIntegralPart, 
+        uint256 _sellingPriceFractionalPart, 
+        uint256 _sellingPriceFractionalPartLength
+    ) 
+        external 
+        onlyIfLegallyAllowed 
+        onlyOwner 
+    {
+        sellingPriceIntegralPart = _sellingPriceIntegralPart;
+        sellingPriceFractionalPart = _sellingPriceFractionalPart;
+        sellingPriceFractionalPartLength = _sellingPriceFractionalPartLength;
         contractState = PropertyTitleContractState.FOR_SALE;
     }
 
     function buyProperty() external payable onlyIfPropertyForSale {
-        (bool sent, bytes memory data) = owner.call{value: sellingPrice}("");
+        uint256 sellingPriceWeiValue = (sellingPriceIntegralPart * 10**18) + (sellingPriceFractionalPart * 10**18 / 10**sellingPriceFractionalPartLength);
+        (bool sent, bytes memory data) = owner.call{value: sellingPriceWeiValue }("");
         require(sent, "Failed to send Ether.");
         contractState = PropertyTitleContractState.OWNED;
         owner = payable(msg.sender);
@@ -103,7 +136,7 @@ contract PropertyTitle {
 
     function validatePropertyDebts() public view returns (bool) {
         /// TODO
-        if (!checkStringsEquality(propertyDetails.propertyAddress, '')) {
+        if (!checkStringsEquality(propertyDetails.street, '')) {
             return true;
         }
         return false;
