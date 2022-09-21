@@ -1,11 +1,11 @@
 import React from 'react';
 import PropertyCard from './PropertyCard';
 
-function AllProperties() {
+function AllProperties(props) {
     return (
         <>
-            All
-            <PropertyCard />
+            <h1 className='text-center my-5'>All Registered Properties</h1>
+            <PropertyCard account={props.account} balance={props.balance} network={props.network}/>
         </>
     );
 }

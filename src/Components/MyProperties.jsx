@@ -1,6 +1,7 @@
 import React from 'react';
 import PropertyDetailsEdit from './PropertyDetailsEdit';
 import TestComponent2 from '../testComponent2';
+import PropertyCard from './PropertyCard';
 
 function MyProperties(props) {
     return (

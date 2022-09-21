@@ -19,8 +19,7 @@ struct PropertyDetails {
     string city;
     string street;
     string streetNumber;
-    uint256 streetApartment;
-    string propertyDescription;
+    uint256 apartmentNumber;
     uint256 squareMetres;
 }
 
@@ -77,7 +76,6 @@ contract PropertyTitle {
     }
 
     function insertPropertyDetails(
-        string calldata _propertyDescription,
         HousingTenure _tenureType,
         uint256 _squareMetres
     )
@@ -85,7 +83,6 @@ contract PropertyTitle {
         onlyOwner
         onlyIfLegallyAllowed
     {
-        propertyDetails.propertyDescription = _propertyDescription;
         propertyDetails.tenureType = _tenureType;
         propertyDetails.squareMetres = _squareMetres;
     }
@@ -93,10 +90,6 @@ contract PropertyTitle {
     function modifyPropertyAdress(string memory _street, string memory _streeNumber) external onlyIfLegallyAllowed onlyOwner {
         propertyDetails.street = _street;
         propertyDetails.streetNumber = _streeNumber;
-    }
-
-    function modifyPropertyDescription(string memory _description) external onlyIfLegallyAllowed onlyOwner {
-        propertyDetails.propertyDescription = _description;
     }
 
     function modifyPropertyTenureType(HousingTenure _tenureType) external onlyIfLegallyAllowed onlyOwner {
