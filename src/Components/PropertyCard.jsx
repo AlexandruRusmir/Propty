@@ -1,10 +1,10 @@
 import React from 'react';
 import '../styles/PropertyCardStyle.css'
 import '../styles/Colors.css'
-import { Col, Row, Card } from 'react-bootstrap';
+import { Col, Row, Card, Accordion, Button } from 'react-bootstrap';
 import Web3 from 'web3';
 import { useState, useEffect } from 'react';
-import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContractStateMessage, getCorrespondingHousingTenure } from '../Helpers/helpers';
+import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContractStateMessage, getCorrespondingHousingTenure, getMessageForRequiredDocuments } from '../Helpers/helpers';
 import propertyTitleBuild from 'contracts/PropertyTitle.json';
 
 function PropertyCard(props) {
@@ -85,44 +85,60 @@ function PropertyCard(props) {
             <Card
                 key={'propertyTitle' + country + city + street  + streetNumber + apartmentNumber}
                 id={'propertyTitle' + country + city + street  + streetNumber + apartmentNumber}
-                text='white'
-                style={{ width: 'auto' }}
-                className="mb-2 mx-5 bg-orange-700"
+                text='black'
+                style={{ width: 'auto', margin: '0 200px' }}
+                className="mb-2 mx-5"
+                variant='light'
             >
-                <Card.Header className='text-center'>Property Owner: {contractOwner}</Card.Header>
+                <Card.Header className='text-center'>
+                    {
+                        props.account == contractOwner ?
+                            <>
+                                <p>This contract belongs to you</p>
+                                <Button variant='success'>Modify Property Title Contract</Button>
+                            </>:
+                            <> 
+                                Property Owner: {contractOwner} 
+                            </>
+                    }
+                </Card.Header>
                 <Card.Body>
                     <Row>
-                        <Col lg={6} md={12}>
-                        <Card.Title className='text-center my-3'>
-                            {'Property Location: ' + country + ', ' + city}
+                        <Card.Title className='text-center mb-4'>
+                            Contract state: {getCorrespondingContractStateMessage(contractState)}
                         </Card.Title>
-                        </Col>
-                        <Col lg={6} md={12}>
-                        <Card.Title className='text-center my-3'>
-                            {'Property address: ' +street + ', ' + streetNumber  + ', ' + apartmentNumber}
-                        </Card.Title>
-                        </Col>
                     </Row>
                     <Card.Text>
                         <Row>
                             <Col lg={6} md={12} className='text-center'>
                                 <p>Contract State: {getCorrespondingContractStateMessage(contractState)}</p>
-                                <p>Selling price: {sellingPrice}</p>
+                                <p>Selling price: {sellingPrice} ETH</p>
                                 <p>Housing tenure: {getCorrespondingHousingTenure(housingTenure)}</p>
                                 <p>Country: {country}</p>
                                 <p>City: {city}</p>
+                            </Col>
+                            <Col lg={6} md={12} className='text-center'>
                                 <p>Street: {street}</p>
                                 <p>Street number: {streetNumber}</p>
                                 <p>Apartment number: {apartmentNumber}</p>
-                            </Col>
-                            <Col lg={6} md={12} className='text-center'>
                                 <p>Square Metres: {squareMetres}</p>
-                                <p>{proofOfIdentity}</p>
-                                <p>{propertyTitleDeeds}</p>
-                                <p>{energyPerformanceCertificate}</p>
-                                <p>{extensionsAndAlterationsDocumentation}</p>
-                                <p>{utilityBillsPaid}</p>
                             </Col>
+                        </Row>
+                        <Row>
+                            <Accordion>
+                                <Accordion.Item eventKey="0">
+                                    <Accordion.Header>Required Property Documents</Accordion.Header>
+                                    <Accordion.Body>
+                                        <div>
+                                            <p>Proof of Identity: {getMessageForRequiredDocuments(proofOfIdentity)}</p>
+                                            <p>Property Title Deeds: {getMessageForRequiredDocuments(propertyTitleDeeds)}</p>
+                                            <p>Energy Performance Certificate: {getMessageForRequiredDocuments(energyPerformanceCertificate)}</p>
+                                            <p>Extensions and Alterations Documentation: {getMessageForRequiredDocuments(extensionsAndAlterationsDocumentation)}</p>
+                                            <p>Utility Bills Paid: {getMessageForRequiredDocuments(utilityBillsPaid)}</p>
+                                        </div>
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                            </Accordion>
                         </Row>
                     </Card.Text>
                 </Card.Body>

@@ -24,7 +24,7 @@ export function getSellingPrice (sellingPriceIntegralPart, sellingPriceFractiona
 }
 
 export function getCorrespondingContractStateMessage (enumNumber) {
-    switch(enumNumber) {
+    switch (enumNumber) {
         case 0:
             return 'Initialized';
         case 1:
@@ -39,7 +39,7 @@ export function getCorrespondingContractStateMessage (enumNumber) {
 }
 
 export function getCorrespondingHousingTenure (enumNumber) {
-    switch(enumNumber) {
+    switch (enumNumber) {
         case 0:
             return 'Owner Occupancy';
         case 1:
@@ -57,4 +57,15 @@ export function getCorrespondingHousingTenure (enumNumber) {
     }
 
     return 'Not a valid housing tenure enum number';
+}
+
+export function getMessageForRequiredDocuments (boolValue) {
+    switch (boolValue) {
+        case 0:
+            return 'Not provided';
+        case 1:
+            return 'Provided';
+    }
+
+    return 'Invalid bool value'; 
 }

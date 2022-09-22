@@ -59,7 +59,6 @@ function App() {
 	return (
 		<>
 			<NavBar account={account} balance={balance} network={network}/>
-
 			<>
 				<Routes>
 					<Route path="/" element={<Home account={account} balance={balance} network={network}/>} />

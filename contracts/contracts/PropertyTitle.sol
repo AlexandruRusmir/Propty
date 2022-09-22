@@ -23,7 +23,7 @@ struct PropertyDetails {
     uint256 squareMetres;
 }
 
-struct RequiredPropertySellingDocuments {
+struct RequiredPropertyDocuments {
     bool proofOfIdentity;
     bool propertyTitleDeeds;
     bool energyPerformanceCertificate;
@@ -40,7 +40,7 @@ contract PropertyTitle {
     address public creator;
     address payable public owner;
     PropertyDetails public propertyDetails;
-    RequiredPropertySellingDocuments public requiredDocuments;
+    RequiredPropertyDocuments public requiredDocuments;
 
     constructor(
         address _creator,
@@ -48,7 +48,8 @@ contract PropertyTitle {
         string memory _country,
         string memory _city,
         string memory _street,
-        string memory _streeNumber
+        string memory _streeNumber,
+        uint256 _apartmentNumber
     )
     {
         creator = _creator;
@@ -58,6 +59,7 @@ contract PropertyTitle {
         propertyDetails.city = _city;
         propertyDetails.street = _street;
         propertyDetails.streetNumber = _streeNumber;
+        propertyDetails.apartmentNumber = _apartmentNumber;
 
         sellingPriceIntegralPart = 7;
         sellingPriceFractionalPart = 534;

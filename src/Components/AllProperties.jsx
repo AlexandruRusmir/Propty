@@ -1,5 +1,6 @@
 import React from 'react';
 import PropertyCard from './PropertyCard';
+import '../styles/style.css';
 
 function AllProperties(props) {
     return (

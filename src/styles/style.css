@@ -5,3 +5,9 @@
 .popover-custom {
     max-width: 450px;
 }
+
+body {
+    background: linear-gradient(135deg, #FFFFFF 0%, #FFFAF7 10%, #FFF3EA 20%, #F5F3F0 33%, #DDF3FF 66%, #D0F1C9 100%) center center fixed;
+    font-family: Roboto-RC, “Helvetica Neue”, Helvetica, Arial, sans-serif;
+    color: #234361;
+}
