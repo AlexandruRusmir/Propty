@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../App.css';
-import '../styles/Colors.css';
+import '../styles/colors.css';
 import '../styles/style.css';
 import Web3 from 'web3';
 import propertyTitleBuild from 'contracts/PropertyTitle.json';

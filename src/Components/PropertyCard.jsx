@@ -1,7 +1,8 @@
 import React from 'react';
-import '../styles/PropertyCardStyle.css'
-import '../styles/Colors.css'
+import '../styles/propertyCardStyle.css'
+import '../styles/colors.css'
 import { Col, Row, Card, Accordion, Button } from 'react-bootstrap';
+import PropertyDetailsModal from './PropertyDetailsModal';
 import Web3 from 'web3';
 import { useState, useEffect } from 'react';
 import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContractStateMessage, getCorrespondingHousingTenure, getMessageForRequiredDocuments } from '../Helpers/helpers';
@@ -27,6 +28,8 @@ function PropertyCard(props) {
     const [energyPerformanceCertificate, setEnergyPerformanceCertificate] = useState('');
     const [extensionsAndAlterationsDocumentation, setExtensionsAndAlterationsDocumentation] = useState('');
     const [utilityBillsPaid, setUtilityBillsPaid] = useState('');
+
+    const [popupOpen, setPopupOpen] = useState(false);
 
     useEffect(() => {
          loadContract();
@@ -95,7 +98,15 @@ function PropertyCard(props) {
                         props.account == contractOwner ?
                             <>
                                 <p>This contract belongs to you</p>
-                                <Button variant='success'>Modify Property Title Contract</Button>
+                                <Button variant='success' onClick={() => setPopupOpen(true)}>
+                                    Modify Property Title Contract
+                                    
+                                </Button>
+
+                                <PropertyDetailsModal
+                                    show={popupOpen}
+                                    onHide={() => setPopupOpen(false)}
+                                />
                             </>:
                             <> 
                                 Property Owner: {contractOwner} 
@@ -111,7 +122,6 @@ function PropertyCard(props) {
                     <Card.Text>
                         <Row>
                             <Col lg={6} md={12} className='text-center'>
-                                <p>Contract State: {getCorrespondingContractStateMessage(contractState)}</p>
                                 <p>Selling price: {sellingPrice} ETH</p>
                                 <p>Housing tenure: {getCorrespondingHousingTenure(housingTenure)}</p>
                                 <p>Country: {country}</p>
