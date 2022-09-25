@@ -49,7 +49,8 @@ contract PropertyTitle {
         string memory _city,
         string memory _street,
         string memory _streeNumber,
-        uint256 _apartmentNumber
+        uint256 _apartmentNumber,
+        uint256 _squareMeters
     )
     {
         creator = _creator;
@@ -60,6 +61,7 @@ contract PropertyTitle {
         propertyDetails.street = _street;
         propertyDetails.streetNumber = _streeNumber;
         propertyDetails.apartmentNumber = _apartmentNumber;
+        propertyDetails.squareMetres = _squareMeters;
 
         sellingPriceIntegralPart = 7;
         sellingPriceFractionalPart = 534;

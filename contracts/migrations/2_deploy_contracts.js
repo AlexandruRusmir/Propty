@@ -6,7 +6,9 @@ module.exports = function(deployer) {
         "Romania",
         "Timisoara",
         "Strada Excelentei",
-        "13A"
+        "13A",
+        7,
+        100
     );
     // Additional contracts can be deployed here
 };

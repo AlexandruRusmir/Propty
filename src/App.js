@@ -19,36 +19,43 @@ function App() {
 	const [balance, setBalance] = useState('');
 	const [network, setNetwork] = useState('');
 
+	const [animationEnd, setAnimationEnd] = useState(false);
+
+	useEffect( () => {
+		window.ethereum.on('accountsChanged', function (accounts) {
+			setAccount(accounts[0].toLowerCase());
+		});
+		window.ethereum.on('chainChanged', (chainId) => {
+			window.location.reload();
+		});
+		loadAccount().then((receivedAccount) => {
+			setAccount(receivedAccount);
+			console.log('signed in');
+		}).catch( err => {
+			console.log(err);
+		});
+
+		setTimeout(() => {
+			setAnimationEnd(true);
+		}, 5000)
+	}, [])
+
 	useEffect(() => {
 		loadBalance().catch(err => {
 			console.log(err);
 		});
 	}, [account])
 
-	useEffect( () => {
-		window.ethereum.on('accountsChanged', function (accounts) {
-			setAccount(accounts[0]);
-			console.log(`Selected account changed to ${accounts[0]}`);
-		});
-		window.ethereum.on('chainChanged', (chainId) => {
-			window.location.reload();
-		});
-		loadAccounts().then(() => {
-			console.log('signed in');
-		}).catch( err => {
-			console.log(err);
-		});
-	}, [])
-
-	async function loadAccounts() {
+	async function loadAccount() {
 		const accounts = await web3.eth.requestAccounts();
-		setAccount(accounts[0]);
+
+		return accounts[0].toLowerCase();
 	}
 
 	async function loadBalance() {
 		const network = await web3.eth.net.getNetworkType();
 		if (!account) {
-			await loadAccounts();
+			await loadAccount();
 		}
 		const balance = await web3.eth.getBalance(account);
 
@@ -58,32 +65,43 @@ function App() {
 
 	return (
 		<>
-			<NavBar account={account} balance={balance} network={network}/>
-			<>
-				<Routes>
-					<Route path="/" element={<Home account={account} balance={balance} network={network}/>} />
-					<Route path="/allproperties" element={
-						<Container>
-							<AllProperties account={account} balance={balance} network={network}/>
-						</Container>
-					} />
-					<Route path="/myproperties" element={
-						<Container>
-							<MyProperties account={account} balance={balance} network={network}/>
-						</Container>
-					} />
-				</Routes>
-				{/* {
-					account ?
-					<>
-						<PropertyDetailsEdit account={account} balance={balance} network={network}/>
-						<TestComponent2 account={account} balance={balance} network={network}/>
-					</>:
-					<p> Please connect to Metamask </p>
-				} */}
+			{
+				animationEnd ?
+				<>
+					<NavBar account={account} balance={balance} network={network}/>
+					<div>
+						<Routes>
+							<Route path="/" element={<Home account={account} balance={balance} network={network}/>} />
+							<Route path="/allproperties" element={
+								<Container>
+									<AllProperties account={account} balance={balance} network={network}/>
+								</Container>
+							} />
+							<Route path="/myproperties" element={
+								<Container>
+									<MyProperties account={account} balance={balance} network={network}/>
+								</Container>
+							} />
+						</Routes>
+						{/* {
+							account ?
+							<>
+								<PropertyDetailsEdit account={account} balance={balance} network={network}/>
+								<TestComponent2 account={account} balance={balance} network={network}/>
+							</>:
+							<p> Please connect to Metamask </p>
+						} */}
+						
+					</div>
+				</> :
 				
-			</>
+				<>
+					ok
+				</>
+				
+			}
 		</>
+		
 	);
 }
 

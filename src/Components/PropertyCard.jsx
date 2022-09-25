@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import '../styles/propertyCardStyle.css'
 import '../styles/colors.css'
@@ -32,7 +33,7 @@ function PropertyCard(props) {
     const [popupOpen, setPopupOpen] = useState(false);
 
     useEffect(() => {
-         loadContract();
+        loadContract();
     }, []);
     
     async function loadContract() {
@@ -84,7 +85,7 @@ function PropertyCard(props) {
     }
 
     return (
-        <>
+        <div>
             <Card
                 key={'propertyTitle' + country + city + street  + streetNumber + apartmentNumber}
                 id={'propertyTitle' + country + city + street  + streetNumber + apartmentNumber}
@@ -95,7 +96,7 @@ function PropertyCard(props) {
             >
                 <Card.Header className='text-center'>
                     {
-                        props.account == contractOwner ?
+                        props.account.toLowerCase() == contractOwner ?
                             <>
                                 <p>This contract belongs to you</p>
                                 <Button variant='success' onClick={() => setPopupOpen(true)}>
@@ -106,6 +107,21 @@ function PropertyCard(props) {
                                 <PropertyDetailsModal
                                     show={popupOpen}
                                     onHide={() => setPopupOpen(false)}
+
+                                    contractState = {contractState}
+                                    sellingPrice = {sellingPrice}
+                                    housingTenure = {housingTenure}
+                                    country = {country}
+                                    city = {city}
+                                    street = {street}
+                                    streetNumber = {streetNumber}
+                                    apartmentNumber = {apartmentNumber}
+                                    squareMetres = {squareMetres}
+                                    proofOfIdentity = {proofOfIdentity}
+                                    propertyTitleDeeds = {propertyTitleDeeds}
+                                    energyPerformanceCertificate = {energyPerformanceCertificate}
+                                    extensionsAndAlterationsDocumentation = {extensionsAndAlterationsDocumentation}
+                                    utilityBillsPaid = {utilityBillsPaid}
                                 />
                             </>:
                             <> 
@@ -119,7 +135,7 @@ function PropertyCard(props) {
                             Contract state: {getCorrespondingContractStateMessage(contractState)}
                         </Card.Title>
                     </Row>
-                    <Card.Text>
+                    <div>
                         <Row>
                             <Col lg={6} md={12} className='text-center'>
                                 <p>Selling price: {sellingPrice} ETH</p>
@@ -139,21 +155,19 @@ function PropertyCard(props) {
                                 <Accordion.Item eventKey="0">
                                     <Accordion.Header>Required Property Documents</Accordion.Header>
                                     <Accordion.Body>
-                                        <div>
-                                            <p>Proof of Identity: {getMessageForRequiredDocuments(proofOfIdentity)}</p>
-                                            <p>Property Title Deeds: {getMessageForRequiredDocuments(propertyTitleDeeds)}</p>
-                                            <p>Energy Performance Certificate: {getMessageForRequiredDocuments(energyPerformanceCertificate)}</p>
-                                            <p>Extensions and Alterations Documentation: {getMessageForRequiredDocuments(extensionsAndAlterationsDocumentation)}</p>
-                                            <p>Utility Bills Paid: {getMessageForRequiredDocuments(utilityBillsPaid)}</p>
-                                        </div>
+                                        <p>Proof of Identity: {getMessageForRequiredDocuments(proofOfIdentity)}</p>
+                                        <p>Property Title Deeds: {getMessageForRequiredDocuments(propertyTitleDeeds)}</p>
+                                        <p>Energy Performance Certificate: {getMessageForRequiredDocuments(energyPerformanceCertificate)}</p>
+                                        <p>Extensions and Alterations Documentation: {getMessageForRequiredDocuments(extensionsAndAlterationsDocumentation)}</p>
+                                        <p>Utility Bills Paid: {getMessageForRequiredDocuments(utilityBillsPaid)}</p>
                                     </Accordion.Body>
                                 </Accordion.Item>
                             </Accordion>
                         </Row>
-                    </Card.Text>
+                    </div>
                 </Card.Body>
             </Card>
-        </>
+        </div>
 	);
 }
 

@@ -1,13 +1,13 @@
-* {
-    font-family: Trebuchet 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+body {
+    background: linear-gradient(135deg, #FFFFFF 0%, #FFFAF7 10%, #FFF3EA 20%, #F5F3F0 33%, #DDF3FF 66%, #D0F1C9 100%) center center fixed;
+    font-family: Roboto, “Helvetica Neue”, Helvetica, Arial, sans-serif;
 }
 
 .popover-custom {
     max-width: 450px;
 }
 
-body {
-    background: linear-gradient(135deg, #FFFFFF 0%, #FFFAF7 10%, #FFF3EA 20%, #F5F3F0 33%, #DDF3FF 66%, #D0F1C9 100%) center center fixed;
-    font-family: Roboto-RC, “Helvetica Neue”, Helvetica, Arial, sans-serif;
-    color: #234361;
+.modal-90w {
+    width: 90%;
+    max-width: none!important;
 }
