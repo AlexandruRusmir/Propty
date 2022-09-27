@@ -104,7 +104,7 @@ contract PropertyTitle {
         propertyDetails.squareMetres = _squareMetres;
     }
 
-    function addPropertyAsForSale(
+    function setPropertySellingPrice(
         uint256 _sellingPriceIntegralPart, 
         uint256 _sellingPriceFractionalPart, 
         uint256 _sellingPriceFractionalPartLength
@@ -133,10 +133,7 @@ contract PropertyTitle {
 
     function validatePropertyDebts() public view returns (bool) {
         /// TODO
-        if (!checkStringsEquality(propertyDetails.street, '')) {
-            return true;
-        }
-        return false;
+        return true;
         /// TODO
     }
 

@@ -11,7 +11,7 @@ import propertyTitleBuild from 'contracts/PropertyTitle.json';
 
 function PropertyCard(props) {
     const web3 = new Web3(Web3.givenProvider || 'https://localhost:8545');
-    let contractAddress = '';
+    let contractAddress = props.contractAddress;
 
     const [contractState, setContractState] = useState('');
     const [sellingPrice, setSellingPrice] = useState('');
@@ -37,9 +37,9 @@ function PropertyCard(props) {
     }, []);
     
     async function loadContract() {
-        const networkId = await web3.eth.net.getId();
+        // const networkId = await web3.eth.net.getId();
 
-        contractAddress =  propertyTitleBuild.networks[networkId].address;
+        // contractAddress =  propertyTitleBuild.networks[networkId].address;
 
         const contractState = await web3.eth.getStorageAt(contractAddress, 0);
         const sellingPriceIntegralPart = await web3.eth.getStorageAt(contractAddress, 1);
@@ -108,6 +108,8 @@ function PropertyCard(props) {
                                     show={popupOpen}
                                     onHide={() => setPopupOpen(false)}
 
+                                    account = {props.account}
+                                    contractAddress = {contractAddress}
                                     contractState = {contractState}
                                     sellingPrice = {sellingPrice}
                                     housingTenure = {housingTenure}
@@ -122,6 +124,8 @@ function PropertyCard(props) {
                                     energyPerformanceCertificate = {energyPerformanceCertificate}
                                     extensionsAndAlterationsDocumentation = {extensionsAndAlterationsDocumentation}
                                     utilityBillsPaid = {utilityBillsPaid}
+
+                                    changeSellingPrice = {(sellingPrice) => {setSellingPrice(sellingPrice)}}
                                 />
                             </>:
                             <> 

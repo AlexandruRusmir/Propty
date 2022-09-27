@@ -22,12 +22,17 @@ function App() {
 	const [animationEnd, setAnimationEnd] = useState(false);
 
 	useEffect( () => {
-		window.ethereum.on('accountsChanged', function (accounts) {
+		const accountsChangeFunction = (accounts) => {
 			setAccount(accounts[0].toLowerCase());
-		});
-		window.ethereum.on('chainChanged', (chainId) => {
+		}
+
+		const chainChangeFunction = (chainId) => {
 			window.location.reload();
-		});
+		}
+
+		window.ethereum.on('accountsChanged', accountsChangeFunction);
+		window.ethereum.on('chainChanged', chainChangeFunction);
+
 		loadAccount().then((receivedAccount) => {
 			setAccount(receivedAccount);
 			console.log('signed in');
@@ -35,9 +40,17 @@ function App() {
 			console.log(err);
 		});
 
-		setTimeout(() => {
-			setAnimationEnd(true);
-		}, 5000)
+		if (!animationEnd) {
+			setTimeout(() => {
+				setAnimationEnd(true);
+			}, 5000)
+		}
+
+		return () => {
+			console.log(1);
+			window.ethereum.removeListener('accountsChanged', accountsChangeFunction);
+			window.ethereum.removeListener('chainChanged', chainChangeFunction);
+		};
 	}, [])
 
 	useEffect(() => {

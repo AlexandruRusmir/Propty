@@ -3,14 +3,53 @@ import '../styles/style.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
+import Web3 from 'web3';
+import propertyTitleBuild from 'contracts/PropertyTitle.json';
 
 function PropertyDetailsModal(props) {
-    const [contractState, setContractState] = useState('');
-    const [sellingPrice, setSellingPrice] = useState(props.sellingPrice);
+    const web3 = new Web3(Web3.givenProvider || 'https://localhost:8545');
+    const contract = new web3.eth.Contract(propertyTitleBuild.abi, props.contractAddress)
 
-    const validateSellingPriceString = (price) => {
+    const [contractState, setContractState] = useState(props.contractState);
+    const [sellingPrice, setSellingPrice] = useState(props.sellingPrice);
+    const [housingTenure, setHousingTenure] = useState(props.housingTenure);
+
+    async function updateContractSellingPrice(sellingPriceString) {
+        if (sellingPriceString.length === 0) {
+            return;
+        }
+
+        if (sellingPriceString.length > 31) {
+            return;
+        }
+
+        const splitArray = sellingPriceString.split('.');
+        if (splitArray.length > 2) {
+            return;
+        }
+
+        const sellingPriceIntegralPart = splitArray[0];
+        const sellingPriceFractionalPart = splitArray[1];
+        const sellingPriceFractionalPartLength = splitArray[1].length;
+
+        contract.methods.setPropertySellingPrice(
+            sellingPriceIntegralPart,
+            sellingPriceFractionalPart,
+            sellingPriceFractionalPartLength
+        ).send({ from: props.account }).then(() => {
+            props.changeSellingPrice(sellingPriceString);
+        });
+        
+    }
+
+    const setSellingPriceString = (price) => {
+        console.log(props.contractAddress);
         if (price.length === 0) {
             setSellingPrice(price);
+            return;
+        }
+
+        if (price.length > 31) {
             return;
         }
 
@@ -25,6 +64,16 @@ function PropertyDetailsModal(props) {
 
         setSellingPrice(price);
     };
+
+    const applyContractChanges = () => {
+        if (sellingPrice != props.sellingPrice) {
+            updateContractSellingPrice(sellingPrice).then(() => {
+                props.onHide();
+            }).catch( err => {
+                console.log(err);
+            });
+        }
+    }
 
     return (
         <div>
@@ -42,8 +91,8 @@ function PropertyDetailsModal(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <div>
-                        <span>Contract State: </span><br/>
-                        <select onChange={(e) => {console.log(e.target.value);}}>
+                        <span>HousingTenure: </span><br/>
+                        <select onChange={(e) => {setHousingTenure(e.target.value)}}>
                             <option value="0">Owner Occupancy</option>
                             <option value="1">Tenancy</option>
                             <option value="2">Cooperative</option>
@@ -57,17 +106,16 @@ function PropertyDetailsModal(props) {
 
                     <div>
                         Selling Price(ETH):<br/> 
-                        <input value={sellingPrice} onChange={(e) => validateSellingPriceString(e.target.value)} placeholder='example: 7.543' />
+                        <input value={sellingPrice} onChange={(e) => setSellingPriceString(e.target.value)} placeholder='example: 7.543' />
                     </div>
                     
                     <div>
-
+                        
                     </div>
                     
-                    <p>{props.utilityBillsPaid}</p>
                 </Modal.Body>
                 <Modal.Footer className='justify-content-center'>
-                    <Button variant='success' onClick={props.onHide}>Save Contract Changes</Button>
+                    <Button variant='success' onClick={applyContractChanges}>Save Contract Changes</Button>
                 </Modal.Footer>
             </Modal>
         </div>
