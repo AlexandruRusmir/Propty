@@ -8,8 +8,6 @@ import { Navbar, NavDropdown, Nav, Container, Popover, OverlayTrigger, Toast, Na
 import { Link } from 'react-router-dom';
 
 function NavBar(props) {
-    const web3 = new Web3(Web3.givenProvider || 'https://localhost:8545');
-
     return (
         <Navbar bg="dark"  variant="dark" expand="lg" sticky="top">
             <Container>

@@ -3362,7 +3362,7 @@
                 }
               ]
             },
-            "name": "validator_revert_t_enum$_PropertyTitleContractState_$548",
+            "name": "validator_revert_t_enum$_PropertyTitleContractState_$576",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -3416,7 +3416,7 @@
                       }
                     ],
                     "functionName": {
-                      "name": "validator_revert_t_enum$_PropertyTitleContractState_$548",
+                      "name": "validator_revert_t_enum$_PropertyTitleContractState_$576",
                       "nodeType": "YulIdentifier",
                       "src": "599:56:3"
                     },
@@ -3428,7 +3428,7 @@
                 }
               ]
             },
-            "name": "abi_decode_t_enum$_PropertyTitleContractState_$548",
+            "name": "abi_decode_t_enum$_PropertyTitleContractState_$576",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -3578,7 +3578,7 @@
                           }
                         ],
                         "functionName": {
-                          "name": "abi_decode_t_enum$_PropertyTitleContractState_$548",
+                          "name": "abi_decode_t_enum$_PropertyTitleContractState_$576",
                           "nodeType": "YulIdentifier",
                           "src": "963:50:3"
                         },
@@ -3597,7 +3597,7 @@
                 }
               ]
             },
-            "name": "abi_decode_tuple_t_enum$_PropertyTitleContractState_$548",
+            "name": "abi_decode_tuple_t_enum$_PropertyTitleContractState_$576",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -3786,7 +3786,7 @@
                 }
               ]
             },
-            "name": "validator_assert_t_enum$_PropertyTitleContractState_$548",
+            "name": "validator_assert_t_enum$_PropertyTitleContractState_$576",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -3829,7 +3829,7 @@
                       }
                     ],
                     "functionName": {
-                      "name": "validator_assert_t_enum$_PropertyTitleContractState_$548",
+                      "name": "validator_assert_t_enum$_PropertyTitleContractState_$576",
                       "nodeType": "YulIdentifier",
                       "src": "1498:56:3"
                     },
@@ -3841,7 +3841,7 @@
                 }
               ]
             },
-            "name": "cleanup_t_enum$_PropertyTitleContractState_$548",
+            "name": "cleanup_t_enum$_PropertyTitleContractState_$576",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -3878,7 +3878,7 @@
                       }
                     ],
                     "functionName": {
-                      "name": "cleanup_t_enum$_PropertyTitleContractState_$548",
+                      "name": "cleanup_t_enum$_PropertyTitleContractState_$576",
                       "nodeType": "YulIdentifier",
                       "src": "1684:47:3"
                     },
@@ -3895,7 +3895,7 @@
                 }
               ]
             },
-            "name": "convert_t_enum$_PropertyTitleContractState_$548_to_t_uint8",
+            "name": "convert_t_enum$_PropertyTitleContractState_$576_to_t_uint8",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -3937,7 +3937,7 @@
                           }
                         ],
                         "functionName": {
-                          "name": "convert_t_enum$_PropertyTitleContractState_$548_to_t_uint8",
+                          "name": "convert_t_enum$_PropertyTitleContractState_$576_to_t_uint8",
                           "nodeType": "YulIdentifier",
                           "src": "1865:58:3"
                         },
@@ -3958,7 +3958,7 @@
                 }
               ]
             },
-            "name": "abi_encode_t_enum$_PropertyTitleContractState_$548_to_t_uint8_fromStack",
+            "name": "abi_encode_t_enum$_PropertyTitleContractState_$576_to_t_uint8_fromStack",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -4048,7 +4048,7 @@
                       }
                     ],
                     "functionName": {
-                      "name": "abi_encode_t_enum$_PropertyTitleContractState_$548_to_t_uint8_fromStack",
+                      "name": "abi_encode_t_enum$_PropertyTitleContractState_$576_to_t_uint8_fromStack",
                       "nodeType": "YulIdentifier",
                       "src": "2115:71:3"
                     },
@@ -4060,7 +4060,7 @@
                 }
               ]
             },
-            "name": "abi_encode_tuple_t_enum$_PropertyTitleContractState_$548__to_t_uint8__fromStack_reversed",
+            "name": "abi_encode_tuple_t_enum$_PropertyTitleContractState_$576__to_t_uint8__fromStack_reversed",
             "nodeType": "YulFunctionDefinition",
             "parameters": [
               {
@@ -4088,7 +4088,7 @@
           }
         ]
       },
-      "contents": "{\n\n    function allocate_unbounded() -> memPtr {\n        memPtr := mload(64)\n    }\n\n    function revert_error_dbdddcbe895c83990c08b3492a0e83918d802a52331272ac6fdb6a7c4aea3b1b() {\n        revert(0, 0)\n    }\n\n    function revert_error_c1322bf8034eace5e0b5c7295db60986aa89aae5e0ea0873e4689e076861a5db() {\n        revert(0, 0)\n    }\n\n    function validator_revert_t_enum$_PropertyTitleContractState_$548(value) {\n        if iszero(lt(value, 4)) { revert(0, 0) }\n    }\n\n    function abi_decode_t_enum$_PropertyTitleContractState_$548(offset, end) -> value {\n        value := calldataload(offset)\n        validator_revert_t_enum$_PropertyTitleContractState_$548(value)\n    }\n\n    function abi_decode_tuple_t_enum$_PropertyTitleContractState_$548(headStart, dataEnd) -> value0 {\n        if slt(sub(dataEnd, headStart), 32) { revert_error_dbdddcbe895c83990c08b3492a0e83918d802a52331272ac6fdb6a7c4aea3b1b() }\n\n        {\n\n            let offset := 0\n\n            value0 := abi_decode_t_enum$_PropertyTitleContractState_$548(add(headStart, offset), dataEnd)\n        }\n\n    }\n\n    function panic_error_0x21() {\n        mstore(0, 35408467139433450592217433187231851964531694900788300625387963629091585785856)\n        mstore(4, 0x21)\n        revert(0, 0x24)\n    }\n\n    function validator_assert_t_enum$_PropertyTitleContractState_$548(value) {\n        if iszero(lt(value, 4)) { panic_error_0x21() }\n    }\n\n    function cleanup_t_enum$_PropertyTitleContractState_$548(value) -> cleaned {\n        cleaned := value validator_assert_t_enum$_PropertyTitleContractState_$548(value)\n    }\n\n    function convert_t_enum$_PropertyTitleContractState_$548_to_t_uint8(value) -> converted {\n        converted := cleanup_t_enum$_PropertyTitleContractState_$548(value)\n    }\n\n    function abi_encode_t_enum$_PropertyTitleContractState_$548_to_t_uint8_fromStack(value, pos) {\n        mstore(pos, convert_t_enum$_PropertyTitleContractState_$548_to_t_uint8(value))\n    }\n\n    function abi_encode_tuple_t_enum$_PropertyTitleContractState_$548__to_t_uint8__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        abi_encode_t_enum$_PropertyTitleContractState_$548_to_t_uint8_fromStack(value0,  add(headStart, 0))\n\n    }\n\n}\n",
+      "contents": "{\n\n    function allocate_unbounded() -> memPtr {\n        memPtr := mload(64)\n    }\n\n    function revert_error_dbdddcbe895c83990c08b3492a0e83918d802a52331272ac6fdb6a7c4aea3b1b() {\n        revert(0, 0)\n    }\n\n    function revert_error_c1322bf8034eace5e0b5c7295db60986aa89aae5e0ea0873e4689e076861a5db() {\n        revert(0, 0)\n    }\n\n    function validator_revert_t_enum$_PropertyTitleContractState_$576(value) {\n        if iszero(lt(value, 4)) { revert(0, 0) }\n    }\n\n    function abi_decode_t_enum$_PropertyTitleContractState_$576(offset, end) -> value {\n        value := calldataload(offset)\n        validator_revert_t_enum$_PropertyTitleContractState_$576(value)\n    }\n\n    function abi_decode_tuple_t_enum$_PropertyTitleContractState_$576(headStart, dataEnd) -> value0 {\n        if slt(sub(dataEnd, headStart), 32) { revert_error_dbdddcbe895c83990c08b3492a0e83918d802a52331272ac6fdb6a7c4aea3b1b() }\n\n        {\n\n            let offset := 0\n\n            value0 := abi_decode_t_enum$_PropertyTitleContractState_$576(add(headStart, offset), dataEnd)\n        }\n\n    }\n\n    function panic_error_0x21() {\n        mstore(0, 35408467139433450592217433187231851964531694900788300625387963629091585785856)\n        mstore(4, 0x21)\n        revert(0, 0x24)\n    }\n\n    function validator_assert_t_enum$_PropertyTitleContractState_$576(value) {\n        if iszero(lt(value, 4)) { panic_error_0x21() }\n    }\n\n    function cleanup_t_enum$_PropertyTitleContractState_$576(value) -> cleaned {\n        cleaned := value validator_assert_t_enum$_PropertyTitleContractState_$576(value)\n    }\n\n    function convert_t_enum$_PropertyTitleContractState_$576_to_t_uint8(value) -> converted {\n        converted := cleanup_t_enum$_PropertyTitleContractState_$576(value)\n    }\n\n    function abi_encode_t_enum$_PropertyTitleContractState_$576_to_t_uint8_fromStack(value, pos) {\n        mstore(pos, convert_t_enum$_PropertyTitleContractState_$576_to_t_uint8(value))\n    }\n\n    function abi_encode_tuple_t_enum$_PropertyTitleContractState_$576__to_t_uint8__fromStack_reversed(headStart , value0) -> tail {\n        tail := add(headStart, 32)\n\n        abi_encode_t_enum$_PropertyTitleContractState_$576_to_t_uint8_fromStack(value0,  add(headStart, 0))\n\n    }\n\n}\n",
       "id": 3,
       "language": "Yul",
       "name": "#utility.yul"
@@ -4102,21 +4102,21 @@
     "absolutePath": "project:/contracts/TestEnum.sol",
     "exportedSymbols": {
       "PropertyDetails": [
-        555
+        583
       ],
       "PropertyTitleContractState": [
-        548
+        576
       ],
       "TestEnum": [
-        634
+        662
       ]
     },
-    "id": 635,
+    "id": 663,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 543,
+        "id": 571,
         "literals": [
           "solidity",
           ">=",
@@ -4131,31 +4131,31 @@
       },
       {
         "canonicalName": "PropertyTitleContractState",
-        "id": 548,
+        "id": 576,
         "members": [
           {
-            "id": 544,
+            "id": 572,
             "name": "INITIALIZED",
             "nameLocation": "103:11:2",
             "nodeType": "EnumValue",
             "src": "103:11:2"
           },
           {
-            "id": 545,
+            "id": 573,
             "name": "OWNED",
             "nameLocation": "116:5:2",
             "nodeType": "EnumValue",
             "src": "116:5:2"
           },
           {
-            "id": 546,
+            "id": 574,
             "name": "FOR_SALE",
             "nameLocation": "123:8:2",
             "nodeType": "EnumValue",
             "src": "123:8:2"
           },
           {
-            "id": 547,
+            "id": 575,
             "name": "NO_LONGER_RELEVANT",
             "nameLocation": "133:18:2",
             "nodeType": "EnumValue",
@@ -4169,16 +4169,16 @@
       },
       {
         "canonicalName": "PropertyDetails",
-        "id": 555,
+        "id": 583,
         "members": [
           {
             "constant": false,
-            "id": 550,
+            "id": 578,
             "mutability": "mutable",
             "name": "propertyAddress",
             "nameLocation": "192:15:2",
             "nodeType": "VariableDeclaration",
-            "scope": 555,
+            "scope": 583,
             "src": "185:22:2",
             "stateVariable": false,
             "storageLocation": "default",
@@ -4187,7 +4187,7 @@
               "typeString": "string"
             },
             "typeName": {
-              "id": 549,
+              "id": 577,
               "name": "string",
               "nodeType": "ElementaryTypeName",
               "src": "185:6:2",
@@ -4200,12 +4200,12 @@
           },
           {
             "constant": false,
-            "id": 552,
+            "id": 580,
             "mutability": "mutable",
             "name": "propertyDescription",
             "nameLocation": "221:19:2",
             "nodeType": "VariableDeclaration",
-            "scope": 555,
+            "scope": 583,
             "src": "214:26:2",
             "stateVariable": false,
             "storageLocation": "default",
@@ -4214,7 +4214,7 @@
               "typeString": "string"
             },
             "typeName": {
-              "id": 551,
+              "id": 579,
               "name": "string",
               "nodeType": "ElementaryTypeName",
               "src": "214:6:2",
@@ -4227,12 +4227,12 @@
           },
           {
             "constant": false,
-            "id": 554,
+            "id": 582,
             "mutability": "mutable",
             "name": "squareMetres",
             "nameLocation": "255:12:2",
             "nodeType": "VariableDeclaration",
-            "scope": 555,
+            "scope": 583,
             "src": "247:20:2",
             "stateVariable": false,
             "storageLocation": "default",
@@ -4241,7 +4241,7 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 553,
+              "id": 581,
               "name": "uint256",
               "nodeType": "ElementaryTypeName",
               "src": "247:7:2",
@@ -4256,7 +4256,7 @@
         "name": "PropertyDetails",
         "nameLocation": "162:15:2",
         "nodeType": "StructDefinition",
-        "scope": 635,
+        "scope": 663,
         "src": "155:116:2",
         "visibility": "public"
       },
@@ -4267,9 +4267,9 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 634,
+        "id": 662,
         "linearizedBaseContracts": [
-          634
+          662
         ],
         "name": "TestEnum",
         "nameLocation": "282:8:2",
@@ -4277,36 +4277,36 @@
         "nodes": [
           {
             "constant": false,
-            "id": 558,
+            "id": 586,
             "mutability": "mutable",
             "name": "prop",
             "nameLocation": "323:4:2",
             "nodeType": "VariableDeclaration",
-            "scope": 634,
+            "scope": 662,
             "src": "296:31:2",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+              "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
               "typeString": "enum PropertyTitleContractState"
             },
             "typeName": {
-              "id": 557,
+              "id": 585,
               "nodeType": "UserDefinedTypeName",
               "pathNode": {
-                "id": 556,
+                "id": 584,
                 "name": "PropertyTitleContractState",
                 "nameLocations": [
                   "296:26:2"
                 ],
                 "nodeType": "IdentifierPath",
-                "referencedDeclaration": 548,
+                "referencedDeclaration": 576,
                 "src": "296:26:2"
               },
-              "referencedDeclaration": 548,
+              "referencedDeclaration": 576,
               "src": "296:26:2",
               "typeDescriptions": {
-                "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                 "typeString": "enum PropertyTitleContractState"
               }
             },
@@ -4314,12 +4314,12 @@
           },
           {
             "constant": false,
-            "id": 560,
+            "id": 588,
             "mutability": "mutable",
             "name": "oakd",
             "nameLocation": "339:4:2",
             "nodeType": "VariableDeclaration",
-            "scope": 634,
+            "scope": 662,
             "src": "332:11:2",
             "stateVariable": true,
             "storageLocation": "default",
@@ -4328,7 +4328,7 @@
               "typeString": "string"
             },
             "typeName": {
-              "id": 559,
+              "id": 587,
               "name": "string",
               "nodeType": "ElementaryTypeName",
               "src": "332:6:2",
@@ -4341,26 +4341,26 @@
           },
           {
             "body": {
-              "id": 572,
+              "id": 600,
               "nodeType": "Block",
               "src": "364:82:2",
               "statements": [
                 {
                   "expression": {
-                    "id": 566,
+                    "id": 594,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
-                      "id": 563,
+                      "id": 591,
                       "name": "prop",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 558,
+                      "referencedDeclaration": 586,
                       "src": "371:4:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                        "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                         "typeString": "enum PropertyTitleContractState"
                       }
                     },
@@ -4368,18 +4368,18 @@
                     "operator": "=",
                     "rightHandSide": {
                       "expression": {
-                        "id": 564,
+                        "id": 592,
                         "name": "PropertyTitleContractState",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 548,
+                        "referencedDeclaration": 576,
                         "src": "378:26:2",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_enum$_PropertyTitleContractState_$548_$",
+                          "typeIdentifier": "t_type$_t_enum$_PropertyTitleContractState_$576_$",
                           "typeString": "type(enum PropertyTitleContractState)"
                         }
                       },
-                      "id": 565,
+                      "id": 593,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -4387,36 +4387,36 @@
                       "memberLocation": "405:8:2",
                       "memberName": "FOR_SALE",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 546,
+                      "referencedDeclaration": 574,
                       "src": "378:35:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                        "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                         "typeString": "enum PropertyTitleContractState"
                       }
                     },
                     "src": "371:42:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                       "typeString": "enum PropertyTitleContractState"
                     }
                   },
-                  "id": 567,
+                  "id": 595,
                   "nodeType": "ExpressionStatement",
                   "src": "371:42:2"
                 },
                 {
                   "expression": {
-                    "id": 570,
+                    "id": 598,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
-                      "id": 568,
+                      "id": 596,
                       "name": "oakd",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 560,
+                      "referencedDeclaration": 588,
                       "src": "420:4:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_string_storage",
@@ -4427,7 +4427,7 @@
                     "operator": "=",
                     "rightHandSide": {
                       "hexValue": "7568667264696869757477",
-                      "id": 569,
+                      "id": 597,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -4447,13 +4447,13 @@
                       "typeString": "string storage ref"
                     }
                   },
-                  "id": 571,
+                  "id": 599,
                   "nodeType": "ExpressionStatement",
                   "src": "420:20:2"
                 }
               ]
             },
-            "id": 573,
+            "id": 601,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
@@ -4461,18 +4461,18 @@
             "nameLocation": "-1:-1:-1",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 561,
+              "id": 589,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "361:2:2"
             },
             "returnParameters": {
-              "id": 562,
+              "id": 590,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "364:0:2"
             },
-            "scope": 634,
+            "scope": 662,
             "src": "350:96:2",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -4480,57 +4480,57 @@
           },
           {
             "body": {
-              "id": 583,
+              "id": 611,
               "nodeType": "Block",
               "src": "510:25:2",
               "statements": [
                 {
                   "expression": {
-                    "id": 581,
+                    "id": 609,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
-                      "id": 579,
+                      "id": 607,
                       "name": "prop",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 558,
+                      "referencedDeclaration": 586,
                       "src": "517:4:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                        "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                         "typeString": "enum PropertyTitleContractState"
                       }
                     },
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
-                      "id": 580,
+                      "id": 608,
                       "name": "_prop",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 576,
+                      "referencedDeclaration": 604,
                       "src": "524:5:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                        "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                         "typeString": "enum PropertyTitleContractState"
                       }
                     },
                     "src": "517:12:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                       "typeString": "enum PropertyTitleContractState"
                     }
                   },
-                  "id": 582,
+                  "id": 610,
                   "nodeType": "ExpressionStatement",
                   "src": "517:12:2"
                 }
               ]
             },
             "functionSelector": "4ce02c63",
-            "id": 584,
+            "id": 612,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -4538,41 +4538,41 @@
             "nameLocation": "461:7:2",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 577,
+              "id": 605,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 576,
+                  "id": 604,
                   "mutability": "mutable",
                   "name": "_prop",
                   "nameLocation": "496:5:2",
                   "nodeType": "VariableDeclaration",
-                  "scope": 584,
+                  "scope": 612,
                   "src": "469:32:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                    "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                     "typeString": "enum PropertyTitleContractState"
                   },
                   "typeName": {
-                    "id": 575,
+                    "id": 603,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 574,
+                      "id": 602,
                       "name": "PropertyTitleContractState",
                       "nameLocations": [
                         "469:26:2"
                       ],
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 548,
+                      "referencedDeclaration": 576,
                       "src": "469:26:2"
                     },
-                    "referencedDeclaration": 548,
+                    "referencedDeclaration": 576,
                     "src": "469:26:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                       "typeString": "enum PropertyTitleContractState"
                     }
                   },
@@ -4582,12 +4582,12 @@
               "src": "468:34:2"
             },
             "returnParameters": {
-              "id": 578,
+              "id": 606,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "510:0:2"
             },
-            "scope": 634,
+            "scope": 662,
             "src": "452:83:2",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -4595,32 +4595,32 @@
           },
           {
             "body": {
-              "id": 592,
+              "id": 620,
               "nodeType": "Block",
               "src": "609:24:2",
               "statements": [
                 {
                   "expression": {
-                    "id": 590,
+                    "id": 618,
                     "name": "prop",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 558,
+                    "referencedDeclaration": 586,
                     "src": "623:4:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                       "typeString": "enum PropertyTitleContractState"
                     }
                   },
-                  "functionReturnParameters": 589,
-                  "id": 591,
+                  "functionReturnParameters": 617,
+                  "id": 619,
                   "nodeType": "Return",
                   "src": "616:11:2"
                 }
               ]
             },
             "functionSelector": "61fd3f62",
-            "id": 593,
+            "id": 621,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -4628,47 +4628,47 @@
             "nameLocation": "550:7:2",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 585,
+              "id": 613,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "557:2:2"
             },
             "returnParameters": {
-              "id": 589,
+              "id": 617,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 588,
+                  "id": 616,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 593,
+                  "scope": 621,
                   "src": "581:26:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                    "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                     "typeString": "enum PropertyTitleContractState"
                   },
                   "typeName": {
-                    "id": 587,
+                    "id": 615,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 586,
+                      "id": 614,
                       "name": "PropertyTitleContractState",
                       "nameLocations": [
                         "581:26:2"
                       ],
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 548,
+                      "referencedDeclaration": 576,
                       "src": "581:26:2"
                     },
-                    "referencedDeclaration": 548,
+                    "referencedDeclaration": 576,
                     "src": "581:26:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                       "typeString": "enum PropertyTitleContractState"
                     }
                   },
@@ -4677,7 +4677,7 @@
               ],
               "src": "580:28:2"
             },
-            "scope": 634,
+            "scope": 662,
             "src": "541:92:2",
             "stateMutability": "view",
             "virtual": false,
@@ -4685,25 +4685,25 @@
           },
           {
             "body": {
-              "id": 602,
+              "id": 630,
               "nodeType": "Block",
               "src": "714:58:2",
               "statements": [
                 {
                   "expression": {
                     "expression": {
-                      "id": 599,
+                      "id": 627,
                       "name": "PropertyTitleContractState",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 548,
+                      "referencedDeclaration": 576,
                       "src": "728:26:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_PropertyTitleContractState_$548_$",
+                        "typeIdentifier": "t_type$_t_enum$_PropertyTitleContractState_$576_$",
                         "typeString": "type(enum PropertyTitleContractState)"
                       }
                     },
-                    "id": 600,
+                    "id": 628,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -4711,22 +4711,22 @@
                     "memberLocation": "755:11:2",
                     "memberName": "INITIALIZED",
                     "nodeType": "MemberAccess",
-                    "referencedDeclaration": 544,
+                    "referencedDeclaration": 572,
                     "src": "728:38:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                       "typeString": "enum PropertyTitleContractState"
                     }
                   },
-                  "functionReturnParameters": 598,
-                  "id": 601,
+                  "functionReturnParameters": 626,
+                  "id": 629,
                   "nodeType": "Return",
                   "src": "721:45:2"
                 }
               ]
             },
             "functionSelector": "ee89dab4",
-            "id": 603,
+            "id": 631,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -4734,47 +4734,47 @@
             "nameLocation": "648:14:2",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 594,
+              "id": 622,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "662:2:2"
             },
             "returnParameters": {
-              "id": 598,
+              "id": 626,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 597,
+                  "id": 625,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 603,
+                  "scope": 631,
                   "src": "686:26:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                    "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                     "typeString": "enum PropertyTitleContractState"
                   },
                   "typeName": {
-                    "id": 596,
+                    "id": 624,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 595,
+                      "id": 623,
                       "name": "PropertyTitleContractState",
                       "nameLocations": [
                         "686:26:2"
                       ],
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 548,
+                      "referencedDeclaration": 576,
                       "src": "686:26:2"
                     },
-                    "referencedDeclaration": 548,
+                    "referencedDeclaration": 576,
                     "src": "686:26:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                       "typeString": "enum PropertyTitleContractState"
                     }
                   },
@@ -4783,7 +4783,7 @@
               ],
               "src": "685:28:2"
             },
-            "scope": 634,
+            "scope": 662,
             "src": "639:133:2",
             "stateMutability": "pure",
             "virtual": false,
@@ -4791,25 +4791,25 @@
           },
           {
             "body": {
-              "id": 612,
+              "id": 640,
               "nodeType": "Block",
               "src": "845:52:2",
               "statements": [
                 {
                   "expression": {
                     "expression": {
-                      "id": 609,
+                      "id": 637,
                       "name": "PropertyTitleContractState",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 548,
+                      "referencedDeclaration": 576,
                       "src": "859:26:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_PropertyTitleContractState_$548_$",
+                        "typeIdentifier": "t_type$_t_enum$_PropertyTitleContractState_$576_$",
                         "typeString": "type(enum PropertyTitleContractState)"
                       }
                     },
-                    "id": 610,
+                    "id": 638,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -4817,22 +4817,22 @@
                     "memberLocation": "886:5:2",
                     "memberName": "OWNED",
                     "nodeType": "MemberAccess",
-                    "referencedDeclaration": 545,
+                    "referencedDeclaration": 573,
                     "src": "859:32:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                       "typeString": "enum PropertyTitleContractState"
                     }
                   },
-                  "functionReturnParameters": 608,
-                  "id": 611,
+                  "functionReturnParameters": 636,
+                  "id": 639,
                   "nodeType": "Return",
                   "src": "852:39:2"
                 }
               ]
             },
             "functionSelector": "c3027525",
-            "id": 613,
+            "id": 641,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -4840,47 +4840,47 @@
             "nameLocation": "785:8:2",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 604,
+              "id": 632,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "793:2:2"
             },
             "returnParameters": {
-              "id": 608,
+              "id": 636,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 607,
+                  "id": 635,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 613,
+                  "scope": 641,
                   "src": "817:26:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                    "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                     "typeString": "enum PropertyTitleContractState"
                   },
                   "typeName": {
-                    "id": 606,
+                    "id": 634,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 605,
+                      "id": 633,
                       "name": "PropertyTitleContractState",
                       "nameLocations": [
                         "817:26:2"
                       ],
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 548,
+                      "referencedDeclaration": 576,
                       "src": "817:26:2"
                     },
-                    "referencedDeclaration": 548,
+                    "referencedDeclaration": 576,
                     "src": "817:26:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                       "typeString": "enum PropertyTitleContractState"
                     }
                   },
@@ -4889,7 +4889,7 @@
               ],
               "src": "816:28:2"
             },
-            "scope": 634,
+            "scope": 662,
             "src": "776:121:2",
             "stateMutability": "pure",
             "virtual": false,
@@ -4897,25 +4897,25 @@
           },
           {
             "body": {
-              "id": 622,
+              "id": 650,
               "nodeType": "Block",
               "src": "972:55:2",
               "statements": [
                 {
                   "expression": {
                     "expression": {
-                      "id": 619,
+                      "id": 647,
                       "name": "PropertyTitleContractState",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 548,
+                      "referencedDeclaration": 576,
                       "src": "986:26:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_PropertyTitleContractState_$548_$",
+                        "typeIdentifier": "t_type$_t_enum$_PropertyTitleContractState_$576_$",
                         "typeString": "type(enum PropertyTitleContractState)"
                       }
                     },
-                    "id": 620,
+                    "id": 648,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -4923,22 +4923,22 @@
                     "memberLocation": "1013:8:2",
                     "memberName": "FOR_SALE",
                     "nodeType": "MemberAccess",
-                    "referencedDeclaration": 546,
+                    "referencedDeclaration": 574,
                     "src": "986:35:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                       "typeString": "enum PropertyTitleContractState"
                     }
                   },
-                  "functionReturnParameters": 618,
-                  "id": 621,
+                  "functionReturnParameters": 646,
+                  "id": 649,
                   "nodeType": "Return",
                   "src": "979:42:2"
                 }
               ]
             },
             "functionSelector": "804c2cf8",
-            "id": 623,
+            "id": 651,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -4946,47 +4946,47 @@
             "nameLocation": "910:10:2",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 614,
+              "id": 642,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "920:2:2"
             },
             "returnParameters": {
-              "id": 618,
+              "id": 646,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 617,
+                  "id": 645,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 623,
+                  "scope": 651,
                   "src": "944:26:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                    "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                     "typeString": "enum PropertyTitleContractState"
                   },
                   "typeName": {
-                    "id": 616,
+                    "id": 644,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 615,
+                      "id": 643,
                       "name": "PropertyTitleContractState",
                       "nameLocations": [
                         "944:26:2"
                       ],
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 548,
+                      "referencedDeclaration": 576,
                       "src": "944:26:2"
                     },
-                    "referencedDeclaration": 548,
+                    "referencedDeclaration": 576,
                     "src": "944:26:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                       "typeString": "enum PropertyTitleContractState"
                     }
                   },
@@ -4995,7 +4995,7 @@
               ],
               "src": "943:28:2"
             },
-            "scope": 634,
+            "scope": 662,
             "src": "901:126:2",
             "stateMutability": "pure",
             "virtual": false,
@@ -5003,25 +5003,25 @@
           },
           {
             "body": {
-              "id": 632,
+              "id": 660,
               "nodeType": "Block",
               "src": "1111:65:2",
               "statements": [
                 {
                   "expression": {
                     "expression": {
-                      "id": 629,
+                      "id": 657,
                       "name": "PropertyTitleContractState",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 548,
+                      "referencedDeclaration": 576,
                       "src": "1125:26:2",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_enum$_PropertyTitleContractState_$548_$",
+                        "typeIdentifier": "t_type$_t_enum$_PropertyTitleContractState_$576_$",
                         "typeString": "type(enum PropertyTitleContractState)"
                       }
                     },
-                    "id": 630,
+                    "id": 658,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": true,
@@ -5029,22 +5029,22 @@
                     "memberLocation": "1152:18:2",
                     "memberName": "NO_LONGER_RELEVANT",
                     "nodeType": "MemberAccess",
-                    "referencedDeclaration": 547,
+                    "referencedDeclaration": 575,
                     "src": "1125:45:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                       "typeString": "enum PropertyTitleContractState"
                     }
                   },
-                  "functionReturnParameters": 628,
-                  "id": 631,
+                  "functionReturnParameters": 656,
+                  "id": 659,
                   "nodeType": "Return",
                   "src": "1118:52:2"
                 }
               ]
             },
             "functionSelector": "e4a1e1ba",
-            "id": 633,
+            "id": 661,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
@@ -5052,47 +5052,47 @@
             "nameLocation": "1040:19:2",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 624,
+              "id": 652,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1059:2:2"
             },
             "returnParameters": {
-              "id": 628,
+              "id": 656,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 627,
+                  "id": 655,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 633,
+                  "scope": 661,
                   "src": "1083:26:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                    "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                     "typeString": "enum PropertyTitleContractState"
                   },
                   "typeName": {
-                    "id": 626,
+                    "id": 654,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 625,
+                      "id": 653,
                       "name": "PropertyTitleContractState",
                       "nameLocations": [
                         "1083:26:2"
                       ],
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 548,
+                      "referencedDeclaration": 576,
                       "src": "1083:26:2"
                     },
-                    "referencedDeclaration": 548,
+                    "referencedDeclaration": 576,
                     "src": "1083:26:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$548",
+                      "typeIdentifier": "t_enum$_PropertyTitleContractState_$576",
                       "typeString": "enum PropertyTitleContractState"
                     }
                   },
@@ -5101,14 +5101,14 @@
               ],
               "src": "1082:28:2"
             },
-            "scope": 634,
+            "scope": 662,
             "src": "1031:145:2",
             "stateMutability": "pure",
             "virtual": false,
             "visibility": "public"
           }
         ],
-        "scope": 635,
+        "scope": 663,
         "src": "273:906:2",
         "usedErrors": []
       }
@@ -5128,7 +5128,7 @@
     }
   },
   "schemaVersion": "3.4.9",
-  "updatedAt": "2022-09-27T18:08:47.087Z",
+  "updatedAt": "2022-10-08T07:25:04.683Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

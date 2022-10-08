@@ -4,11 +4,13 @@ import Web3 from 'web3';
 import testContractBuild from 'contracts/TestContract.json';
 import PropertyDetailsEdit from './Components/PropertyDetailsEdit';
 import TestComponent2 from './testComponent2';
+import { useWeb3 } from './CustomHooks/useWeb3';
+import { useContract } from './CustomHooks/useContract';
 
 function TestComponent(props) {
-    const web3 = new Web3(Web3.givenProvider || 'https://localhost:8545');
+    const web3 = useWeb3().current;
 
-    let contract = '';
+    let contract = useContract().current;
     const [number, setNumber] = useState(0);
     const [newNumber, setNewNumber] = useState('');
 
@@ -19,8 +21,8 @@ function TestComponent(props) {
     async function loadContract() {
         const networkId = await web3.eth.net.getId();
 
-        contract = new web3.eth.Contract(testContractBuild.abi, testContractBuild.networks[networkId].address);
         let number = await getContractNumber();
+        console.log(number);
         setNumber(number);
     }
 

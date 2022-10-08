@@ -4,9 +4,11 @@ import Web3 from 'web3';
 import propertyTitleBuild from 'contracts/PropertyTitle.json';
 import { Button, Carousel,ButtonGroup } from 'react-bootstrap';
 import { getNumberOfTrailingCharacters, getSellingPrice } from '../Helpers/helpers.js';
+import { useWeb3 } from '../CustomHooks/useWeb3';
 
 function PropertyDetailsEdit(props) {
-    const web3 = new Web3(Web3.givenProvider || 'https://localhost:8545');
+    const web3 = useWeb3().current;
+
     let contractAddress = '';
 
     const [contractState, setContractState] = useState('');

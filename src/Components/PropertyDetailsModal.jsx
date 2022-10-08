@@ -6,12 +6,13 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useState } from 'react';
 import Web3 from 'web3';
-import propertyTitleBuild from 'contracts/PropertyTitle.json';
 import { Form } from 'react-bootstrap';
+import { useWeb3 } from '../CustomHooks/useWeb3';
+import { useContract } from '../CustomHooks/useContract';
 
 function PropertyDetailsModal(props) {
-    const web3 = new Web3(Web3.givenProvider || 'https://localhost:8545');
-    const contract = new web3.eth.Contract(propertyTitleBuild.abi, props.contractAddress)
+    const web3 = useWeb3().current;
+    const contract = useContract().current;
 
     const [contractState, setContractState] = useState(props.contractState);
     const [sellingPrice, setSellingPrice] = useState(props.sellingPrice);
@@ -38,21 +39,27 @@ function PropertyDetailsModal(props) {
         }
 
         const sellingPriceIntegralPart = splitArray[0];
-        const sellingPriceFractionalPart = splitArray[1];
-        const sellingPriceFractionalPartLength = splitArray[1].length;
+        if (splitArray[1]) {
+            const sellingPriceFractionalPart = splitArray[1];
+            const sellingPriceFractionalPartLength = splitArray[1].length;
 
-        contract.methods.setPropertySellingPrice(
-            sellingPriceIntegralPart,
-            sellingPriceFractionalPart,
-            sellingPriceFractionalPartLength
-        ).send({ from: props.account }).then(() => {
+            contract.methods.setPropertySellingPrice(
+                sellingPriceIntegralPart,
+                sellingPriceFractionalPart,
+                sellingPriceFractionalPartLength
+            ).send({ from: props.account }).then(() => {
+                props.changeSellingPrice(sellingPriceString);
+            });
+
+            return;
+        }
+        
+        contract.methods.setPropertySellingPrice(sellingPriceIntegralPart,0,).send({ from: props.account }).then(() => {
             props.changeSellingPrice(sellingPriceString);
         });
-        
     }
 
     const setSellingPriceString = (price) => {
-        console.log(props.contractAddress);
         if (price.length === 0) {
             setSellingPrice(price);
             return;

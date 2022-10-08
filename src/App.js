@@ -11,9 +11,10 @@ import { Route, Routes } from 'react-router-dom';
 import Home from './Components/Home';
 import AllProperties from './Components/AllProperties';
 import MyProperties from './Components/MyProperties';
+import { useWeb3 } from './CustomHooks/useWeb3';
 
 function App() {
-	const web3 = new Web3(Web3.givenProvider || 'https://localhost:8545');
+	const web3 = useWeb3().current;
 	
 	const [account, setAccount] = useState('');
 	const [balance, setBalance] = useState('');
@@ -43,11 +44,11 @@ function App() {
 		if (!animationEnd) {
 			setTimeout(() => {
 				setAnimationEnd(true);
-			}, 5000)
+			}, 3000)
 		}
 
 		return () => {
-			console.log(1);
+			console.log('destructed');
 			window.ethereum.removeListener('accountsChanged', accountsChangeFunction);
 			window.ethereum.removeListener('chainChanged', chainChangeFunction);
 		};

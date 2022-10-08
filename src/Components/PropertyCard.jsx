@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from 'react';
+import React, { useRef } from 'react';
 import '../styles/propertyCardStyle.css'
 import '../styles/colors.css'
 import { Col, Row, Card, Accordion, Button } from 'react-bootstrap';
@@ -7,11 +7,13 @@ import PropertyDetailsModal from './PropertyDetailsModal';
 import Web3 from 'web3';
 import { useState, useEffect } from 'react';
 import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContractStateMessage, getCorrespondingHousingTenure, getMessageForRequiredDocuments } from '../Helpers/helpers';
-import propertyTitleBuild from 'contracts/PropertyTitle.json';
+import { useWeb3 } from '../CustomHooks/useWeb3';
+import { useContract } from '../CustomHooks/useContract';
 
 function PropertyCard(props) {
-    const web3 = new Web3(Web3.givenProvider || 'https://localhost:8545');
+    const web3 = useWeb3().current;
     let contractAddress = props.contractAddress;
+    const contract = useContract().current;
 
     const [contractState, setContractState] = useState('');
     const [sellingPrice, setSellingPrice] = useState('');
@@ -84,6 +86,28 @@ function PropertyCard(props) {
         setUtilityBillsPaid(web3.utils.hexToNumber(utilityBillsPaid));
     }
 
+    async function getPropertySellingPrice() {
+        return contract.methods.getPropertySellingPrice().call();
+    }
+
+    async function buyProperty() {
+        const sellingPrice = await getPropertySellingPrice();
+
+        const params = [{
+            'from': props.account,
+            'to': '0xD517EBCb17d3409fF5e6e51C5ee5BE7419Fe1B10',
+            'gas': Number(2100000).toString(16),
+            'gasPrice': Number(250000000).toString(16),
+            'value': Number(sellingPrice).toString(16),
+        }];
+
+        const result = await window.ethereum.request({method: 'eth_sendTransaction', params}).catch( err => {
+            console.log(err);
+        })
+
+        console.log(result);
+    }
+
     return (
         <div>
             <Card
@@ -129,7 +153,12 @@ function PropertyCard(props) {
                                 />
                             </>:
                             <> 
-                                Property Owner: {contractOwner} 
+                                Property Owner: {contractOwner}
+                                {
+                                    contractState == 2 ?
+                                    <Button onClick={() => {buyProperty();}}>Buy Property</Button> :
+                                    ''
+                                }
                             </>
                     }
                 </Card.Header>

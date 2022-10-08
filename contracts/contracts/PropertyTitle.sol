@@ -38,13 +38,13 @@ contract PropertyTitle {
     uint256 public sellingPriceFractionalPart;
     uint256 public sellingPriceFractionalPartLength;
     address public creator;
-    address payable public owner;
+    address public owner;
     PropertyDetails public propertyDetails;
     RequiredPropertyDocuments public requiredDocuments;
 
     constructor(
         address _creator,
-        address payable _owner,
+        address _owner,
         string memory _country,
         string memory _city,
         string memory _street,
@@ -66,6 +66,15 @@ contract PropertyTitle {
         sellingPriceIntegralPart = 7;
         sellingPriceFractionalPart = 534;
         sellingPriceFractionalPartLength = 3;
+    }
+
+    receive() external payable onlyIfPropertyForSale
+    {
+        uint256 sellingPriceWeiValue = (sellingPriceIntegralPart * 10**18) + (sellingPriceFractionalPart * 10**(18-sellingPriceFractionalPartLength));
+        require(msg.sender.balance >= sellingPriceWeiValue, 'Insufficient funds');
+        payable(owner).transfer(msg.value);
+        contractState = PropertyTitleContractState.OWNED;
+        owner = payable(msg.sender);
     }
 
     function modifyContractState(
@@ -119,12 +128,9 @@ contract PropertyTitle {
         contractState = PropertyTitleContractState.FOR_SALE;
     }
 
-    function buyProperty() external payable onlyIfPropertyForSale {
-        uint256 sellingPriceWeiValue = (sellingPriceIntegralPart * 10**18) + (sellingPriceFractionalPart * 10**18 / 10**sellingPriceFractionalPartLength);
-        (bool sent, bytes memory data) = owner.call{value: sellingPriceWeiValue }("");
-        require(sent, "Failed to send Ether.");
-        contractState = PropertyTitleContractState.OWNED;
-        owner = payable(msg.sender);
+    function getPropertySellingPrice() public view returns (uint256) {
+        uint256 sellingPriceWeiValue = (sellingPriceIntegralPart * 10**18) + (sellingPriceFractionalPart * 10**(18-sellingPriceFractionalPartLength));
+        return sellingPriceWeiValue;
     }
 
     function getContractDetails() public view returns (address, address, PropertyTitleContractState) {
