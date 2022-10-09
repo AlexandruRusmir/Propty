@@ -7,11 +7,6 @@ body {
     max-width: 450px;
 }
 
-.modal-90w {
-    width: 90%;
-    max-width: none!important;
-}
-
 .input-box input:not([type='checkbox']) {
     border: 2px solid #e7e7e7;
     width: 100%;
@@ -49,7 +44,7 @@ body {
     color: #FFF;
     cursor: pointer;
     border: none;
-    transition: ease-in-out .3s;
+    transition: ease-in-out .4s;
 }
 
 .submit-btn:hover {
@@ -58,8 +53,24 @@ body {
     box-shadow: 0 0 11px rgba(33,33,33,.2);
 }
 
+.list-for-sale-btn {
+    padding: 6px 10px;
+    margin: 0 auto;
+    text-align: center;
+    background: #ff4c4c;
+    font-weight: 700;
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .3s;
+    outline: none;
+}
+
 .apply-change-btn {
     padding: 6px 10px;
+    width: 146px;
     margin: 0 auto;
     text-align: center;
     background: #ff4c4c;
@@ -69,15 +80,17 @@ body {
     cursor: pointer;
     border: none;
     transition: ease-in-out .3s;
+    outline: none;
 }
 
-.apply-change-btn:hover {
+.apply-change-btn:hover, .apply-change-btn:focus {
     transform: translateY(-2px);
     background: #fc2323;
     box-shadow: 0 0 11px rgba(33,33,33,.2);
+    outline: none;
 }
 
-.disabled {
+.disabled-btn {
     pointer-events: none;
     background-color: #dedede;
 }
@@ -90,8 +103,8 @@ body {
 
 @media (max-width: 576px) {
     .apply-change-btn {
-        padding: 3px 8px;
+        padding: 4px 8px;
         margin-left: 2%;
-        margin-top: 8px;
+        margin-top: 10px;
     }
 }

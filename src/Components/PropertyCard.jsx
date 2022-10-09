@@ -9,6 +9,9 @@ import { useState, useEffect } from 'react';
 import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContractStateMessage, getCorrespondingHousingTenure, getMessageForRequiredDocuments } from '../Helpers/helpers';
 import { useWeb3 } from '../CustomHooks/useWeb3';
 import { useContract } from '../CustomHooks/useContract';
+import { FaEthereum } from 'react-icons/fa';
+import { MdOutlineSell, MdOutlineEditLocationAlt } from 'react-icons/md';
+import { CgPlayListRemove } from 'react-icons/cg'
 
 function PropertyCard(props) {
     const web3 = useWeb3().current;
@@ -72,7 +75,7 @@ function PropertyCard(props) {
         );
         setContractCreator(contractCreator);
         setContractOwner(contractOwner);
-        setHousingTenure(web3.utils.hexToNumber(housingTenure));
+        setHousingTenure(web3.utils.hexToNumber(housingTenure))
         setCountry(web3.utils.hexToString(country).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(country))));
         setCity(web3.utils.hexToString(city).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(city))));
         setStreet(web3.utils.hexToString(street).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(street))));
@@ -114,7 +117,6 @@ function PropertyCard(props) {
                 key={'propertyTitle' + country + city + street  + streetNumber + apartmentNumber}
                 id={'propertyTitle' + country + city + street  + streetNumber + apartmentNumber}
                 text='black'
-                style={{ width: 'auto', margin: '0 200px' }}
                 className="mb-2 mx-5"
                 variant='light'
             >
@@ -123,10 +125,23 @@ function PropertyCard(props) {
                         props.account.toLowerCase() == contractOwner ?
                             <>
                                 <p>This contract belongs to you</p>
-                                <Button variant='success' onClick={() => setPopupOpen(true)}>
-                                    Modify Property Title Contract
-                                    
-                                </Button>
+                                <Row>
+                                    <Col>
+                                        <Button variant='success' onClick={() => setPopupOpen(true)} className='list-for-sale-btn'>
+                                            Modify Property Title Contract <MdOutlineEditLocationAlt size={22}/>
+                                        </Button>
+                                    </Col>
+                                    <Col>
+                                        <Button className='list-for-sale-btn'>
+                                            List Property For Sale <MdOutlineSell size={22}/>
+                                        </Button>
+                                    </Col>
+                                    <Col>
+                                        <Button className='list-for-sale-btn'>
+                                            Invalidate Contract <CgPlayListRemove size={22}/>
+                                        </Button>
+                                    </Col>
+                                </Row>
 
                                 <PropertyDetailsModal
                                     show={popupOpen}
@@ -156,8 +171,14 @@ function PropertyCard(props) {
                                 Property Owner: {contractOwner}
                                 {
                                     contractState == 2 ?
-                                    <Button onClick={() => {buyProperty();}}>Buy Property</Button> :
-                                    ''
+                                        <Row>
+                                            <Col>
+                                                <Button onClick={() => {buyProperty();}}>
+                                                    Buy Property <FaEthereum />
+                                                </Button>
+                                            </Col>
+                                        </Row> :
+                                        ''
                                 }
                             </>
                     }

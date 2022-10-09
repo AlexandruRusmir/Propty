@@ -9,6 +9,7 @@ import Web3 from 'web3';
 import { Form } from 'react-bootstrap';
 import { useWeb3 } from '../CustomHooks/useWeb3';
 import { useContract } from '../CustomHooks/useContract';
+import { MdOutlineSell } from "react-icons/md";
 
 function PropertyDetailsModal(props) {
     const web3 = useWeb3().current;
@@ -96,41 +97,46 @@ function PropertyDetailsModal(props) {
             <Modal
                 show={props.show}
                 onHide = {props.onHide}
-                dialogClassName="modal-90w"
+                size = 'lg'
                 aria-labelledby={'propertyTitleEditModal' + props.country + props.city + props.street  + props.streetNumber + props.apartmentNumber}
                 centered
             >
                 <Modal.Header closeButton>
                 <Modal.Title id={'propertyEditModal' + props.country + props.city + props.street + props.streetNumber + props.apartmentNumber}>
-                    Modify your Property Title Contract
+                    <div className='mx-4'>
+                        Modify your Property Title Contract
+                    </div>
                 </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Row>
-                        <Col lg={6} md={12} className='input-box flex-column'>
-                            <div className='m-3'>
-                                <span>Contract State: </span><br/>
+                        <Col className='input-box flex-column'>
+                            <div className='mx-4 my-3'>
+                                Selling Price(ETH):<br/> 
                                 <Row>
-                                    <Col sm={7} xs={12}>
-                                        <select onChange={(e) => {setContractState(e.target.value)}}>
-                                            <option value="1">Owned</option>
-                                            <option value="2">For sale</option>
-                                            <option value="3">No Longer Relevant</option>
-                                        </select>
+                                    <Col lg={9} sm={7} xs={12}>
+                                        <input value={sellingPrice} onChange={(e) => setSellingPriceString(e.target.value)} placeholder='example: 7.543' />
                                     </Col>
                                     <Col>
-                                        <Button className='apply-change-btn'>
-                                            Apply Change
-                                        </Button>
+                                        {
+                                            sellingPrice == props.sellingPrice ?
+                                                <Button className='apply-change-btn disabled-btn'>
+                                                    Apply Change
+                                                </Button> :
+                                                <Button className='apply-change-btn'>
+                                                    Apply Change
+                                                </Button> 
+                                        }                       
                                     </Col>
                                 </Row>
+                                
                             </div>
 
-                            <div className='m-3'>
+                            <div className='mx-4 my-3'>
                                 <span>Housing Tenure: </span><br/>
                                 <Row>
-                                    <Col sm={7} xs={12}>
-                                        <select onChange={(e) => {setHousingTenure(e.target.value)}}>
+                                    <Col lg={9} sm={7} xs={12}>
+                                        <select onChange={(e) => {setHousingTenure(e.target.value);}}>
                                             <option value="0">Owner Occupancy</option>
                                             <option value="1">Tenancy</option>
                                             <option value="2">Cooperative</option>
@@ -141,112 +147,35 @@ function PropertyDetailsModal(props) {
                                         </select>
                                     </Col>
                                     <Col>
-                                        <Button className='apply-change-btn'>
-                                            Apply Change
-                                        </Button>
+                                        {
+                                            housingTenure == props.housingTenure ?
+                                                <Button className='apply-change-btn disabled-btn'>
+                                                    Request Change
+                                                </Button> :
+                                                <Button className='apply-change-btn' onClick={() => {console.log(1);}}>
+                                                    Request Change
+                                                </Button>
+                                        }
                                     </Col>
                                 </Row>
                             </div>
 
-                            <div className='m-3'>
-                                Selling Price(ETH):<br/> 
-                                <Row>
-                                    <Col sm={7} xs={12}>
-                                        <input value={sellingPrice} onChange={(e) => setSellingPriceString(e.target.value)} placeholder='example: 7.543' />
-                                    </Col>
-                                    <Col>
-                                        <Button className='apply-change-btn'>
-                                            Apply Change
-                                        </Button>                                        
-                                    </Col>
-                                </Row>
-                                
-                            </div>
-                            
-                            <div className='m-3'>
-                                Country:<br/>
-                                <Row>
-                                    <Col sm={7} xs={12}>
-                                        <input  value={country} onChange={(e) => setCountry(e.target.value)} placeholder='example: Romania' />
-                                    </Col>
-                                    <Col>
-                                        <Button className='apply-change-btn'>
-                                            Apply Change
-                                        </Button>
-                                    </Col>
-                                </Row>
-                                
-                            </div>
-
-                            <div className='m-3'>
-                                City:<br/>
-                                <Row>
-                                    <Col sm={7} xs={12}>
-                                        <input value={city} onChange={(e) => setCity(e.target.value)} placeholder='example: Timisoara' />
-                                    </Col>
-                                    <Col>
-                                        <Button className='apply-change-btn'>
-                                            Apply Change
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </div>
-                        </Col>
-
-                        <Col lg={6} md={12} className='input-box flex-column'>
-                            <div className='m-3'>
-                                Street:<br/>
-                                <Row>
-                                    <Col sm={7} xs={12}>
-                                        <input value={street} onChange={(e) => setStreet(e.target.value)} placeholder='example: Hope Boulevard' />
-                                    </Col>
-                                    <Col>
-                                        <Button className='apply-change-btn'>
-                                            Apply Change
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </div>
-
-                            <div className='m-3'>
-                                Street Number:<br/>
-                                <Row>
-                                    <Col sm={7} xs={12}>
-                                        <input value={streetNumber} onChange={(e) => setStreetNumber(e.target.value)} placeholder='example: 13A' />
-                                    </Col>
-                                    <Col>
-                                        <Button className='apply-change-btn'>
-                                            Apply Change
-                                        </Button>
-                                    </Col>
-                                </Row>
-                                
-                            </div>
-
-                            <div className='m-3'>
-                                Apartment Number:<br/>
-                                <Row>
-                                    <Col sm={7} xs={12}>
-                                        <input value={apartmentNumber} onChange={(e) => setApartmentNumber(e.target.value)} placeholder='example: 21' />
-                                    </Col>
-                                    <Col>
-                                        <Button className='apply-change-btn'>
-                                            Apply Change
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </div>
-
-                            <div className='m-3'>
+                            <div className='mx-4 my-3'>
                                 Square Metres:<br/>
                                 <Row>
-                                    <Col sm={7} xs={12}>
+                                    <Col lg={9} sm={7} xs={12}>
                                         <input type='number' value={squareMetres} onChange={(e) => setSquareMetres(e.target.value)} placeholder='example: 152' />
                                     </Col>
                                     <Col>
-                                        <Button className='apply-change-btn'>
-                                            Apply Change
-                                        </Button>
+                                        {
+                                            squareMetres == props.squareMetres ?
+                                            <Button className='apply-change-btn disabled-btn'>
+                                                Request Change
+                                            </Button> :
+                                            <Button className='apply-change-btn'>
+                                                Request Change
+                                            </Button>
+                                        }
                                     </Col>
                                 </Row>
                             </div>
@@ -256,7 +185,16 @@ function PropertyDetailsModal(props) {
                 <Modal.Footer className='justify-content-center'>
                     <Row>
                         <Col xs={12}>
-                            <Button className='submit-btn' onClick={applyContractChanges}>Save Contract Changes</Button>
+                            {
+                                squareMetres == props.squareMetres && sellingPrice == props.sellingPrice && housingTenure == props.housingTenure ?
+                                <Button className='submit-btn disabled-btn' onClick={applyContractChanges}>
+                                    Save Contract Changes
+                                </Button> :
+                                <Button className='submit-btn' onClick={applyContractChanges}>
+                                    Save Contract Changes
+                                </Button>
+                            }
+                            
                         </Col>
                         <Col xs={12} className='text-center mt-2'>
                             <div className=''>
