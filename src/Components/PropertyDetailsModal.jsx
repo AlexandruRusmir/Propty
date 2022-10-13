@@ -23,14 +23,14 @@ function PropertyDetailsModal(props) {
     const [street, setStreet] = useState(props.street);
     const [streetNumber, setStreetNumber] = useState(props.streetNumber);
     const [apartmentNumber, setApartmentNumber] = useState(props.apartmentNumber);
-    const [squareMetres, setSquareMetres] = useState(props.squareMetres);
+    const [squareMeters, setSquareMeters] = useState(props.squareMeters);
 
-    async function updateContractSellingPrice(sellingPriceString) {
+    const updateContractSellingPrice = async (sellingPriceString) => {
         if (sellingPriceString.length === 0) {
             return;
         }
 
-        if (sellingPriceString.length > 31) {
+        if (sellingPriceString.length > 17) {
             return;
         }
 
@@ -55,8 +55,75 @@ function PropertyDetailsModal(props) {
             return;
         }
         
-        contract.methods.setPropertySellingPrice(sellingPriceIntegralPart,0,).send({ from: props.account }).then(() => {
+        contract.methods.setPropertySellingPrice(sellingPriceIntegralPart,0,0).send({ from: props.account }).then(() => {
             props.changeSellingPrice(sellingPriceString);
+        });
+    }
+
+    const updateContractHousingTenure = async () => {
+        if (housingTenure.length === 0) {
+            return;
+        }
+
+        contract.methods.modifyPropertyTenureType(housingTenure).send({ from: props.account }).then(() => {
+            props.changeHousingTenure(housingTenure);
+        });
+    }
+
+    const updateContractSquareMeters = async () => {
+        if (squareMeters.length === 0) {
+            return;
+        }
+
+        contract.methods.modifyPropertySquareMeters(squareMeters).send({ from: props.account }).then(() => {
+            props.changeSquareMeters(squareMeters);
+        });
+    }
+
+    const updateContractPriceAndTenureAndMeters = async (sellingPriceString) => {
+        if (sellingPriceString.length === 0) {
+            return;
+        }
+
+        if (sellingPriceString.length > 17) {
+            return;
+        }
+
+        const splitArray = sellingPriceString.split('.');
+        if (splitArray.length > 2) {
+            return;
+        }
+
+        const sellingPriceIntegralPart = splitArray[0];
+        if (splitArray[1]) {
+            const sellingPriceFractionalPart = splitArray[1];
+            const sellingPriceFractionalPartLength = splitArray[1].length;
+
+            contract.methods.modifyPropertyPriceAndTenureAndMeters(
+                sellingPriceIntegralPart,
+                sellingPriceFractionalPart,
+                sellingPriceFractionalPartLength,
+                housingTenure,
+                squareMeters
+            ).send({ from: props.account }).then(() => {
+                props.changeSellingPrice(sellingPriceString);
+                props.changeHousingTenure(housingTenure);
+                props.changeSquareMeters(squareMeters);
+            });
+
+            return;
+        }
+        
+        contract.methods.modifyPropertyPriceAndTenureAndMeters(
+            sellingPriceIntegralPart,
+            0,
+            0,
+            housingTenure,
+            squareMeters
+            ).send({ from: props.account }).then(() => {
+                props.changeSellingPrice(sellingPriceString);
+                props.changeHousingTenure(housingTenure);
+                props.changeSquareMeters(squareMeters);
         });
     }
 
@@ -82,7 +149,7 @@ function PropertyDetailsModal(props) {
         setSellingPrice(price);
     };
 
-    const applyContractChanges = () => {
+    const applySellingPriceChange = () => {
         if (sellingPrice != props.sellingPrice) {
             updateContractSellingPrice(sellingPrice).then(() => {
                 props.onHide();
@@ -90,6 +157,34 @@ function PropertyDetailsModal(props) {
                 console.log(err);
             });
         }
+    }
+
+    const applyHousingTenureChange = () => {
+        if (housingTenure != props.housingTenure) {
+            updateContractHousingTenure(sellingPrice).then(() => {
+                props.onHide();
+            }).catch( err => {
+                console.log(err);
+            });
+        }
+    }
+
+    const applySquareMetersChange = () => {
+        if (squareMeters != props.squareMeters) {
+            updateContractSquareMeters(squareMeters).then(() => {
+                props.onHide();
+            }).catch( err => {
+                console.log(err);
+            });
+        }
+    }
+
+    const applyAllContractChanges = () => {
+        updateContractPriceAndTenureAndMeters(sellingPrice).then(() => {
+            props.onHide();
+        }).catch( err => {
+            console.log(err);
+        });
     }
 
     return (
@@ -123,7 +218,7 @@ function PropertyDetailsModal(props) {
                                                 <Button className='apply-change-btn disabled-btn'>
                                                     Apply Change
                                                 </Button> :
-                                                <Button className='apply-change-btn'>
+                                                <Button className='apply-change-btn' onClick={() => {applySellingPriceChange();}}>
                                                     Apply Change
                                                 </Button> 
                                         }                       
@@ -152,7 +247,7 @@ function PropertyDetailsModal(props) {
                                                 <Button className='apply-change-btn disabled-btn'>
                                                     Request Change
                                                 </Button> :
-                                                <Button className='apply-change-btn' onClick={() => {console.log(1);}}>
+                                                <Button className='apply-change-btn' onClick={() => {applyHousingTenureChange();}}>
                                                     Request Change
                                                 </Button>
                                         }
@@ -164,15 +259,15 @@ function PropertyDetailsModal(props) {
                                 Square Metres:<br/>
                                 <Row>
                                     <Col lg={9} sm={7} xs={12}>
-                                        <input type='number' value={squareMetres} onChange={(e) => setSquareMetres(e.target.value)} placeholder='example: 152' />
+                                        <input type='number' value={squareMeters} onChange={(e) => setSquareMeters(e.target.value)} placeholder='example: 152' />
                                     </Col>
                                     <Col>
                                         {
-                                            squareMetres == props.squareMetres ?
+                                            squareMeters == props.squareMeters ?
                                             <Button className='apply-change-btn disabled-btn'>
                                                 Request Change
                                             </Button> :
-                                            <Button className='apply-change-btn'>
+                                            <Button className='apply-change-btn' onClick={() => {applySquareMetersChange();}}>
                                                 Request Change
                                             </Button>
                                         }
@@ -186,11 +281,11 @@ function PropertyDetailsModal(props) {
                     <Row>
                         <Col xs={12}>
                             {
-                                squareMetres == props.squareMetres && sellingPrice == props.sellingPrice && housingTenure == props.housingTenure ?
-                                <Button className='submit-btn disabled-btn' onClick={applyContractChanges}>
+                                squareMeters == props.squareMeters && sellingPrice == props.sellingPrice && housingTenure == props.housingTenure ?
+                                <Button className='submit-btn disabled-btn'>
                                     Save Contract Changes
                                 </Button> :
-                                <Button className='submit-btn' onClick={applyContractChanges}>
+                                <Button className='submit-btn' onClick={() => {applyAllContractChanges();}}>
                                     Save Contract Changes
                                 </Button>
                             }

@@ -28,7 +28,7 @@ function PropertyCard(props) {
     const [street, setStreet] = useState('');
     const [streetNumber, setStreetNumber] = useState('');
     const [apartmentNumber, setApartmentNumber] = useState('');
-    const [squareMetres, setSquareMetres] = useState('');
+    const [squareMeters, setSquareMeters] = useState('');
     const [proofOfIdentity, setProofOfIdentity] = useState('');
     const [propertyTitleDeeds, setPropertyTitleDeeds] = useState('');
     const [energyPerformanceCertificate, setEnergyPerformanceCertificate] = useState('');
@@ -58,7 +58,7 @@ function PropertyCard(props) {
         const street = await web3.eth.getStorageAt(contractAddress, 9);
         const streetNumber = await web3.eth.getStorageAt(contractAddress, 10);
         const apartmentNumber = await web3.eth.getStorageAt(contractAddress, 11);
-        const squareMetres = await web3.eth.getStorageAt(contractAddress, 12);
+        const squareMeters = await web3.eth.getStorageAt(contractAddress, 12);
         const proofOfIdentity = await web3.eth.getStorageAt(contractAddress, 13);
         const propertyTitleDeeds = await web3.eth.getStorageAt(contractAddress, 14);
         const energyPerformanceCertificate = await web3.eth.getStorageAt(contractAddress, 15);
@@ -81,7 +81,7 @@ function PropertyCard(props) {
         setStreet(web3.utils.hexToString(street).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(street))));
         setStreetNumber(web3.utils.hexToString(streetNumber).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(streetNumber))));
         setApartmentNumber(web3.utils.hexToNumber(apartmentNumber));
-        setSquareMetres(web3.utils.hexToNumber(squareMetres));
+        setSquareMeters(web3.utils.hexToNumber(squareMeters));
         setProofOfIdentity(web3.utils.hexToNumber(proofOfIdentity));
         setPropertyTitleDeeds(web3.utils.hexToNumber(propertyTitleDeeds));
         setEnergyPerformanceCertificate(web3.utils.hexToNumber(energyPerformanceCertificate));
@@ -98,17 +98,29 @@ function PropertyCard(props) {
 
         const params = [{
             'from': props.account,
-            'to': '0xD517EBCb17d3409fF5e6e51C5ee5BE7419Fe1B10',
+            'to': props.contractAddress,
             'gas': Number(2100000).toString(16),
             'gasPrice': Number(250000000).toString(16),
             'value': Number(sellingPrice).toString(16),
         }];
 
-        const result = await window.ethereum.request({method: 'eth_sendTransaction', params}).catch( err => {
+        const result = await window.ethereum.request({method: 'eth_sendTransaction', params}).then( () => {
+            setContractOwner(props.account)
+        }).catch( err => {
             console.log(err);
-        })
+        });
 
         console.log(result);
+    }
+
+    async function setPropertyForSale() {
+        // contract.methods.setPropertySellingPrice(
+        //     sellingPriceIntegralPart,
+        //     sellingPriceFractionalPart,
+        //     sellingPriceFractionalPartLength
+        // ).send({ from: props.account }).then(() => {
+        //     props.changeSellingPrice(sellingPriceString);
+        // });
     }
 
     return (
@@ -132,7 +144,9 @@ function PropertyCard(props) {
                                         </Button>
                                     </Col>
                                     <Col>
-                                        <Button className='list-for-sale-btn'>
+                                        <Button className='list-for-sale-btn' onClick={async () => {
+                                            await setPropertyForSale();
+                                        }}>
                                             List Property For Sale <MdOutlineSell size={22}/>
                                         </Button>
                                     </Col>
@@ -157,14 +171,16 @@ function PropertyCard(props) {
                                     street = {street}
                                     streetNumber = {streetNumber}
                                     apartmentNumber = {apartmentNumber}
-                                    squareMetres = {squareMetres}
+                                    squareMeters = {squareMeters}
                                     proofOfIdentity = {proofOfIdentity}
                                     propertyTitleDeeds = {propertyTitleDeeds}
                                     energyPerformanceCertificate = {energyPerformanceCertificate}
                                     extensionsAndAlterationsDocumentation = {extensionsAndAlterationsDocumentation}
                                     utilityBillsPaid = {utilityBillsPaid}
 
-                                    changeSellingPrice = {(sellingPrice) => {setSellingPrice(sellingPrice)}}
+                                    changeSellingPrice = {(sellingPrice) => {setSellingPrice(sellingPrice);}}
+                                    changeHousingTenure = {(housingTenure) => {setHousingTenure(housingTenure);}}
+                                    changeSquareMeters = {(squareMeters) => {setSquareMeters(squareMeters);}}
                                 />
                             </>:
                             <> 
@@ -201,7 +217,7 @@ function PropertyCard(props) {
                                 <p>Street: {street}</p>
                                 <p>Street number: {streetNumber}</p>
                                 <p>Apartment number: {apartmentNumber}</p>
-                                <p>Square Metres: {squareMetres}</p>
+                                <p>Square Metres: {squareMeters}</p>
                             </Col>
                         </Row>
                         <Row>

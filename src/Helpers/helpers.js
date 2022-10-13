@@ -24,36 +24,52 @@ export function getSellingPrice (sellingPriceIntegralPart, sellingPriceFractiona
 }
 
 export function getCorrespondingContractStateMessage (enumNumber) {
-    switch (enumNumber) {
-        case 0:
-            return 'Initialized';
-        case 1:
-            return 'Owned';
-        case 2:
-            return 'For sale';
-        case 3:
-            return 'No longer Relevant';
+    if (enumNumber == 0) {
+        return 'Initialized';
+    }
+
+    if (enumNumber == 1) {
+        return 'Owned';
+    }
+
+    if (enumNumber == 2) {
+        return 'For sale';
+    }
+
+    if (enumNumber == 3) {
+        return 'No longer Relevant';
     }
 
     return 'Not a valid contract state enum number';
 }
 
 export function getCorrespondingHousingTenure (enumNumber) {
-    switch (enumNumber) {
-        case 0:
-            return 'Owner Occupancy';
-        case 1:
-            return 'Tenancy';
-        case 2:
-            return 'Cooperative';
-        case 3:
-            return 'Condomium';
-        case 4:
-            return 'Public Housing';
-        case 5:
-            return 'Squatting';
-        case 6:
-            return 'Land Trust';
+    if (enumNumber == 0) {
+        return 'Owner Occupancy';
+    }
+
+    if (enumNumber == 1) {
+        return 'Tenancy';
+    }
+
+    if (enumNumber == 2) {
+        return 'Cooperative';
+    }
+
+    if (enumNumber == 3) {
+        return 'Condomium';
+    }
+
+    if (enumNumber == 4) {
+        return 'Public Housing';
+    }
+
+    if (enumNumber == 5) {
+        return 'Squatting';
+    }
+
+    if (enumNumber == 6) {
+        return 'Land Trust';
     }
 
     return 'Not a valid housing tenure enum number';

@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
-enum PropertyTitleContractState { INITIALIZED, OWNED, FOR_SALE, NO_LONGER_RELEVANT }
+enum PropertyTitleContractState { PENDING, OWNED, FOR_SALE, NO_LONGER_RELEVANT }
 
 enum HousingTenure {
     OWNER_OCCUPANCY,
@@ -20,7 +20,7 @@ struct PropertyDetails {
     string street;
     string streetNumber;
     uint256 apartmentNumber;
-    uint256 squareMetres;
+    uint256 squareMeters;
 }
 
 struct RequiredPropertyDocuments {
@@ -61,14 +61,10 @@ contract PropertyTitle {
         propertyDetails.street = _street;
         propertyDetails.streetNumber = _streeNumber;
         propertyDetails.apartmentNumber = _apartmentNumber;
-        propertyDetails.squareMetres = _squareMeters;
-
-        sellingPriceIntegralPart = 7;
-        sellingPriceFractionalPart = 534;
-        sellingPriceFractionalPartLength = 3;
+        propertyDetails.squareMeters = _squareMeters;
     }
 
-    receive() external payable onlyIfPropertyForSale
+    receive() external payable onlyIfPropertyForSale onlyRelevantProperty
     {
         uint256 sellingPriceWeiValue = (sellingPriceIntegralPart * 10**18) + (sellingPriceFractionalPart * 10**(18-sellingPriceFractionalPartLength));
         require(msg.sender.balance >= sellingPriceWeiValue, 'Insufficient funds');
@@ -77,12 +73,13 @@ contract PropertyTitle {
         owner = payable(msg.sender);
     }
 
-    function modifyContractState(
+    function modifyContractStateAndOwner(
         address payable _owner, 
         PropertyTitleContractState _contractState
     )
         external 
         onlyIfUserIsRegistrar
+        onlyRelevantProperty
     {
         owner = _owner;
         contractState = _contractState;
@@ -90,27 +87,47 @@ contract PropertyTitle {
 
     function insertPropertyDetails(
         HousingTenure _tenureType,
-        uint256 _squareMetres
+        uint256 _squareMeters
     )
         external
         onlyOwner
         onlyIfLegallyAllowed
+        onlyRelevantProperty
     {
         propertyDetails.tenureType = _tenureType;
-        propertyDetails.squareMetres = _squareMetres;
+        propertyDetails.squareMeters = _squareMeters;
     }
 
-    function modifyPropertyAdress(string memory _street, string memory _streeNumber) external onlyIfLegallyAllowed onlyOwner {
+    function modifyContractState(PropertyTitleContractState _contractState) external onlyIfLegallyAllowed onlyOwner onlyRelevantProperty {
+        contractState = _contractState;
+    }
+
+    function modifyPropertyAdress(string memory _street, string memory _streeNumber) external onlyIfLegallyAllowed onlyOwner onlyRelevantProperty {
         propertyDetails.street = _street;
         propertyDetails.streetNumber = _streeNumber;
     }
 
-    function modifyPropertyTenureType(HousingTenure _tenureType) external onlyIfLegallyAllowed onlyOwner {
+    function modifyPropertyPriceAndTenureAndMeters(
+        uint256 _sellingPriceIntegralPart, 
+        uint256 _sellingPriceFractionalPart, 
+        uint256 _sellingPriceFractionalPartLength,
+        HousingTenure _housingTenure,
+        uint256 _squareMeters
+    )
+        external
+        onlyIfLegallyAllowed
+        onlyOwner
+        onlyRelevantProperty
+    {
+
+    }
+
+    function modifyPropertyTenureType(HousingTenure _tenureType) external onlyIfLegallyAllowed onlyOwner onlyRelevantProperty {
         propertyDetails.tenureType = _tenureType;
     }
 
-    function modifyPropertySquareMetres(uint256 _squareMetres) external onlyIfLegallyAllowed onlyOwner {
-        propertyDetails.squareMetres = _squareMetres;
+    function modifyPropertySquareMeters(uint256 _squareMeters) external onlyIfLegallyAllowed onlyOwner onlyRelevantProperty {
+        propertyDetails.squareMeters = _squareMeters;
     }
 
     function setPropertySellingPrice(
@@ -121,6 +138,7 @@ contract PropertyTitle {
         external 
         onlyIfLegallyAllowed 
         onlyOwner 
+        onlyRelevantProperty
     {
         sellingPriceIntegralPart = _sellingPriceIntegralPart;
         sellingPriceFractionalPart = _sellingPriceFractionalPart;
@@ -204,6 +222,12 @@ contract PropertyTitle {
         require(propertyDetails.tenureType == HousingTenure.OWNER_OCCUPANCY || propertyDetails.tenureType == HousingTenure.CONDOMIUM,
             "This property's tenure type does not support being sold");
         require(contractState == PropertyTitleContractState.FOR_SALE, "This property is not for sale.");
+        _;
+    }
+
+    modifier onlyRelevantProperty {
+        require(contractState != PropertyTitleContractState.NO_LONGER_RELEVANT, 
+            'This Property Title Contract is no longer relavant');
         _;
     }
 }
