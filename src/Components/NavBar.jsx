@@ -31,7 +31,6 @@ function NavBar(props) {
                                             <div>
                                                 <strong>
                                                     Address: {props.account}<br/>
-                                                    Current balance: <i>{props.balance}</i> ETH<br/>
                                                 </strong>
                                             </div> 
                                             :

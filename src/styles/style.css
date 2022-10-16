@@ -1,10 +1,20 @@
 body {
     background: linear-gradient(135deg, #FFFFFF 0%, #FFFAF7 10%, #FFF3EA 20%, #F5F3F0 33%, #DDF3FF 66%, #D0F1C9 100%) center center fixed;
-    font-family: Roboto, “Helvetica Neue”, Helvetica, Arial, sans-serif;
+    font-family: Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, sans-serif !important;
+    color: #234361 !important;
 }
 
 .popover-custom {
     max-width: 450px;
+}
+
+.font-weight-600 {
+    font-weight: 600;
+}
+
+.title-text {
+    font-size: 36px;
+    color: var(#234361,#333);
 }
 
 .input-box input:not([type='checkbox']) {
@@ -34,6 +44,7 @@ body {
 }
 
 .submit-btn {
+    font-weight: 600;
     display: block;
     padding: 10px 20px;
     margin: 0 auto;
@@ -54,6 +65,79 @@ body {
 }
 
 .list-for-sale-btn {
+    width: 200px;
+    padding: 6px 10px;
+    margin: 0 auto;
+    text-align: center;
+    background: #097770;
+    font-weight: 700;
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .3s;
+    outline: none;
+    margin-bottom: 8px;
+}
+
+.list-for-sale-btn:hover, .list-for-sale-btn:focus {
+    background: #08635d;
+    border-color: transparent;
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    transform: translateY(-2px);
+}
+
+.remove-listing-btn {
+    width: 200px;
+    padding: 6px 10px;
+    margin: 0 auto;
+    text-align: center;
+    background: #4d5198;
+    font-weight: 700;
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .3s;
+    outline: none;
+    margin-bottom: 8px;
+}
+
+.remove-listing-btn:hover, .remove-listing-btn:focus {
+    background: #3d407a;
+    border-color: transparent;
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    transform: translateY(-2px);
+}
+
+.modify-contract-btn {
+    width: 200px;
+    padding: 6px 10px;
+    margin: 0 auto;
+    text-align: center;
+    background: hsl(217deg, 100%, 50%);
+    font-weight: 700;
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .3s;
+    outline: none;
+    margin-bottom: 8px;
+}
+
+.modify-contract-btn:hover, .modify-contract-btn:focus {
+    background-color: #004ecc;
+    border-color: transparent;
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    transform: translateY(-2px);
+}
+
+.buy-contract-btn {
+    width: 200px;
     padding: 6px 10px;
     margin: 0 auto;
     text-align: center;
@@ -66,6 +150,38 @@ body {
     border: none;
     transition: ease-in-out .3s;
     outline: none;
+    margin-bottom: 8px;
+}
+
+.buy-contract-btn:hover, .buy-contract-btn:focus {
+    background: #fc2323;
+    border-color: transparent;
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    transform: translateY(-2px);
+}
+
+.disable-contract-btn {
+    width: 200px;
+    padding: 6px 10px;
+    margin: 0 auto;
+    text-align: center;
+    background: #d72631;
+    font-weight: 700;
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .3s;
+    outline: none;
+    margin-bottom: 8px;
+}
+
+.disable-contract-btn:hover, .disable-contract-btn:focus {
+    background-color: #c22630;
+    border-color: transparent;
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    transform: translateY(-2px);
 }
 
 .apply-change-btn {
@@ -99,6 +215,12 @@ body {
     margin-top: 0.25rem;
     font-size: .875em;
     color: #6c757d;
+}
+
+@media (max-width: 992px) {
+    .disable-contract-btn, .modify-contract-btn, .list-for-sale-btn {
+        margin-bottom: 18px;
+    }
 }
 
 @media (max-width: 576px) {

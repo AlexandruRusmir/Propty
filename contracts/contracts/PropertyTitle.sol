@@ -55,7 +55,7 @@ contract PropertyTitle {
     {
         creator = _creator;
         owner = _owner;
-        contractState = PropertyTitleContractState.FOR_SALE;
+        contractState = PropertyTitleContractState.PENDING;
         propertyDetails.country = _country;
         propertyDetails.city = _city;
         propertyDetails.street = _street;
@@ -64,7 +64,7 @@ contract PropertyTitle {
         propertyDetails.squareMeters = _squareMeters;
     }
 
-    receive() external payable onlyIfPropertyForSale onlyRelevantProperty
+    receive() external payable onlyIfPropertyForSale onlyRelevantProperty 
     {
         uint256 sellingPriceWeiValue = (sellingPriceIntegralPart * 10**18) + (sellingPriceFractionalPart * 10**(18-sellingPriceFractionalPartLength));
         require(msg.sender.balance >= sellingPriceWeiValue, 'Insufficient funds');
@@ -111,7 +111,7 @@ contract PropertyTitle {
         uint256 _sellingPriceIntegralPart, 
         uint256 _sellingPriceFractionalPart, 
         uint256 _sellingPriceFractionalPartLength,
-        HousingTenure _housingTenure,
+        HousingTenure _tenureType,
         uint256 _squareMeters
     )
         external
@@ -119,7 +119,11 @@ contract PropertyTitle {
         onlyOwner
         onlyRelevantProperty
     {
-
+        sellingPriceIntegralPart = _sellingPriceIntegralPart;
+        sellingPriceFractionalPart = _sellingPriceFractionalPart;
+        sellingPriceFractionalPartLength = _sellingPriceFractionalPartLength;
+        propertyDetails.tenureType = _tenureType;
+        propertyDetails.squareMeters = _squareMeters;
     }
 
     function modifyPropertyTenureType(HousingTenure _tenureType) external onlyIfLegallyAllowed onlyOwner onlyRelevantProperty {
@@ -143,7 +147,6 @@ contract PropertyTitle {
         sellingPriceIntegralPart = _sellingPriceIntegralPart;
         sellingPriceFractionalPart = _sellingPriceFractionalPart;
         sellingPriceFractionalPartLength = _sellingPriceFractionalPartLength;
-        contractState = PropertyTitleContractState.FOR_SALE;
     }
 
     function getPropertySellingPrice() public view returns (uint256) {

@@ -10,13 +10,14 @@ import { Form } from 'react-bootstrap';
 import { useWeb3 } from '../CustomHooks/useWeb3';
 import { useContract } from '../CustomHooks/useContract';
 import { MdOutlineSell } from "react-icons/md";
+import config from '../Config/propertyTitleStates';
 
 function PropertyDetailsModal(props) {
     const web3 = useWeb3().current;
     const contract = useContract().current;
 
     const [contractState, setContractState] = useState(props.contractState);
-    const [sellingPrice, setSellingPrice] = useState(props.sellingPrice);
+    const [sellingPrice, setSellingPrice] = useState(props.sellingPrice.toString());
     const [housingTenure, setHousingTenure] = useState(props.housingTenure);
     const [city, setCity] = useState(props.city);
     const [country, setCountry] = useState(props.country);
@@ -152,7 +153,7 @@ function PropertyDetailsModal(props) {
     const applySellingPriceChange = () => {
         if (sellingPrice != props.sellingPrice) {
             updateContractSellingPrice(sellingPrice).then(() => {
-                props.onHide();
+                props.onDetailsEditHide();
             }).catch( err => {
                 console.log(err);
             });
@@ -162,7 +163,7 @@ function PropertyDetailsModal(props) {
     const applyHousingTenureChange = () => {
         if (housingTenure != props.housingTenure) {
             updateContractHousingTenure(sellingPrice).then(() => {
-                props.onHide();
+                props.onDetailsEditHide();
             }).catch( err => {
                 console.log(err);
             });
@@ -172,7 +173,7 @@ function PropertyDetailsModal(props) {
     const applySquareMetersChange = () => {
         if (squareMeters != props.squareMeters) {
             updateContractSquareMeters(squareMeters).then(() => {
-                props.onHide();
+                props.onDetailsEditHide();
             }).catch( err => {
                 console.log(err);
             });
@@ -181,7 +182,7 @@ function PropertyDetailsModal(props) {
 
     const applyAllContractChanges = () => {
         updateContractPriceAndTenureAndMeters(sellingPrice).then(() => {
-            props.onHide();
+            props.onDetailsEditHide();
         }).catch( err => {
             console.log(err);
         });
@@ -191,23 +192,23 @@ function PropertyDetailsModal(props) {
         <div>
             <Modal
                 show={props.show}
-                onHide = {props.onHide}
+                onHide = {props.onDetailsEditHide}
                 size = 'lg'
                 aria-labelledby={'propertyTitleEditModal' + props.country + props.city + props.street  + props.streetNumber + props.apartmentNumber}
                 centered
             >
                 <Modal.Header closeButton>
-                <Modal.Title id={'propertyEditModal' + props.country + props.city + props.street + props.streetNumber + props.apartmentNumber}>
-                    <div className='mx-4'>
-                        Modify your Property Title Contract
-                    </div>
-                </Modal.Title>
+                    <Modal.Title id={'propertyEditModal' + props.country + props.city + props.street + props.streetNumber + props.apartmentNumber}>
+                        <div className='mx-4'>
+                            Modify your Property Title Contract
+                        </div>
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Row>
                         <Col className='input-box flex-column'>
                             <div className='mx-4 my-3'>
-                                Selling Price(ETH):<br/> 
+                                Selling Price(ETH):<br/>
                                 <Row>
                                     <Col lg={9} sm={7} xs={12}>
                                         <input value={sellingPrice} onChange={(e) => setSellingPriceString(e.target.value)} placeholder='example: 7.543' />
@@ -221,7 +222,7 @@ function PropertyDetailsModal(props) {
                                                 <Button className='apply-change-btn' onClick={() => {applySellingPriceChange();}}>
                                                     Apply Change
                                                 </Button> 
-                                        }                       
+                                        }
                                     </Col>
                                 </Row>
                                 
@@ -231,14 +232,14 @@ function PropertyDetailsModal(props) {
                                 <span>Housing Tenure: </span><br/>
                                 <Row>
                                     <Col lg={9} sm={7} xs={12}>
-                                        <select onChange={(e) => {setHousingTenure(e.target.value);}}>
-                                            <option value="0">Owner Occupancy</option>
-                                            <option value="1">Tenancy</option>
-                                            <option value="2">Cooperative</option>
-                                            <option value="3">Condomium</option>
-                                            <option value="4">Public Housing</option>
-                                            <option value="5">Squatting</option>
-                                            <option value="6">Land Trust</option>
+                                        <select value={housingTenure} onChange={(e) => {setHousingTenure(e.target.value);}}>
+                                            <option value={config.housingTenure.OWNER_OCCUPANCY}>Owner Occupancy</option>
+                                            <option value={config.housingTenure.TENANCY}>Tenancy</option>
+                                            <option value={config.housingTenure.COOPERATIVE}>Cooperative</option>
+                                            <option value={config.housingTenure.CONDOMIUM}>Condomium</option>
+                                            <option value={config.housingTenure.PUBLIC_HOUSING}>Public Housing</option>
+                                            <option value={config.housingTenure.SQUATTING}>Squatting</option>
+                                            <option value={config.housingTenure.LAND_TRUST}>Land Trust</option>
                                         </select>
                                     </Col>
                                     <Col>

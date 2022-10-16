@@ -3,7 +3,6 @@ import './App.css';
 import './styles/style.css';
 import Web3 from 'web3'
 import TestComponent from './testComponent';
-import PropertyDetailsEdit from './Components/PropertyDetailsEdit';
 import TestComponent2 from './testComponent2';
 import Container from 'react-bootstrap/Container';
 import NavBar from './Components/NavBar';
@@ -31,8 +30,14 @@ function App() {
 			window.location.reload();
 		}
 
+		const messageReceiveFunction = async (message) => {
+			await loadBalance();
+			console.log(message);
+		}
+
 		window.ethereum.on('accountsChanged', accountsChangeFunction);
 		window.ethereum.on('chainChanged', chainChangeFunction);
+		window.ethereum.on('message', messageReceiveFunction);
 
 		loadAccount().then((receivedAccount) => {
 			setAccount(receivedAccount);
@@ -51,6 +56,7 @@ function App() {
 			console.log('destructed');
 			window.ethereum.removeListener('accountsChanged', accountsChangeFunction);
 			window.ethereum.removeListener('chainChanged', chainChangeFunction);
+			window.ethereum.removeListener('message', messageReceiveFunction);
 		};
 	}, [])
 

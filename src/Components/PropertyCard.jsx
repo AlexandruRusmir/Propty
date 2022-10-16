@@ -4,14 +4,15 @@ import '../styles/propertyCardStyle.css'
 import '../styles/colors.css'
 import { Col, Row, Card, Accordion, Button } from 'react-bootstrap';
 import PropertyDetailsModal from './PropertyDetailsModal';
-import Web3 from 'web3';
+import StateChangeModal from './StateChangeModal';
 import { useState, useEffect } from 'react';
 import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContractStateMessage, getCorrespondingHousingTenure, getMessageForRequiredDocuments } from '../Helpers/helpers';
 import { useWeb3 } from '../CustomHooks/useWeb3';
 import { useContract } from '../CustomHooks/useContract';
 import { FaEthereum } from 'react-icons/fa';
-import { MdOutlineSell, MdOutlineEditLocationAlt } from 'react-icons/md';
+import { MdOutlineSell, MdOutlineEditLocationAlt, MdRemoveDone } from 'react-icons/md';
 import { CgPlayListRemove } from 'react-icons/cg'
+import config from '../Config/propertyTitleStates';
 
 function PropertyCard(props) {
     const web3 = useWeb3().current;
@@ -35,7 +36,10 @@ function PropertyCard(props) {
     const [extensionsAndAlterationsDocumentation, setExtensionsAndAlterationsDocumentation] = useState('');
     const [utilityBillsPaid, setUtilityBillsPaid] = useState('');
 
-    const [popupOpen, setPopupOpen] = useState(false);
+    const [desiredNewState, setDesiredNewState] = useState('');
+
+    const [contractEditOpen, setContractEditOpen] = useState(false);
+    const [stateChangeOpen, setStateChangeOpen] = useState(false);
 
     useEffect(() => {
         loadContract();
@@ -105,7 +109,8 @@ function PropertyCard(props) {
         }];
 
         const result = await window.ethereum.request({method: 'eth_sendTransaction', params}).then( () => {
-            setContractOwner(props.account)
+            setContractOwner(props.account);
+            setContractState(config.contractState.OWNED);
         }).catch( err => {
             console.log(err);
         });
@@ -113,22 +118,11 @@ function PropertyCard(props) {
         console.log(result);
     }
 
-    async function setPropertyForSale() {
-        // contract.methods.setPropertySellingPrice(
-        //     sellingPriceIntegralPart,
-        //     sellingPriceFractionalPart,
-        //     sellingPriceFractionalPartLength
-        // ).send({ from: props.account }).then(() => {
-        //     props.changeSellingPrice(sellingPriceString);
-        // });
-    }
-
     return (
         <div>
             <Card
                 key={'propertyTitle' + country + city + street  + streetNumber + apartmentNumber}
                 id={'propertyTitle' + country + city + street  + streetNumber + apartmentNumber}
-                text='black'
                 className="mb-2 mx-5"
                 variant='light'
             >
@@ -136,30 +130,69 @@ function PropertyCard(props) {
                     {
                         props.account.toLowerCase() == contractOwner ?
                             <>
-                                <p>This contract belongs to you</p>
+                                <p>
+                                    <strong>You are the Owner of this Contract</strong>
+                                </p>
                                 <Row>
-                                    <Col>
-                                        <Button variant='success' onClick={() => setPopupOpen(true)} className='list-for-sale-btn'>
-                                            Modify Property Title Contract <MdOutlineEditLocationAlt size={22}/>
+                                    <Col lg={4} md={12}>
+                                        {
+                                            contractState == config.contractState.FOR_SALE ?
+                                            <Button className='remove-listing-btn' onClick={() => {
+                                                setDesiredNewState(config.contractState.OWNED);
+                                                setStateChangeOpen(true);
+                                            }}>
+                                                Remove Listing <CgPlayListRemove size={22}/>
+                                            </Button> :
+                                            <>
+                                                {
+                                                    housingTenure == config.housingTenure.OWNER_OCCUPANCY || housingTenure == config.housingTenure.CONDOMIUM ?
+                                                    <Button className='list-for-sale-btn' onClick={() => {
+                                                        setDesiredNewState(config.contractState.FOR_SALE);
+                                                        setStateChangeOpen(true);
+                                                    }}>
+                                                        List For Sale <MdOutlineSell size={22}/>
+                                                    </Button> :
+                                                    <Button className='list-for-sale-btn disabled-btn'>
+                                                        List For Sale <MdOutlineSell size={22}/>
+                                                    </Button>
+                                                }
+                                            </>
+                                        }
+                                    </Col>
+                                    <Col lg={4} md={12}>
+                                        <Button onClick={() => setContractEditOpen(true)} className='modify-contract-btn'>
+                                            Modify Contract <MdOutlineEditLocationAlt size={22}/>
                                         </Button>
                                     </Col>
-                                    <Col>
-                                        <Button className='list-for-sale-btn' onClick={async () => {
-                                            await setPropertyForSale();
+                
+                                    <Col lg={4} md={12}>
+                                        <Button className='disable-contract-btn' onClick={() => {
+                                            setDesiredNewState(config.contractState.NO_LONGER_RELEVANT);
+                                            setStateChangeOpen(true);
                                         }}>
-                                            List Property For Sale <MdOutlineSell size={22}/>
+                                            Invalidate Contract <MdRemoveDone size={22}/>
                                         </Button>
                                     </Col>
-                                    <Col>
-                                        <Button className='list-for-sale-btn'>
-                                            Invalidate Contract <CgPlayListRemove size={22}/>
-                                        </Button>
-                                    </Col>
+                                    <StateChangeModal
+                                        show={stateChangeOpen}
+                                        onStateChangeHide={() => setStateChangeOpen(false)}
+                                        desiredNewState = {desiredNewState}
+
+                                        account = {props.account}
+                                        contractAddress = {contractAddress}
+                                        country = {country}
+                                        city = {city}
+                                        street = {street}
+                                        streetNumber = {streetNumber}
+                                        apartmentNumber = {apartmentNumber}
+
+                                        changeContractState = {(newContractState) => {setContractState(newContractState)}}
+                                    />
                                 </Row>
 
                                 <PropertyDetailsModal
-                                    show={popupOpen}
-                                    onHide={() => setPopupOpen(false)}
+                                    show={contractEditOpen}
+                                    onDetailsEditHide={() => setContractEditOpen(false)}
 
                                     account = {props.account}
                                     contractAddress = {contractAddress}
@@ -184,12 +217,14 @@ function PropertyCard(props) {
                                 />
                             </>:
                             <> 
-                                Property Owner: {contractOwner}
+                                <p className='mb-3'>
+                                    <strong>Property Owner: {contractOwner}</strong>
+                                </p>
                                 {
-                                    contractState == 2 ?
+                                    contractState == config.contractState.FOR_SALE ?
                                         <Row>
                                             <Col>
-                                                <Button onClick={() => {buyProperty();}}>
+                                                <Button className='buy-contract-btn' onClick={() => {buyProperty();}}>
                                                     Buy Property <FaEthereum />
                                                 </Button>
                                             </Col>
@@ -208,31 +243,35 @@ function PropertyCard(props) {
                     <div>
                         <Row>
                             <Col lg={6} md={12} className='text-center'>
-                                <p>Selling price: {sellingPrice} ETH</p>
-                                <p>Housing tenure: {getCorrespondingHousingTenure(housingTenure)}</p>
-                                <p>Country: {country}</p>
-                                <p>City: {city}</p>
+                                <p><strong>Selling price:</strong> {sellingPrice} ETH</p>
+                                <p><strong>Housing tenure:</strong> {getCorrespondingHousingTenure(housingTenure)}</p>
+                                <p><strong>Country:</strong> {country}</p>
+                                <p><strong>City:</strong> {city}</p>
                             </Col>
                             <Col lg={6} md={12} className='text-center'>
-                                <p>Street: {street}</p>
-                                <p>Street number: {streetNumber}</p>
-                                <p>Apartment number: {apartmentNumber}</p>
-                                <p>Square Metres: {squareMeters}</p>
+                                <p><strong>Street:</strong> {street}</p>
+                                <p><strong>Street number:</strong> {streetNumber}</p>
+                                <p><strong>Apartment number:</strong> {apartmentNumber}</p>
+                                <p><strong>Square Metres:</strong> {squareMeters}</p>
                             </Col>
                         </Row>
                         <Row>
-                            <Accordion>
-                                <Accordion.Item eventKey="0">
-                                    <Accordion.Header>Required Property Documents</Accordion.Header>
-                                    <Accordion.Body>
-                                        <p>Proof of Identity: {getMessageForRequiredDocuments(proofOfIdentity)}</p>
-                                        <p>Property Title Deeds: {getMessageForRequiredDocuments(propertyTitleDeeds)}</p>
-                                        <p>Energy Performance Certificate: {getMessageForRequiredDocuments(energyPerformanceCertificate)}</p>
-                                        <p>Extensions and Alterations Documentation: {getMessageForRequiredDocuments(extensionsAndAlterationsDocumentation)}</p>
-                                        <p>Utility Bills Paid: {getMessageForRequiredDocuments(utilityBillsPaid)}</p>
-                                    </Accordion.Body>
-                                </Accordion.Item>
-                            </Accordion>
+                            <div>
+                                <div className='custom-accordion'>
+                                    <Accordion>
+                                        <Accordion.Item eventKey="0">
+                                            <Accordion.Header className='mx-2'><span>Required Property Documents</span></Accordion.Header>
+                                            <Accordion.Body>
+                                                <p>Proof of Identity: {getMessageForRequiredDocuments(proofOfIdentity)}</p>
+                                                <p>Property Title Deeds: {getMessageForRequiredDocuments(propertyTitleDeeds)}</p>
+                                                <p>Energy Performance Certificate: {getMessageForRequiredDocuments(energyPerformanceCertificate)}</p>
+                                                <p>Extensions and Alterations Documentation: {getMessageForRequiredDocuments(extensionsAndAlterationsDocumentation)}</p>
+                                                <p>Utility Bills Paid: {getMessageForRequiredDocuments(utilityBillsPaid)}</p>
+                                            </Accordion.Body>
+                                        </Accordion.Item>
+                                    </Accordion>
+                                </div>
+                            </div>
                         </Row>
                     </div>
                 </Card.Body>
