@@ -58,8 +58,9 @@ body {
     transition: ease-in-out .4s;
 }
 
-.submit-btn:hover {
+.submit-btn:hover, .submit-btn:focus {
     transform: translate(-1px, -5px);
+    border-color: transparent;
     background: #fc2323;
     box-shadow: 0 0 11px rgba(33,33,33,.2);
 }
@@ -69,7 +70,7 @@ body {
     padding: 6px 10px;
     margin: 0 auto;
     text-align: center;
-    background: #097770;
+    background: #5dbe47;
     font-weight: 700;
     outline: none;
     border-radius: 6px;
@@ -82,37 +83,13 @@ body {
 }
 
 .list-for-sale-btn:hover, .list-for-sale-btn:focus {
-    background: #08635d;
+    background: #51a73e;
     border-color: transparent;
     box-shadow: 0 0 11px rgba(33,33,33,.2);
     transform: translateY(-2px);
 }
 
 .remove-listing-btn {
-    width: 200px;
-    padding: 6px 10px;
-    margin: 0 auto;
-    text-align: center;
-    background: #4d5198;
-    font-weight: 700;
-    outline: none;
-    border-radius: 6px;
-    color: #FFF;
-    cursor: pointer;
-    border: none;
-    transition: ease-in-out .3s;
-    outline: none;
-    margin-bottom: 8px;
-}
-
-.remove-listing-btn:hover, .remove-listing-btn:focus {
-    background: #3d407a;
-    border-color: transparent;
-    box-shadow: 0 0 11px rgba(33,33,33,.2);
-    transform: translateY(-2px);
-}
-
-.modify-contract-btn {
     width: 200px;
     padding: 6px 10px;
     margin: 0 auto;
@@ -129,8 +106,32 @@ body {
     margin-bottom: 8px;
 }
 
+.remove-listing-btn:hover, .remove-listing-btn:focus {
+    background: #004ecc;
+    border-color: transparent;
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    transform: translateY(-2px);
+}
+
+.modify-contract-btn {
+    width: 200px;
+    padding: 6px 10px;
+    margin: 0 auto;
+    text-align: center;
+    background: #ff4c4c;
+    font-weight: 700;
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .3s;
+    outline: none;
+    margin-bottom: 8px;
+}
+
 .modify-contract-btn:hover, .modify-contract-btn:focus {
-    background-color: #004ecc;
+    background-color: #fc2323;
     border-color: transparent;
     box-shadow: 0 0 11px rgba(33,33,33,.2);
     transform: translateY(-2px);

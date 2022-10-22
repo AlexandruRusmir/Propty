@@ -3,7 +3,7 @@ const config = {
         PENDING: 0,
         OWNED: 1, 
         FOR_SALE: 2, 
-        NO_LONGER_RELEVANT: 2
+        NO_LONGER_RELEVANT: 3
     },
     housingTenure: {
         OWNER_OCCUPANCY: 0,

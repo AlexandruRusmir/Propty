@@ -218,7 +218,7 @@ function PropertyCard(props) {
                             </>:
                             <> 
                                 <p className='mb-3'>
-                                    <strong>Property Owner: {contractOwner}</strong>
+                                    <strong>Property Owner:</strong> {contractOwner}
                                 </p>
                                 {
                                     contractState == config.contractState.FOR_SALE ?

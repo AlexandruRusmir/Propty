@@ -1,0 +1,16 @@
+.carousel-picture {
+    height: 300px;
+     width: 100%;
+}
+
+.my-properties-card {
+    width: 80%;
+    height: 80%;
+}
+
+@media (max-width: 992px) {
+    .my-properties-card {
+        width: 90%;
+        height: 100%;
+    }
+}

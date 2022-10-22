@@ -29,9 +29,7 @@ function NavBar(props) {
                                     {
                                         props.account ?
                                             <div>
-                                                <strong>
-                                                    Address: {props.account}<br/>
-                                                </strong>
+                                                <strong>Address:</strong> {props.account}<br/>
                                             </div> 
                                             :
                                             <strong>You are not connected to any account!</strong>
