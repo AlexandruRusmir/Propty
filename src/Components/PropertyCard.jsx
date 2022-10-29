@@ -45,7 +45,7 @@ function PropertyCard(props) {
         loadContract();
     }, []);
     
-    async function loadContract() {
+    const loadContract = async () => {
         // const networkId = await web3.eth.net.getId();
 
         // contractAddress =  propertyTitleBuild.networks[networkId].address;
@@ -93,11 +93,11 @@ function PropertyCard(props) {
         setUtilityBillsPaid(web3.utils.hexToNumber(utilityBillsPaid));
     }
 
-    async function getPropertySellingPrice() {
+    const getPropertySellingPrice = async () => {
         return contract.methods.getPropertySellingPrice().call();
     }
 
-    async function buyProperty() {
+    const buyProperty = async () => {
         const sellingPrice = await getPropertySellingPrice();
 
         const params = [{

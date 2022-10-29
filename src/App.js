@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import './styles/style.css';
 import Web3 from 'web3'
-import TestComponent from './testComponent';
-import TestComponent2 from './testComponent2';
 import Container from 'react-bootstrap/Container';
 import NavBar from './Components/NavBar';
 import { Route, Routes } from 'react-router-dom';
@@ -107,7 +105,6 @@ function App() {
 							account ?
 							<>
 								<PropertyDetailsEdit account={account} balance={balance} network={network}/>
-								<TestComponent2 account={account} balance={balance} network={network}/>
 							</>:
 							<p> Please connect to Metamask </p>
 						} */}

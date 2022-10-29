@@ -14,21 +14,21 @@ function StateChangeModal(props) {
     const contractAddress = props.contractAddress;
     const contract = useContract().current;
 
-    async function setPropertyForSale() {
+    const setPropertyForSale = async () => {
         contract.methods.modifyContractState(config.contractState.FOR_SALE).send({ from: props.account }).then(() => {
             props.changeContractState(config.contractState.FOR_SALE);
             props.onStateChangeHide();
         });
     }
 
-    async function removePropertyForSaleListing() {
+    const removePropertyForSaleListing = async () => {
         contract.methods.modifyContractState(config.contractState.OWNED).send({ from: props.account }).then(() => {
             props.changeContractState(config.contractState.OWNED);
             props.onStateChangeHide();
         });
     }
 
-    async function permanentlyDisableContract() {
+    const permanentlyDisableContract = async () => {
         contract.methods.modifyContractState(config.contractState.NO_LONGER_RELEVANT).send({ from: props.account }).then(() => {
             props.changeContractState(config.contractState.NO_LONGER_RELEVANT);
             props.onStateChangeHide();
