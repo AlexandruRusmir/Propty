@@ -10,7 +10,7 @@ import { Form } from 'react-bootstrap';
 import { useWeb3 } from '../CustomHooks/useWeb3';
 import { useContract } from '../CustomHooks/useContract';
 import { MdOutlineSell } from "react-icons/md";
-import config from '../Config/propertyTitleStates';
+import config from '../Config/config';
 
 function PropertyDetailsModal(props) {
     const web3 = useWeb3().current;

@@ -12,7 +12,7 @@ import { useContract } from '../CustomHooks/useContract';
 import { FaEthereum } from 'react-icons/fa';
 import { MdOutlineSell, MdOutlineEditLocationAlt, MdRemoveDone } from 'react-icons/md';
 import { CgPlayListRemove } from 'react-icons/cg'
-import config from '../Config/propertyTitleStates';
+import config from '../Config/config';
 
 function PropertyCard(props) {
     const web3 = useWeb3().current;

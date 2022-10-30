@@ -1,6 +1,10 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.15;
 
+interface ITitleCreatingContract {
+    function checkIfUserIsRegistrar(address _userAddress) external view returns (bool);
+}
+
 enum PropertyTitleContractState { PENDING, OWNED, FOR_SALE, NO_LONGER_RELEVANT }
 
 enum HousingTenure {
@@ -217,7 +221,7 @@ contract PropertyTitle {
     }
 
     modifier onlyIfUserIsRegistrar {
-        require(checkIfUserIsRegistrar(), "Only a registered registrar has access to this action.");
+        require(ITitleCreatingContract(creator).checkIfUserIsRegistrar(msg.sender) == true, "Only a registered registrar has access to this action.");
         _;
     }
 

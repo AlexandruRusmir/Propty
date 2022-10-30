@@ -219,7 +219,7 @@ body {
 }
 
 @media (max-width: 992px) {
-    .disable-contract-btn, .modify-contract-btn, .list-for-sale-btn {
+    .disable-contract-btn, .modify-contract-btn, .list-for-sale-btn, .remove-listing-btn {
         margin-bottom: 18px;
     }
 }

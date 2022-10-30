@@ -20,7 +20,7 @@ export function getNumberOfTrailingCharacters (string = '') {
 }
 
 export function getSellingPrice (sellingPriceIntegralPart, sellingPriceFractionalPart, sellingPriceFractionalPartLength) {
-    return sellingPriceIntegralPart + sellingPriceFractionalPart * 10 ** (-sellingPriceFractionalPartLength);
+    return (sellingPriceIntegralPart + sellingPriceFractionalPart * 10 ** (-sellingPriceFractionalPartLength)).toFixed(4);
 }
 
 export function getCorrespondingContractStateMessage (enumNumber) {

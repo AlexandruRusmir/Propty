@@ -13,8 +13,8 @@ import { useWeb3 } from '../CustomHooks/useWeb3';
 function TitleContractsList(props) {
     const web3 = useWeb3().current;
     const titlesContract = useTitlesContract().current;
-
-    const [contractOwners, setContractOwners] = useState([]);
+    let contractOwners = [];
+    
     const [registrars, setCRegistrars] = useState([]);
     const [titleContracts, setTitleContracts] = useState([]);
 
@@ -23,9 +23,18 @@ function TitleContractsList(props) {
     }, [])
 
     const loadContract = async () => {
-        const owners = await titlesContract.methods.owners(props.account).call();
-        setContractOwners(owners);
-        console.log(contractOwners);
+        const owners = await loadContractOwners();
+        contractOwners = owners;
+    }
+
+    const loadContractOwners = async () => {
+        const owners = await getContractOwners();
+        return owners;
+    }
+
+    const getContractOwners = async () => {
+        const owners = titlesContract.methods.getContractOwners().call();
+        return owners;
     }
 
     return (
