@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import './App.css';
 import './styles/style.css';
 import Web3 from 'web3'
 import Container from 'react-bootstrap/Container';
 import NavBar from './Components/NavBar';
 import { Route, Routes } from 'react-router-dom';
-import Home from './Components/Home';
-import AllProperties from './Components/AllProperties';
-import MyProperties from './Components/MyProperties';
+import Home from './Components/User/Home';
+import AllProperties from './Components/User/AllProperties';
+import MyProperties from './Components/User/MyProperties';
+import AllRegistrars from './Components/Owner/AllRegistrars';
 import { useWeb3 } from './CustomHooks/useWeb3';
 import { useTitlesContract } from './CustomHooks/useTitlesContract';
 
@@ -69,12 +69,14 @@ function App() {
 		loadBalance().catch(err => {
 			console.log(err);
 		});
-		loadCentralContract();
+		loadCentralContractData();
 	}, [account])
 
 	useEffect(() => {
 		if (centralContractOwners.includes(account)) {
 			setIsAdmin(true);
+		} else {
+			setIsAdmin(false);
 		}
 	}, [centralContractOwners])
 
@@ -95,7 +97,7 @@ function App() {
 		setBalance((balance/1e18).toFixed(4));
 	}
 
-	const loadCentralContract = async () => {
+	const loadCentralContractData = async () => {
         const owners = await getCentralContractOwners();
 		const lowerCaseOwnerAdresses = owners.map(ownerAddress => {
 			return ownerAddress.toLowerCase();
@@ -115,7 +117,7 @@ function App() {
 		if (!account) {
 			return;
 		}
-		const result = titlesContract.methods.registrars(account).call();
+		const result = titlesContract.methods.registrarsState(account).call();
 		return result
 	}
 
@@ -124,18 +126,25 @@ function App() {
 			{
 				animationEnd ?
 				<>
-					<NavBar account={account} balance={balance} network={network}/>
+					<NavBar account={account} balance={balance} network={network} isAdmin={isAdmin} isRegistrar={isRegistrar}/>
 					<div>
 						<Routes>
-							<Route path="/" element={<Home account={account} balance={balance} network={network}/>} />
-							<Route path="/allproperties" element={
+							<Route path="/" element={
+								<Home account={account} balance={balance} network={network}/>
+							} />
+							<Route path="/all-properties" element={
 								<Container>
 									<AllProperties account={account} balance={balance} network={network}/>
 								</Container>
 							} />
-							<Route path="/myproperties" element={
+							<Route path="/my-properties" element={
 								<Container>
 									<MyProperties account={account} balance={balance} network={network}/>
+								</Container>
+							} />
+							<Route path="/handle-registrars" element={
+								<Container>
+									<AllRegistrars account={account} balance={balance} network={network}/>
 								</Container>
 							} />
 						</Routes>

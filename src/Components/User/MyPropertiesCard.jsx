@@ -1,6 +1,7 @@
 import Card from 'react-bootstrap/Card';
-import HouseInHand from '../images/house_in_hand.svg';
-import '../styles/cardAndCarouselStyle.css';
+import HouseInHand from '../../images/house_in_hand.svg';
+import '../../styles/cardAndCarouselStyle.css';
+import '../../styles/style.css';
 
 function MyPropertiesCard() {
   return (

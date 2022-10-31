@@ -71,6 +71,14 @@ contract TitleCreatingContract {
         return owners;
     }
 
+    function getContractRegistrars() public view returns (address[] memory) {
+        return registrars;
+    }
+
+    function getTitleContracts() public view returns (address[] memory) {
+        return titleContracts;
+    }
+
     modifier onlyRegistrar {
         require(registrarsState[msg.sender] == true, "Only one of the registrars has access to this functionality.");
         _;

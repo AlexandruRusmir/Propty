@@ -1,6 +1,6 @@
 import React from 'react';
-import '../styles/parallaxStyle.css';
-import '../styles/style.css';
+import '../../styles/parallaxStyle.css';
+import '../../styles/style.css';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 

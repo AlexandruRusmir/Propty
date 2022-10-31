@@ -6,9 +6,10 @@ import MyPropertiesCard from './MyPropertiesCard';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { useCentralContractOwners } from '../CustomHooks/useCentralContractOwners';
-import { useTitlesContract } from '../CustomHooks/useTitlesContract';
-import { useWeb3 } from '../CustomHooks/useWeb3';
+import { useCentralContractOwners } from '../../CustomHooks/useCentralContractOwners';
+import { useWeb3 } from '../../CustomHooks/useWeb3';
+import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
+import '../../styles/style.css';
 
 function TitleContractsList(props) {
     const web3 = useWeb3().current;

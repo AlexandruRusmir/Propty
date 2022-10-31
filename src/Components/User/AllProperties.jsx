@@ -1,6 +1,6 @@
 import React from 'react';
 import PropertyCard from './PropertyCard';
-import '../styles/style.css';
+import '../../styles/style.css';
 import TitleContractsList from './TitleContractsList';
 
 function AllProperties(props) {

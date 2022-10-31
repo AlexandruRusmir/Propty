@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/style.css';
+import '../../styles/style.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
@@ -7,10 +7,10 @@ import Col from 'react-bootstrap/Col';
 import { useState } from 'react';
 import Web3 from 'web3';
 import { Form } from 'react-bootstrap';
-import { useWeb3 } from '../CustomHooks/useWeb3';
-import { useContract } from '../CustomHooks/useContract';
+import { useWeb3 } from '../../CustomHooks/useWeb3';
+import { useContract } from '../../CustomHooks/useContract';
 import { MdOutlineSell } from "react-icons/md";
-import config from '../Config/config';
+import config from '../../Config/config';
 
 function PropertyDetailsModal(props) {
     const web3 = useWeb3().current;

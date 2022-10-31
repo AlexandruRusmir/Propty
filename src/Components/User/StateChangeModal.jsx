@@ -1,13 +1,13 @@
 import React from 'react';
-import '../styles/style.css';
+import '../../styles/style.css';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useState } from 'react';
-import { getCorrespondingContractStateMessage } from '../Helpers/helpers';
-import { useContract } from '../CustomHooks/useContract';
-import config from '../Config/config';
+import { getCorrespondingContractStateMessage } from '../../Helpers/helpers';
+import { useContract } from '../../CustomHooks/useContract';
+import config from '../../Config/config';
 
 function StateChangeModal(props) {
     const desiredNewState = props.desiredNewState;

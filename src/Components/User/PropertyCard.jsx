@@ -1,18 +1,19 @@
 /* eslint-disable */
 import React, { useRef } from 'react';
-import '../styles/propertyCardStyle.css'
-import '../styles/colors.css'
+import '../../styles/propertyCardStyle.css'
+import '../../styles/colors.css'
+import '../../styles/style.css';
 import { Col, Row, Card, Accordion, Button } from 'react-bootstrap';
 import PropertyDetailsModal from './PropertyDetailsModal';
 import StateChangeModal from './StateChangeModal';
 import { useState, useEffect } from 'react';
-import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContractStateMessage, getCorrespondingHousingTenure, getMessageForRequiredDocuments } from '../Helpers/helpers';
-import { useWeb3 } from '../CustomHooks/useWeb3';
-import { useContract } from '../CustomHooks/useContract';
+import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContractStateMessage, getCorrespondingHousingTenure, getMessageForRequiredDocuments } from '../../Helpers/helpers';
+import { useWeb3 } from '../../CustomHooks/useWeb3';
+import { useContract } from '../../CustomHooks/useContract';
 import { FaEthereum } from 'react-icons/fa';
 import { MdOutlineSell, MdOutlineEditLocationAlt, MdRemoveDone } from 'react-icons/md';
 import { CgPlayListRemove } from 'react-icons/cg'
-import config from '../Config/config';
+import config from '../../Config/config';
 
 function PropertyCard(props) {
     const web3 = useWeb3().current;

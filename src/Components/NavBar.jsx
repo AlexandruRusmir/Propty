@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import '../App.css';
 import '../styles/colors.css';
 import '../styles/style.css';
 import Web3 from 'web3';
@@ -16,8 +15,13 @@ function NavBar(props) {
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
                     <Link to="/" className='nav-link'>Home</Link>
-                    <Link to="/allproperties" className='nav-link'>All Properties</Link>
-                    <Link to="/myproperties" className='nav-link'>My Properties</Link>
+                    {
+                        props.isAdmin === true?
+                        <Link to="/handle-registrars" className='nav-link'>Handle Registrars</Link> :
+                        ''
+                    }
+                    <Link to="/all-properties" className='nav-link'>All Properties</Link>
+                    <Link to="/my-properties" className='nav-link'>My Properties</Link>
                     <OverlayTrigger
                         trigger="click"
                         key='bottom'
