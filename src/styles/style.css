@@ -4,6 +4,12 @@ body {
     color: #234361 !important;
 }
 
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .popover-custom {
     max-width: 450px;
 }

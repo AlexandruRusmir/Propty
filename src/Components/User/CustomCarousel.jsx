@@ -6,7 +6,7 @@ import '../../styles/cardAndCarouselStyle.css';
 
 function CustomCarousel() {
   return (
-    <Carousel controls={false} variant="dark" style={{height: '400px'}} className='d-flex justify-content-center align-items-center'>
+    <Carousel controls={false} variant="dark" className='my-properties-carousel centered'>
       <Carousel.Item interval={2000}>
         <img
           className="d-block w-100 carousel-picture"

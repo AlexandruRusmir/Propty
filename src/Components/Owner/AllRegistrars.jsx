@@ -8,7 +8,10 @@ function AllRegistrars(props) {
                 <h1 className='text-center my-5 title-text'>All Registrars</h1>
             </div>
             <div>
-                <RegistrarCard address="0xb4n4n4..." isRegistrar={true} />
+                <RegistrarCard address="0xA14304638C269F716B06ccFd8f0Cc5f2a9Bb79CC" isRegistrar={true} />
+            </div>
+            <div>
+                <RegistrarCard address="0xA14304638C269F716B06ccFd8f0Cc5f2a9Bb79CC" isRegistrar={false} />
             </div>
         </>
     );

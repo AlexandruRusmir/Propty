@@ -80,7 +80,7 @@ function StateChangeModal(props) {
                         }
                     </Row>
                 </Modal.Body>
-                <Modal.Footer className='justify-content-center'>
+                <Modal.Footer className='centered'>
                     <Row>
                         <Col xs={12}>
                             {

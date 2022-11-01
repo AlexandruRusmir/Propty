@@ -16,7 +16,7 @@ function MyProperties(props) {
                     <CustomCarousel/>
                 </Col>
                 <Col lg={6} sm={12}>
-                    <div className='w-100 h-100 d-flex justify-content-center align-items-center'>
+                    <div className='w-100 h-100 d-flex centered'>
                         <MyPropertiesCard />
                     </div>
                 </Col>
