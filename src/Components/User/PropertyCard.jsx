@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useRef } from 'react';
 import '../../styles/propertyCardStyle.css'
-import '../../styles/colors.css'
+import '../../styles/buttons.css'
 import '../../styles/style.css';
 import { Col, Row, Card, Accordion, Button } from 'react-bootstrap';
 import PropertyDetailsModal from './PropertyDetailsModal';

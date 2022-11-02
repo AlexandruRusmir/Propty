@@ -12,6 +12,11 @@
     height: 80%;
 }
 
+.registrar-card {
+    margin: 0 140px;
+    margin-bottom: 40px;
+}
+
 .registrar-state-image {
     height: 60px;
 }
@@ -22,6 +27,11 @@
 }
 
 @media (max-width: 992px) {
+    .registrar-card {
+        margin: 0 50px;
+        margin-bottom: 30px;
+    }
+
     .my-properties-card {
         width: 90%;
         height: 100%;
@@ -31,5 +41,12 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+}
+
+@media (max-width: 556px) {
+    .registrar-card {
+        margin: 0 2px;
+        margin-bottom: 20px;
     }
 }

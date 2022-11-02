@@ -1,5 +1,6 @@
 import React from 'react';
 import '../../styles/style.css';
+import '../../styles/buttons.css'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import '../../styles/style.css';
 import '../../styles/cardAndCarouselStyle.css';
+import '../../styles/buttons.css';
 import Card from 'react-bootstrap/Card';
 import PersonAdd from '../../images/person_add.svg';
 import PersonRemove from '../../images/person_remove.svg';
@@ -17,7 +18,7 @@ function RegistrarCard(props) {
     const [isRegistrar, setIsRegistrar] = useState(props.isRegistrar);
 
     return (
-        <Card className='mx-5 mb-4'>
+        <Card className='registrar-card mb-5'>
             {
                 isRegistrar ?
                 <Card.Img className='my-2 registrar-state-image' src={PersonCheck} /> :
@@ -31,8 +32,8 @@ function RegistrarCard(props) {
                     <Col lg={3} md={12} className='centered'>
                         {
                             isRegistrar ?
-                            <Button>Add</Button> :
-                            <Button>Remove</Button>
+                            <Button className='remove-registrar-btn'>Remove <img src={PersonRemove} /> </Button> :
+                            <Button className='add-registrar-btn'>Add <img src={PersonAdd} /> </Button>
                         }
                     </Col>
                 </Row>

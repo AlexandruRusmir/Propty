@@ -1,7 +1,29 @@
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import '../../styles/style.css';
 import RegistrarCard from './RegistrarCard';
 
 function AllRegistrars(props) {
+    const [registrars, setRegistrars] = useState([]);
+
+    const titlesContract = useTitlesContract().current;
+
+    useEffect(() => {
+        loadCentralContractRegistrars();
+    }, [])
+
+    const loadCentralContractRegistrars = async () => {
+        const registrars = await getCentralContractRegistrars();
+        setRegistrars(registrars);
+        console.log(registrars);
+    }
+
+    const getCentralContractRegistrars = async () => {
+        const registrars = titlesContract.methods.getContractRegistrars().call();
+        return registrars;
+    }
+
     return (
         <>
             <div>

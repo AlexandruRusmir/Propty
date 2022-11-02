@@ -1,0 +1,234 @@
+.submit-btn {
+    font-weight: 600;
+    display: block;
+    padding: 10px 20px;
+    margin: 0 auto;
+    text-align: center;
+    background: #ff4c4c;
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .4s;
+}
+
+.submit-btn:hover, .submit-btn:focus {
+    transform: translate(-1px, -5px);
+    border-color: transparent;
+    background: #fc2323;
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+}
+
+.list-for-sale-btn {
+    width: 200px;
+    padding: 6px 10px;
+    margin: 0 auto;
+    text-align: center;
+    background: #3CB371;
+    font-weight: 700;
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .3s;
+    outline: none;
+    margin-bottom: 8px;
+}
+
+.list-for-sale-btn:hover, .list-for-sale-btn:focus {
+    background: #37a569;
+    border-color: transparent;
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    transform: translateY(-2px);
+}
+
+.remove-listing-btn {
+    width: 200px;
+    padding: 6px 10px;
+    margin: 0 auto;
+    text-align: center;
+    background: #12a4d9;
+    font-weight: 700;
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .3s;
+    outline: none;
+    margin-bottom: 8px;
+}
+
+.remove-listing-btn:hover, .remove-listing-btn:focus {
+    background: #1295c5;
+    border-color: transparent;
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    transform: translateY(-2px);
+}
+
+.modify-contract-btn {
+    width: 200px;
+    padding: 6px 10px;
+    margin: 0 auto;
+    text-align: center;
+    background: #ff4c4c;
+    font-weight: 700;
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .3s;
+    outline: none;
+    margin-bottom: 8px;
+}
+
+.modify-contract-btn:hover, .modify-contract-btn:focus {
+    background-color: #fc2323;
+    border-color: transparent;
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    transform: translateY(-2px);
+}
+
+.buy-contract-btn {
+    width: 200px;
+    padding: 6px 10px;
+    margin: 0 auto;
+    text-align: center;
+    background: #ff4c4c;
+    font-weight: 700;
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .3s;
+    outline: none;
+    margin-bottom: 8px;
+}
+
+.buy-contract-btn:hover, .buy-contract-btn:focus {
+    background: #fc2323;
+    border-color: transparent;
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    transform: translateY(-2px);
+}
+
+.disable-contract-btn {
+    width: 200px;
+    padding: 6px 10px;
+    margin: 0 auto;
+    text-align: center;
+    background: #D01C1FFF;
+    font-weight: 700;
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .3s;
+    outline: none;
+    margin-bottom: 8px;
+}
+
+.disable-contract-btn:hover, .disable-contract-btn:focus {
+    background-color: rgb(190, 27, 30);
+    border-color: transparent;
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    transform: translateY(-2px);
+}
+
+.apply-change-btn {
+    padding: 6px 10px;
+    width: 146px;
+    margin: 0 auto;
+    text-align: center;
+    background: #ff4c4c;
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .3s;
+    outline: none;
+}
+
+.apply-change-btn:hover, .apply-change-btn:focus {
+    transform: translateY(-2px);
+    background: #fc2323;
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    outline: none;
+}
+
+.remove-registrar-btn {
+    width: 140px;
+    padding: 6px 10px;
+    margin: 0 auto;
+    text-align: center;
+    background: #D01C1FFF;
+    font-weight: 700;
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .3s;
+    outline: none;
+    margin-bottom: 8px;
+}
+
+.remove-registrar-btn:hover, .remove-registrar-btn:focus {
+    transform: translateY(-2px);
+    background: rgb(190, 27, 30);
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    outline: none;
+}
+
+.add-registrar-btn {
+    width: 140px;
+    padding: 6px 10px;
+    margin: 0 auto;
+    text-align: center;
+    background: #3CB371;
+    font-weight: 700;
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .3s;
+    outline: none;
+    margin-bottom: 8px;
+}
+
+.add-registrar-btn:hover, .add-registrar-btn:focus {
+    transform: translateY(-2px);
+    background: #37a569;
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+    outline: none;
+}
+
+.disabled-btn {
+    pointer-events: none !important;
+    background-color: #dedede !important;
+}
+
+@media (max-width: 992px) {
+    .disable-contract-btn, .modify-contract-btn, .list-for-sale-btn, .remove-listing-btn {
+        margin-bottom: 18px;
+    }
+
+    .add-registrar-btn, .remove-registrar-btn {
+        margin-top: 18px;
+    }
+}
+
+@media (max-width: 576px) {
+    .apply-change-btn {
+        padding: 4px 8px;
+        margin-left: 2%;
+        margin-top: 10px;
+    }
+}
