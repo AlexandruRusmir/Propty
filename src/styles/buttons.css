@@ -14,7 +14,7 @@
 }
 
 .submit-btn:hover, .submit-btn:focus {
-    transform: translate(-1px, -5px);
+    transform: translate(-1px, -3px);
     border-color: transparent;
     background: #fc2323;
     box-shadow: 0 0 11px rgba(33,33,33,.2);

@@ -19,6 +19,8 @@ function StateChangeModal(props) {
         contract.methods.modifyContractState(config.contractState.FOR_SALE).send({ from: props.account }).then(() => {
             props.changeContractState(config.contractState.FOR_SALE);
             props.onStateChangeHide();
+        }).catch((err) => {
+            console.log(err.message);
         });
     }
 
@@ -26,6 +28,8 @@ function StateChangeModal(props) {
         contract.methods.modifyContractState(config.contractState.OWNED).send({ from: props.account }).then(() => {
             props.changeContractState(config.contractState.OWNED);
             props.onStateChangeHide();
+        }).catch((err) => {
+            console.log(err.message);
         });
     }
 
@@ -33,6 +37,8 @@ function StateChangeModal(props) {
         contract.methods.modifyContractState(config.contractState.NO_LONGER_RELEVANT).send({ from: props.account }).then(() => {
             props.changeContractState(config.contractState.NO_LONGER_RELEVANT);
             props.onStateChangeHide();
+        }).catch((err) => {
+            console.log(err.message);
         });
     }
 

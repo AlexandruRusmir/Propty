@@ -52,6 +52,8 @@ function PropertyDetailsModal(props) {
                 sellingPriceFractionalPartLength
             ).send({ from: props.account }).then(() => {
                 props.changeSellingPrice(sellingPriceString);
+            }).catch((err) => {
+                console.log(err.message);
             });
 
             return;
@@ -59,6 +61,8 @@ function PropertyDetailsModal(props) {
         
         contract.methods.setPropertySellingPrice(sellingPriceIntegralPart,0,0).send({ from: props.account }).then(() => {
             props.changeSellingPrice(sellingPriceString);
+        }).catch((err) => {
+            console.log(err.message);
         });
     }
 
@@ -126,6 +130,8 @@ function PropertyDetailsModal(props) {
                 props.changeSellingPrice(sellingPriceString);
                 props.changeHousingTenure(housingTenure);
                 props.changeSquareMeters(squareMeters);
+        }).catch((err) => {
+            console.log(err.message);
         });
     }
 

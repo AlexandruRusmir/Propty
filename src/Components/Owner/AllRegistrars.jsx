@@ -3,11 +3,16 @@ import { useState } from 'react';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import '../../styles/style.css';
 import RegistrarCard from './RegistrarCard';
+import Row  from 'react-bootstrap/Row';
+import Col  from 'react-bootstrap/Col';
+import { Button } from 'react-bootstrap';
+import AddRegistrarModal from './AddRegistrarModal';
 
 function AllRegistrars(props) {
-    const [registrars, setRegistrars] = useState([]);
-
     const titlesContract = useTitlesContract().current;
+
+    const [registrars, setRegistrars] = useState([]);
+    const [addRegistrarOpen, setAddRegistrarOpen] = useState(false);
 
     useEffect(() => {
         loadCentralContractRegistrars();
@@ -29,6 +34,20 @@ function AllRegistrars(props) {
             <div>
                 <h1 className='text-center my-5 title-text'>All Registrars</h1>
             </div>
+            <Row className='mb-5'>
+                <AddRegistrarModal
+                    show = {addRegistrarOpen}
+                    onAddRegistrarHide = {() => setAddRegistrarOpen(false)}
+
+                    addNewRegistrar = {(newRegistrar) => {setRegistrars(registrars.concat([newRegistrar]));}}
+
+                    account = {props.account}
+                    currentRegistrars = {registrars}
+                />
+                <Col lg={12} className='d-flex justify-content-end'>
+                    <Button onClick={() => {setAddRegistrarOpen(true);}}>Add a new Registrar</Button>
+                </Col>
+            </Row>
             <div>
                 <RegistrarCard address="0xA14304638C269F716B06ccFd8f0Cc5f2a9Bb79CC" isRegistrar={true} />
             </div>
