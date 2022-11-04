@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import Web3 from 'web3';
 
@@ -14,25 +14,43 @@ function AddRegistrarModal(props) {
 
     const [newRegistrarAddress, setNewRegistrarAddress] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [addressIsValid, setAddressIsValid] = useState(false);
+    // TODO: check this 
+
+    useEffect(() => {
+        validateNewRegistrarAddress();
+    }, [newRegistrarAddress]);
 
     const validateNewRegistrarAddress = () => {
+        if (newRegistrarAddress === '') {
+            setErrorMessage('');
+            setAddressIsValid(false);
+            return false;
+        }
+
         if ((newRegistrarAddress.length === 42 && newRegistrarAddress.substring(0,2).toLowerCase() !== '0x') || 
             (newRegistrarAddress.length === 40 && newRegistrarAddress.substring(0,2).toLowerCase() === '0x') ||
             (newRegistrarAddress.length !== 42 && newRegistrarAddress.length !== 40)) {
             setErrorMessage('Invalid Ethereum Address');
+            setAddressIsValid(false);
             return false;
         }
 
-        for (const registrarAddress in props.registrars) {
-            console.log(registrarAddress);
-            console.log(newRegistrarAddress.toLowerCase());
-            if ((newRegistrarAddress.toLowerCase() === registrarAddress) ||
-                (newRegistrarAddress.length === 40 && registrarAddress.substring(2) === newRegistrarAddress.toLowerCase())) {
+        let addressIsAlreadyRegistrar = false;
+        props.currentRegistrars.forEach((registrarAddress, index) => {
+            if ((newRegistrarAddress.toLowerCase() === registrarAddress.toLowerCase()) ||
+                (newRegistrarAddress.length === 40 && registrarAddress.substring(2).toLowerCase() === newRegistrarAddress.toLowerCase())) {
                     setErrorMessage('Address already added as Registrar');
-                    return false;
+                    setAddressIsValid(false);
+                    addressIsAlreadyRegistrar = true;
                 }
+        })
+        if (addressIsAlreadyRegistrar) {
+            return false;
         }
 
+        setErrorMessage('');
+        setAddressIsValid(true);
         return true;
     }
 
@@ -65,24 +83,37 @@ function AddRegistrarModal(props) {
                 centered
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>
-                        
+                    <Modal.Title className='centered mx-3'>
+                        Add a new registrar by providing their address
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    <Row className='mx-3 input-box'>
+                <Modal.Body className='mx-3 input-box'>
+                    <div>
+                        <p>Please introduce the account address of the person you would like to add as a registrar:</p>
+                    </div>
+                    <div>
                         <input type='text' value={newRegistrarAddress} onChange={(e) => {setNewRegistrarAddress(e.target.value);}}
                             placeholder='New registrar address (0x8mD4y...)' />
-                    </Row>
+                    </div>
                     <p id='error-message' className='error-message centered mt-2'>{errorMessage}</p>
                 </Modal.Body>
                 <Modal.Footer className='centered'>
                     <Row>
                         <Col xs={12}>
-                            <Button className='submit-btn' onClick={async () => {await requestRegistrarAdd();}}>
-                                Add as Registrar
-                            </Button>
+                            {
+                                addressIsValid ?
+                                    <Button className='submit-btn' onClick={async () => {await requestRegistrarAdd();}}>
+                                        Add as Registrar
+                                    </Button> :
+                                    <Button className='submit-btn disabled-btn'>
+                                        Add as Registrar
+                                    </Button>
+                            }
+                            
                         </Col>
+                        <div className='centered'>
+                            <p className='small-text'>This operation will give the account corresponding to the address registrar rights!</p>
+                        </div>
                     </Row>
                 </Modal.Footer>
             </Modal>

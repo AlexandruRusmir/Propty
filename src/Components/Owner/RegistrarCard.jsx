@@ -27,7 +27,7 @@ function RegistrarCard(props) {
             <Card.Header className='py-4'>
                 <Row>
                     <Col lg={9} md={12} className='registrar-card-text'>
-                        <Card.Text><strong>Address:</strong> {props.address}</Card.Text>
+                        <Card.Text><span className='registrar-address-text'>Address:</span> {props.address}</Card.Text>
                     </Col>
                     <Col lg={3} md={12} className='centered'>
                         {

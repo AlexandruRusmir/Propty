@@ -59,3 +59,13 @@ body {
 .error-message {
     color: #de1738;
 }
+
+.registrar-address-text {
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .registrar-address-text {
+        display: none;
+    }
+}

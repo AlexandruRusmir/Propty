@@ -45,9 +45,12 @@ function AllRegistrars(props) {
                     currentRegistrars = {registrars}
                 />
                 <Col lg={12} className='d-flex justify-content-end'>
-                    <Button onClick={() => {setAddRegistrarOpen(true);}}>Add a new Registrar</Button>
+                    <Button className='add-new-registrar-btn' onClick={() => {setAddRegistrarOpen(true);}}>Add a new Registrar</Button>
                 </Col>
             </Row>
+            <div>
+                
+            </div>
             <div>
                 <RegistrarCard address="0xA14304638C269F716B06ccFd8f0Cc5f2a9Bb79CC" isRegistrar={true} />
             </div>
