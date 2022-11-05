@@ -7,7 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 import Home from './Components/User/Home';
 import AllProperties from './Components/User/AllProperties';
 import MyProperties from './Components/User/MyProperties';
-import AllRegistrars from './Components/Owner/AllRegistrars';
+import HandleRegistrars from './Components/Owner/HandleRegistrars';
 import { useWeb3 } from './CustomHooks/useWeb3';
 import { useTitlesContract } from './CustomHooks/useTitlesContract';
 
@@ -144,7 +144,7 @@ function App() {
 							} />
 							<Route path="/handle-registrars" element={
 								<Container>
-									<AllRegistrars account={account} balance={balance} network={network}/>
+									<HandleRegistrars owners={centralContractOwners} account={account} balance={balance} network={network}/>
 								</Container>
 							} />
 						</Routes>

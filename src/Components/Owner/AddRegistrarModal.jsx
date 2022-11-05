@@ -22,8 +22,15 @@ function AddRegistrarModal(props) {
     }, [newRegistrarAddress]);
 
     const validateNewRegistrarAddress = () => {
+        console.log(props.currentOwners);
         if (newRegistrarAddress === '') {
             setErrorMessage('');
+            setAddressIsValid(false);
+            return false;
+        }
+
+        if (props.currentOwners.includes(newRegistrarAddress.toLowerCase())) {
+            setErrorMessage('This address belongs to an owner and can not be become a registrar address.');
             setAddressIsValid(false);
             return false;
         }
@@ -92,7 +99,7 @@ function AddRegistrarModal(props) {
                         <input type='text' value={newRegistrarAddress} onChange={(e) => {setNewRegistrarAddress(e.target.value);}}
                             placeholder='New registrar address (0x8mD4y...)' />
                     </div>
-                    <p id='error-message' className='error-message centered mt-2'>{errorMessage}</p>
+                    <p id='error-message' className='error-message mt-2 text-center'>{errorMessage}</p>
                 </Modal.Body>
                 <Modal.Footer className='centered'>
                     <Row>

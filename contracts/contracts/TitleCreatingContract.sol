@@ -3,11 +3,13 @@ pragma solidity ^0.8.15;
 
 import "./PropertyTitle.sol";
 
-
 contract TitleCreatingContract {
     address[] public owners;
+    mapping (address => bool) public isOwner;
+
     address[] public registrars;
-    mapping (address => bool) public registrarsState;
+    mapping (address => bool) public isRegistrar;
+
     address[] public titleContracts;
     mapping (address => bool) public propertyTitleContractsValidaty;
 
@@ -15,25 +17,28 @@ contract TitleCreatingContract {
     {
         for (uint256 i = 0; i < _owners.length; i++) {
             owners.push(_owners[i]);
+            isOwner[_owners[i]] = true;
         }
     }
 
     function addRegistrars(address[] memory _registrars) public onlyOwner {
         for (uint256 i = 0; i < _registrars.length; i++) {
-            registrars.push(_registrars[i]);
-            registrarsState[_registrars[i]] = true;
+            if (!checkIfUserIsOwner(_registrars[i])) {
+                registrars.push(_registrars[i]);
+                isRegistrar[_registrars[i]] = true;
+            }
         }
     }
 
     function removeRegistrarRole(address[] memory _registrars) public onlyOwner {
         for (uint256 i = 0; i < _registrars.length; i++) {
-            registrarsState[_registrars[i]] = false;
+            isRegistrar[_registrars[i]] = false;
         }
     }
 
     function reactivateRegistrarRole(address[] memory _registrars) public onlyOwner {
         for (uint256 i = 0; i < _registrars.length; i++) {
-            registrarsState[_registrars[i]] = true;
+            isRegistrar[_registrars[i]] = true;
         }
     }
 
@@ -66,8 +71,15 @@ contract TitleCreatingContract {
         propertyTitleContractsValidaty[_contractAddress] = true;
     }
 
+    function checkIfUserIsOwner(address _userAddress) public view returns (bool) {
+        if (isOwner[_userAddress] == true) {
+            return true;
+        }
+        return false;    
+    }
+
     function checkIfUserIsRegistrar(address _userAddress) public view returns (bool) {
-        if (registrarsState[_userAddress] == true) {
+        if (isRegistrar[_userAddress] == true) {
             return true;
         }
         return false;
@@ -86,19 +98,12 @@ contract TitleCreatingContract {
     }
 
     modifier onlyRegistrar {
-        require(registrarsState[msg.sender] == true, "Only one of the registrars has access to this functionality.");
+        require(isRegistrar[msg.sender] == true, "Only one of the registrars has access to this functionality.");
         _;
     }
 
     modifier onlyOwner {
-        bool confirmedOwner = false;
-        for (uint256 i = 0; i < owners.length; i++) {
-            if (msg.sender == owners[i]) {
-                confirmedOwner = true;
-                break;
-            }
-        }
-        require(confirmedOwner == true, "Only one of the owners has access to this functionality.");
+        require(isOwner[msg.sender] == true, "Only one of the owners has access to this functionality.");
         _;
     }
 }
