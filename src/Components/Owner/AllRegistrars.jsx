@@ -19,14 +19,26 @@ function AllRegistrars(props) {
     }, [])
 
     const loadCentralContractRegistrars = async () => {
-        const registrars = await getCentralContractRegistrars();
-        setRegistrars(registrars);
-        console.log(registrars);
+        const registrarAddresses = await getCentralContractRegistrars();
+        let registrarsArray = [];
+        for (let registrarAddress of registrarAddresses) {
+            const addressIsStillRegistrar = await checkIfAddressIsRegistrar(registrarAddress);
+            registrarsArray.push({
+                address: registrarAddress,
+                isRegistrar: addressIsStillRegistrar
+            })
+        }
+        setRegistrars(registrarsArray);
     }
 
     const getCentralContractRegistrars = async () => {
-        const registrars = titlesContract.methods.getContractRegistrars().call();
+        const registrars = await titlesContract.methods.getContractRegistrars().call();
         return registrars;
+    }
+
+    const checkIfAddressIsRegistrar = async (address) => {
+        const isRegistrar = await titlesContract.methods.checkIfUserIsRegistrar(address).call();
+        return isRegistrar;
     }
 
     return (
@@ -34,12 +46,17 @@ function AllRegistrars(props) {
             <div>
                 <h1 className='text-center my-5 title-text'>All Registrars</h1>
             </div>
-            <Row className='mb-5'>
+            <Row className='mb-5' key='registrars-list'>
                 <AddRegistrarModal
                     show = {addRegistrarOpen}
                     onAddRegistrarHide = {() => setAddRegistrarOpen(false)}
 
-                    addNewRegistrar = {(newRegistrar) => {setRegistrars(registrars.concat([newRegistrar]));}}
+                    addNewRegistrar = {(newRegistrar) => { console.log(newRegistrar);
+                        setRegistrars([{
+                        adress: newRegistrar,
+                        isRegistrar: true
+                    }, ...registrars]
+                    );}}
 
                     account = {props.account}
                     currentRegistrars = {registrars}
@@ -49,13 +66,11 @@ function AllRegistrars(props) {
                 </Col>
             </Row>
             <div>
-                
-            </div>
-            <div>
-                <RegistrarCard address="0xA14304638C269F716B06ccFd8f0Cc5f2a9Bb79CC" isRegistrar={true} />
-            </div>
-            <div>
-                <RegistrarCard address="0xA14304638C269F716B06ccFd8f0Cc5f2a9Bb79CC" isRegistrar={false} />
+                {
+                    registrars.map(({address, isRegistrar}) => (
+                        <RegistrarCard account={props.account} key={address} address={address} isRegistrar={isRegistrar} />
+                    ))
+                }
             </div>
         </>
     );

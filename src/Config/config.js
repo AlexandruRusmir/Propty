@@ -1,5 +1,5 @@
 const config = {
-    titleDeployingContractAddress: '0x843FFB9CB80c0De05aAd87c727dC6CaCc82c1339',
+    titleDeployingContractAddress: '0x8A53B0218dcB387d06828c7EBAd1B463c3a9F874',
     contractState: {
         PENDING: 0,
         OWNED: 1, 

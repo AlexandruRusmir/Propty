@@ -17,13 +17,22 @@ function RegistrarCard(props) {
 
     const [isRegistrar, setIsRegistrar] = useState(props.isRegistrar);
 
+    const removeRegistrarRole = async (address) => {
+        return titlesContract.methods.removeRegistrarRole([address]).send({ from: props.account });
+    }
+
+    const addRegistrarRole = async (address) => {
+        return titlesContract.methods.reactivateRegistrarRole([address]).send({ from: props.account });
+    }
+
     return (
-        <Card className='registrar-card mb-5'>
+        <Card className='registrar-card mb-4'>
             {
                 isRegistrar ?
                 <Card.Img className='my-2 registrar-state-image' src={PersonCheck} /> :
                 <Card.Img className='my-2 registrar-state-image' src={PersonBlocked} />
             }
+
             <Card.Header className='py-4'>
                 <Row>
                     <Col lg={9} md={12} className='registrar-card-text'>
@@ -32,8 +41,28 @@ function RegistrarCard(props) {
                     <Col lg={3} md={12} className='centered'>
                         {
                             isRegistrar ?
-                            <Button className='remove-registrar-btn'>Remove <img src={PersonRemove} /> </Button> :
-                            <Button className='add-registrar-btn'>Add <img src={PersonAdd} /> </Button>
+                            <Button className='remove-registrar-btn'
+                                onClick={() => {
+                                    removeRegistrarRole(props.address).then(() => {
+                                        setIsRegistrar(false);
+                                    }).catch(err => {
+                                        console.log(err);
+                                    })
+                                }}
+                            >
+                                Remove <img src={PersonRemove} /> 
+                            </Button> :
+                            <Button className='add-registrar-btn'
+                                onClick={() => {
+                                    addRegistrarRole(props.address).then(() => {
+                                        setIsRegistrar(true);
+                                    }).catch( err => {
+                                        console.log(err);
+                                    })
+                                }}
+                            >
+                                Add <img src={PersonAdd} /> 
+                            </Button>
                         }
                     </Col>
                 </Row>

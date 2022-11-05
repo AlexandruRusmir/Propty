@@ -36,17 +36,13 @@ function AddRegistrarModal(props) {
             return false;
         }
 
-        let addressIsAlreadyRegistrar = false;
-        props.currentRegistrars.forEach((registrarAddress, index) => {
-            if ((newRegistrarAddress.toLowerCase() === registrarAddress.toLowerCase()) ||
-                (newRegistrarAddress.length === 40 && registrarAddress.substring(2).toLowerCase() === newRegistrarAddress.toLowerCase())) {
+        for (let registrar of props.currentRegistrars) {
+            if ((newRegistrarAddress.toLowerCase() === registrar.address.toLowerCase()) ||
+                (newRegistrarAddress.length === 40 && registrar.address.substring(2).toLowerCase() === newRegistrarAddress.toLowerCase())) {
                     setErrorMessage('Address already added as Registrar');
                     setAddressIsValid(false);
-                    addressIsAlreadyRegistrar = true;
+                    return false;
                 }
-        })
-        if (addressIsAlreadyRegistrar) {
-            return false;
         }
 
         setErrorMessage('');
@@ -66,8 +62,9 @@ function AddRegistrarModal(props) {
     }
 
     const addRegistrar = async () => {
-        titlesContract.methods.addRegistrars([newRegistrarAddress.toLowerCase()]).send({ from: props.account }).then(() => {
+        titlesContract.methods.addRegistrars([newRegistrarAddress]).send({ from: props.account }).then(() => {
             props.addNewRegistrar(newRegistrarAddress);
+            props.onAddRegistrarHide();
         }).catch((err) => {
             console.log(err.message);
         });

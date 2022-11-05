@@ -25,9 +25,15 @@ contract TitleCreatingContract {
         }
     }
 
-    function removeRegistrars(address[] memory _registrars) public onlyOwner {
+    function removeRegistrarRole(address[] memory _registrars) public onlyOwner {
         for (uint256 i = 0; i < _registrars.length; i++) {
             registrarsState[_registrars[i]] = false;
+        }
+    }
+
+    function reactivateRegistrarRole(address[] memory _registrars) public onlyOwner {
+        for (uint256 i = 0; i < _registrars.length; i++) {
+            registrarsState[_registrars[i]] = true;
         }
     }
 
