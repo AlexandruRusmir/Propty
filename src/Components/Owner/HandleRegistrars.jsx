@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import '../../styles/style.css';
 import { useNavigate } from 'react-router-dom';
@@ -16,14 +15,35 @@ function HandleRegistrars(props) {
 
     const [registrars, setRegistrars] = useState([]);
     const [addRegistrarOpen, setAddRegistrarOpen] = useState(false);
-    const [registrarsList, setRegistrarsList] = useState('');
+
+    const [searchText, setSearchText] = useState('');
+    const [seeRemovedRegistrars, setSeeRemovedRegistrars] = useState(false);
+    const [seeActiveRegistrars, setSeeActiveRegistrars] = useState(false);
 
     useEffect(() => {
         if (!props.owners.includes(props.account)) {
             navigate('/');
+            return;
         }
         loadCentralContractRegistrars();
     }, [])
+
+    const filteredRegistrars = useMemo( () => {
+        return registrars.filter((registrar) => {
+            if (registrar.address.toLowerCase().includes(searchText.toLowerCase())) {
+                if ((!seeRemovedRegistrars && !seeActiveRegistrars) || (seeRemovedRegistrars && seeActiveRegistrars)) {
+                    return true;
+                }
+                if (seeRemovedRegistrars && !registrar.isRegistrar) {
+                    return true;
+                }
+                if (seeActiveRegistrars && registrar.isRegistrar) {
+                    return true;
+                }
+            }
+            return false
+        });
+    }, [registrars, searchText, seeRemovedRegistrars, seeActiveRegistrars])
 
     const loadCentralContractRegistrars = async () => {
         const registrarAddresses = await getCentralContractRegistrars();
@@ -58,7 +78,7 @@ function HandleRegistrars(props) {
                     show = {addRegistrarOpen}
                     onAddRegistrarHide = {() => setAddRegistrarOpen(false)}
 
-                    addNewRegistrar = {(newRegistrar) => { console.log(newRegistrar);
+                    addNewRegistrar = {(newRegistrar) => {
                         setRegistrars([
                         {
                         address: newRegistrar,
@@ -70,14 +90,50 @@ function HandleRegistrars(props) {
                     currentRegistrars = {registrars}
                     currentOwners = {props.owners}
                 />
-                <Col lg={12} className='d-flex justify-content-end'>
-                    <Button className='add-new-registrar-btn' onClick={() => {setAddRegistrarOpen(true);}}>Add a new Registrar</Button>
-                </Col>
+                <Row>
+                    <Col className='d-flex justify-content-end'>
+                        <Button className='add-new-registrar-btn' onClick={() => {setAddRegistrarOpen(true);}}>Add a new Registrar</Button>
+                    </Col>
+                </Row>
+                <Row className='input-box mt-4 mb-2'>
+                    <Col xs={12} className='registrar-search'>
+                        <h5>Filter Registrars:</h5>
+                    </Col>
+                    <Col lg={9} xs={12} className='registrar-search' >
+                        <input 
+                            placeholder='Search for registrar by address' 
+                            value={searchText}
+                            onChange={(e) => {
+                                setSearchText(e.target.value);
+                            }}
+                        />
+                    </Col>
+                    <Col lg={3} xs={12} className='registrar-search-checkboxes'>
+                        <Row>
+                            <Col lg={12} sm={6}>
+                                <input type='checkbox' id='removed-registrars'
+                                    onClick={() => {
+                                        setSeeRemovedRegistrars(!seeRemovedRegistrars);
+                                    }}
+                                />
+                                <label for='removed-registrars' className='checkbox-label'>Removed Registrars</label>
+                            </Col>
+                            <Col lg={12} sm={6}>
+                                <input type='checkbox' id='active-registrars'
+                                    onClick={() => {
+                                        setSeeActiveRegistrars(!seeActiveRegistrars);
+                                    }}
+                                />
+                                <label for='active-registrars' className='checkbox-label'>Active Registrars</label>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
             </Row>
             <div>
                 {
-                    registrars ?
-                    registrars.map(({address, isRegistrar}) => (
+                    filteredRegistrars ?
+                    filteredRegistrars.map(({address, isRegistrar}) => (
                         <RegistrarCard account={props.account} key={address} address={address} isRegistrar={isRegistrar} />
                     )) :
                     <div className='centered'>

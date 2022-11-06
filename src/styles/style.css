@@ -29,9 +29,42 @@ body {
     height: 100%;
     padding: 3px 8px;
     font-size: 1rem;
-    background: transparent;
+    background: #fff;
     outline: none;
-    transition: .5s;
+    transition: .4s ease-in-out;
+}
+
+.input-box input[type=checkbox] {
+    position: relative;
+    cursor: pointer;
+    margin: 0 6px;
+}
+
+.input-box input[type=checkbox]:before {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #555555;
+    border-radius: 4px;
+    background-color: #fff;
+    content: "";
+    display: block;
+    position: absolute;
+}
+
+.input-box input[type=checkbox]:checked:after {
+    width: 5px;
+    height: 10px;
+    border: solid #212121;
+    border-width: 0 2px 2px 0;
+    position: absolute;
+    margin-top: 2px;
+    margin-left: 6px;
+    content: "";
+    transform: rotate(45deg);
+}
+
+.checkbox-label {
+    cursor: pointer;
 }
 
 .input-box select {
@@ -42,13 +75,20 @@ body {
     font-size: 1rem;
     background: transparent;
     outline: none;
-    transition: .5s;
+    transition: .4s;
 }
 
 .input-box input:focus {
     border-color: #ff4c4c;
 }
 
+.registrar-search {
+    padding-left: 160px;
+}
+
+.registrar-search-checkboxes {
+    padding-left: 0;
+}
 
 .small-text {
     margin-top: 0.25rem;
@@ -62,6 +102,17 @@ body {
 
 .registrar-address-text {
     font-weight: 600;
+}
+
+@media (max-width: 992px) {
+    .registrar-search{
+        padding-left: 5%
+        ;
+    }
+    .registrar-search-checkboxes {
+        margin-top: 10px;
+        padding-left: 6%;
+    }
 }
 
 @media (max-width: 768px) {

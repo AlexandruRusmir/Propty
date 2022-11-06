@@ -22,7 +22,6 @@ function AddRegistrarModal(props) {
     }, [newRegistrarAddress]);
 
     const validateNewRegistrarAddress = () => {
-        console.log(props.currentOwners);
         if (newRegistrarAddress === '') {
             setErrorMessage('');
             setAddressIsValid(false);
