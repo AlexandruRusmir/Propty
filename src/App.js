@@ -10,6 +10,7 @@ import MyProperties from './Components/User/MyProperties';
 import HandleRegistrars from './Components/Owner/HandleRegistrars';
 import { useWeb3 } from './CustomHooks/useWeb3';
 import { useTitlesContract } from './CustomHooks/useTitlesContract';
+import HandleContractRequests from './Components/Registrar/HandleContractRequests';
 
 
 function App() {
@@ -145,6 +146,11 @@ function App() {
 							<Route path="/handle-registrars" element={
 								<Container>
 									<HandleRegistrars owners={centralContractOwners} account={account} balance={balance} network={network}/>
+								</Container>
+							} />
+							<Route path="/contract-requests" element={
+								<Container>
+									<HandleContractRequests account={account} balance={balance} network={network}/>
 								</Container>
 							} />
 						</Routes>

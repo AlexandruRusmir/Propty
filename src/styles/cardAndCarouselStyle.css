@@ -8,8 +8,7 @@
 }
 
 .my-properties-card {
-    width: 80%;
-    height: 80%;
+    width: 95%;
 }
 
 .registrar-card {
@@ -31,8 +30,7 @@
     }
 
     .my-properties-card {
-        width: 90%;
-        height: 100%;
+        width: 100%;
     }
 
     .registrar-card-text {

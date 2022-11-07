@@ -16,8 +16,13 @@ function NavBar(props) {
                 <Nav className="me-auto">
                     <Link to="/" className='nav-link'>Home</Link>
                     {
-                        props.isAdmin === true?
+                        props.isAdmin === true ?
                         <Link to="/handle-registrars" className='nav-link'>Handle Registrars</Link> :
+                        ''
+                    }
+                    {
+                        props.isRegistrar === true ?
+                        <Link to="/contract-requests" className='nav-link'>Contract Requests</Link> :
                         ''
                     }
                     <Link to="/all-properties" className='nav-link'>All Properties</Link>

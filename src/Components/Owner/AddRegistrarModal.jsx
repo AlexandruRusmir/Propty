@@ -15,8 +15,8 @@ function AddRegistrarModal(props) {
     const [newRegistrarAddress, setNewRegistrarAddress] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [addressIsValid, setAddressIsValid] = useState(false);
-    // TODO: check this 
 
+    
     useEffect(() => {
         validateNewRegistrarAddress();
     }, [newRegistrarAddress]);

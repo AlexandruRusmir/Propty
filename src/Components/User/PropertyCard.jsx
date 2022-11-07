@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useRef } from 'react';
 import '../../styles/propertyCardStyle.css'
 import '../../styles/buttons.css'
@@ -122,7 +121,7 @@ function PropertyCard(props) {
     return (
         <div>
             <Card
-                key={'propertyTitle' + country + city + street  + streetNumber + apartmentNumber}
+                key = ''
                 id={'propertyTitle' + country + city + street  + streetNumber + apartmentNumber}
                 className="mb-2 mx-5"
                 variant='light'

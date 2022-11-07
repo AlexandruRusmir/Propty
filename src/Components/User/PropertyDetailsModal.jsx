@@ -201,7 +201,7 @@ function PropertyDetailsModal(props) {
                 show={props.show}
                 onHide = {props.onDetailsEditHide}
                 size = 'lg'
-                aria-labelledby={'propertyTitleEditModal' + props.country + props.city + props.street  + props.streetNumber + props.apartmentNumber}
+                key={'propertyTitleEditModal' + props.country + props.city + props.street  + props.streetNumber + props.apartmentNumber}
                 centered
             >
                 <Modal.Header closeButton>
