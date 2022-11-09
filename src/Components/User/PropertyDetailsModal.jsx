@@ -300,9 +300,7 @@ function PropertyDetailsModal(props) {
                             
                         </Col>
                         <Col xs={12} className='text-center mt-2'>
-                            <div className=''>
-                                <p className='small-text'>This operation costs more than individually applying the changes</p>
-                            </div>
+                            <p className='small-text'>This operation costs more than individually applying the changes</p>
                         </Col>
                     </Row>
                 </Modal.Footer>
