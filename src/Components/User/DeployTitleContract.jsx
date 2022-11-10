@@ -24,6 +24,11 @@ function DeployTitleContract(props) {
     const [squareMeters, setSquareMeters] = useState('');
 
     const [valuesAreValid, setValuesAreValid] = useState(false);
+    const [cityIsValid, setCityIsValid] = useState(true);
+    const [countryIsValid, setCountryIsValid] = useState(true);
+    const [streetIsValid, setStreetIsValid] = useState(true);
+    const [streetNumberIsValid, setStreetNumberIsValid] = useState(true);
+    const [apartmentNumberIsValid, setApartmentNumberIsValid] = useState(true);
 
     const validateUserInputs = () => {
         console.log(1);
@@ -69,7 +74,7 @@ function DeployTitleContract(props) {
             <Modal.Body>
                 <div className='input-box'>
                     <Row className='mx-2'>
-                        <Col lg={6} md={12} className=' my-4'>
+                        <Col lg={6} md={12} className=''>
                             Housing: <br/>
                             <select onChange={(e) => {setHousingTenure(e.target.value);}}>
                                 <option value={config.housingTenure.OWNER_OCCUPANCY}>Owner Occupancy</option>
@@ -80,40 +85,69 @@ function DeployTitleContract(props) {
                                 <option value={config.housingTenure.SQUATTING}>Squatting</option>
                                 <option value={config.housingTenure.LAND_TRUST}>Land Trust</option>
                             </select>
+                            <span class="invalid-feedback">
+                                {countryIsValid ? <>&nbsp;</> : 'This value can not exceed 32 characters!'}
+                            </span>
                         </Col>
-                        <Col lg={6} md={12} className=' my-4'>
+                        <Col lg={6} md={12} className=''>
                             Country:<br/>
-                            <input value={country} onChange={(e) => setCountry(e.target.value)} placeholder='example: Romania' />
+                            <input 
+                                value={country} 
+                                className={countryIsValid ? '' : 'invalid-input'} 
+                                onChange={(e) => setCountry(e.target.value)} 
+                                placeholder={countryIsValid ? 'example: Romania' : 'This value can not exceed 32 characters!'} 
+                            />
+                            <span class="invalid-feedback">
+                                {countryIsValid ? <>&nbsp;</> : 'This value can not exceed 32 characters!'}
+                            </span>
                         </Col>
                     </Row>
                     <Row className='mx-2'>
-                        <Col lg={6} md={12} className=' my-4'>
+                        <Col lg={6} md={12} className=' '>
                             <span>City:</span><br/>
                             <input value={city} onChange={(e) => setCity(e.target.value)} placeholder='example: Timisoara' />
+                            <span class="invalid-feedback">
+                                {countryIsValid ? <>&nbsp;</> : 'This value can not exceed 32 characters!'}
+                            </span>
                         </Col>
-                        <Col lg={6} md={12} className=' my-4'>
+                        <Col lg={6} md={12} className=' '>
                             <span>Street:</span><br/>
                             <input value={street} onChange={(e) => setStreet(e.target.value)} placeholder='example: Bulevardul Sperantei' />
+                            <span class="invalid-feedback">
+                                {countryIsValid ? <>&nbsp;</> : 'This value can not exceed 32 characters!'}
+                            </span>
                         </Col>
                     </Row>
                     <Row className='mx-2'>
-                        <Col lg={6} md={12} className=' my-4'>
+                        <Col lg={6} md={12} className=' '>
                             <span>Stree Number:</span><br/>
                             <input value={streetNumber} onChange={(e) => setStreetNumber(e.target.value)} placeholder='example: 13A' />
+                            <span class="invalid-feedback">
+                                {countryIsValid ? <>&nbsp;</> : 'This value can not exceed 32 characters!'}
+                            </span>
                         </Col>
-                        <Col lg={6} md={12} className=' my-4'>
+                        <Col lg={6} md={12} className=' '>
                             <span>Apartment Number:</span><br/>
                             <input value={apartmentNumber} type='number' onChange={(e) => setApartmentNumber(e.target.value)} placeholder='example: 8' />
+                            <span class="invalid-feedback">
+                                {countryIsValid ? <>&nbsp;</> : 'This value can not exceed 32 characters!'}
+                            </span>
                         </Col>
                     </Row>
                     <Row className='mx-2'>
-                        <Col lg={6} md={12} className=' my-4'>
+                        <Col lg={6} md={12} className=' '>
                             <span>Square Meters:</span><br/>
                             <input value={squareMeters} type='number' onChange={(e) => setSquareMeters(e.target.value)} placeholder='example: 132' />
+                            <span class="invalid-feedback">
+                                {countryIsValid ? <>&nbsp;</> : 'This value can not exceed 32 characters!'}
+                            </span>
                         </Col>
-                        <Col lg={6} md={12} className=' my-4'>
+                        <Col lg={6} md={12} className=' '>
                             <span>Selling Price(ETH):</span><br/>
                             <input value={sellingPrice} onChange={(e) => setSellingPriceString(e.target.value)} placeholder='example: 7.543' />
+                            <span class="invalid-feedback">
+                                {countryIsValid ? <>&nbsp;</> : 'This value can not exceed 32 characters!'}
+                            </span>
                         </Col>
                     </Row>
                 </div>
@@ -131,7 +165,7 @@ function DeployTitleContract(props) {
                             </Button> 
                     }
                     </Col>
-                    <Col xs={12} className='text-center mt-2'>
+                    <Col xs={12} className='text-center '>
                         <p className='small-text'>Your contract wil be deployed and validated by a registrar in the shortest possible time.</p>
                     </Col>
                 </Row>
