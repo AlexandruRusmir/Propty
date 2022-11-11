@@ -5,8 +5,9 @@ import '../../styles/style.css';
 import Button from 'react-bootstrap/Button';
 import DeployTitleContract from './DeployTitleContract';
 import { useState } from 'react';
+import { propTypes } from 'react-bootstrap/esm/Image';
 
-function MyPropertiesCard() {
+function MyPropertiesCard(props) {
     const [addNewContractShow, setAddNewContractShow] = useState(false)
 
     return (
@@ -20,6 +21,7 @@ function MyPropertiesCard() {
             <DeployTitleContract
               show={addNewContractShow}
               onAddNewContractHide={() => setAddNewContractShow(false)}
+              key={props.account + 'addPropertModal'}
             />
             <div className='centered mt-5 mb-2'>
               <Button className='modify-contract-btn' onClick={() => {setAddNewContractShow(true);}} >Add a Title Contract</Button>
