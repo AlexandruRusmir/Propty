@@ -5,17 +5,14 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { useState } from 'react';
-import { getCorrespondingContractStateMessage } from '../../Helpers/helpers';
-import { useContract } from '../../CustomHooks/useContract';
+import { useState, useEffect, useMemo } from 'react';
 import config from '../../Config/config';
-import { useEffect } from 'react';
-import { useMemo } from 'react';
+import errorMessages from '../../Config/errorMessages';
+import { checkIfNumberIsValid } from '../../Helpers/helpers';
 
 function DeployTitleContract(props) {
-
     const [sellingPrice, setSellingPrice] = useState('');
-    const [housingTenure, setHousingTenure] = useState('');
+    const [housingTenure, setHousingTenure] = useState('0');
     const [city, setCity] = useState('');
     const [country, setCountry] = useState('');
     const [street, setStreet] = useState('');
@@ -23,7 +20,8 @@ function DeployTitleContract(props) {
     const [apartmentNumber, setApartmentNumber] = useState('');
     const [squareMeters, setSquareMeters] = useState('');
 
-    const [valuesAreValid, setValuesAreValid] = useState(false);
+    const [valuesAreCompleted, setValuesAreCompleted] = useState(false);
+
     const [housingTenureIsValid, setHousingTenureIsValid] = useState(true);
     const [cityIsValid, setCityIsValid] = useState(true);
     const [countryIsValid, setCountryIsValid] = useState(true);
@@ -33,35 +31,111 @@ function DeployTitleContract(props) {
     const [squareMetresIsValid, setSquareMetresIsValid] = useState(true);
     const [apartmentNumberIsValid, setApartmentNumberIsValid] = useState(true);
 
-    const validateUserInputs = () => {
-        if (!(housingTenure >= config.housingTenure.OWNER_OCCUPANCY && housingTenure <=config.housingTenure.LAND_TRUST)) {
-            setHousingTenureIsValid(false);
+    const [housingTenureInvalidMessage, setHousingTenureInvalidMessage] = useState('');
+    const [cityInvalidMessage, setCityInvalidMessage] = useState('');
+    const [countryInvalidMessage, setCountryInvalidMessage] = useState('');
+    const [streetInvalidMessage, setStreetInvalidMessage] = useState('');
+    const [streetNumberInvalidMessage, setStreetNumberInvalidMessage] = useState('');
+    const [apartmentNumberInvalidMessage, setApartmentNumberInvalidMessage] = useState('');
+    const [squareMetersInvalidMessage, setSquareMetersInvalidMessage] = useState('');
+    const [sellingPriceInvalidMessage, setSellingPriceInvalidMessage] = useState('');
+
+    const checkIfInputsAreCompleted = () => {
+        if (!housingTenure || !country || !city || !street || !streetNumber || !sellingPrice || !squareMeters || !apartmentNumber) {
+            setValuesAreCompleted(false);
+            return;
         }
+        setValuesAreCompleted(true);
     }
 
-    useMemo(validateUserInputs, [city, country, street, streetNumber, apartmentNumber, squareMeters]);
+    useMemo(checkIfInputsAreCompleted, [housingTenure, city, country, street, streetNumber, apartmentNumber, squareMeters, sellingPrice]);
 
-    const setSellingPriceString = (price) => {
-        if (price.length === 0) {
-            setSellingPrice(price);
-            return;
+    const validateUserInputs = () => {
+        if (!(housingTenure <= config.housingTenure.LAND_TRUST && housingTenure >= config.housingTenure.OWNER_OCCUPANCY)) {
+            setHousingTenureIsValid(false);
+            setHousingTenureInvalidMessage(errorMessages.deployTitleMessages.invalidHousingTenureValue);
+            return false;
         }
 
-        if (price.length > 31) {
-            return;
+        if (country.length < 4) {
+            setCountryIsValid(false);
+            setCountryInvalidMessage(errorMessages.deployTitleMessages.lessThan4CharactersValue);
+            return false;
+        }
+        if (country.length > 32) {
+            setCountryIsValid(false);
+            setCountryInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
+            return false;
         }
 
-        const splitArray = price.split('.');
-        if (splitArray.length > 2) {
-            return;
+        if (city.length < 1) {
+            setCountryIsValid(false);
+            setCityInvalidMessage(errorMessages.deployTitleMessages.lessThan1CharacterValue);
+            return false;
+        }
+        if (city.length > 32) {
+            setCityIsValid(false);
+            setCityInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
+            return false;
         }
 
-        if (!((price[price.length -1] >= '0' && price[price.length -1] <= '9') || price[price.length - 1] === '.')) {
-            return;
+        if (street.length < 4) {
+            setStreetIsValid(false);
+            setStreetInvalidMessage(errorMessages.deployTitleMessages.lessThan4CharactersValue);
+            return false;
+        }
+        if (street.length > 32) {
+            setStreetIsValid(false);
+            setStreetInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
+            return false;
         }
 
-        setSellingPrice(price);
-    };
+        if (streetNumber.length < 1) {
+            setStreetNumberIsValid(false);
+            setStreetNumberInvalidMessage(errorMessages.deployTitleMessages.lessThan1CharacterValue);
+            return false;
+        }
+        if (streetNumber.length > 32) {
+            setStreetNumberIsValid(false);
+            setStreetNumberInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
+            return false;
+        }
+
+        if (apartmentNumber.length < 1) {
+            setApartmentNumberIsValid(false);
+            setApartmentNumberInvalidMessage(errorMessages.deployTitleMessages.lessThan1CharacterValue);
+            return false;
+        }
+        if (apartmentNumber.length > 32) {
+            setApartmentNumberIsValid(false);
+            setApartmentNumberInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
+            return false;
+        }
+
+        if (squareMeters.length < 1) {
+            setSquareMetresIsValid(false);
+            setSquareMetersInvalidMessage(errorMessages.deployTitleMessages.lessThan1CharacterValue);
+            return false;
+        }
+        if (squareMeters.length > 32) {
+            setSquareMetresIsValid(false);
+            setSquareMetersInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
+            return false;
+        }
+
+        if (sellingPrice.length < 1) {
+            setSellingPriceIsValid(false);
+            setSellingPriceInvalidMessage(errorMessages.deployTitleMessages.lessThan1CharacterValue);
+            return false;
+        }
+        if (sellingPrice.length > 32) {
+            setSellingPriceIsValid(false);
+            setSellingPriceInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
+            return false;
+        }
+
+        return true;
+    }
 
     return (
         <Modal
@@ -94,7 +168,7 @@ function DeployTitleContract(props) {
                                 <option value={config.housingTenure.LAND_TRUST}>Land Trust</option>
                             </select>
                             <span className="invalid-input-feedback">
-                                {housingTenureIsValid ? <>&nbsp;</> : 'Illegal value provided as housing tenure'}
+                                {housingTenureIsValid ? <>&nbsp;</> : housingTenureInvalidMessage}
                             </span>
                         </Col>
                         <Col lg={6} md={12} className='mb-3'>
@@ -107,7 +181,7 @@ function DeployTitleContract(props) {
                                 placeholder='example: Romania'
                             />
                             <span className="invalid-input-feedback">
-                                {countryIsValid ? <>&nbsp;</> : 'This value can not exceed 32 characters!'}
+                                {countryIsValid ? <>&nbsp;</> : countryInvalidMessage}
                             </span>
                         </Col>
                     </Row>
@@ -122,7 +196,7 @@ function DeployTitleContract(props) {
                                 placeholder='example: Timisoara' 
                             />
                             <span className="invalid-input-feedback">
-                                {cityIsValid ? <>&nbsp;</> : 'This value can not exceed 32 characters!'}
+                                {cityIsValid ? <>&nbsp;</> : cityInvalidMessage}
                             </span>
                         </Col>
                         <Col lg={6} md={12} className='mb-3'>
@@ -135,7 +209,7 @@ function DeployTitleContract(props) {
                                 placeholder='example: Bulevardul Sperantei' 
                             />
                             <span className="invalid-input-feedback">
-                                {streetIsValid ? <>&nbsp;</> : 'This value can not exceed 32 characters!'}
+                                {streetIsValid ? <>&nbsp;</> : streetInvalidMessage}
                             </span>
                         </Col>
                     </Row>
@@ -150,7 +224,7 @@ function DeployTitleContract(props) {
                                 placeholder='example: 13A' 
                             />
                             <span className="invalid-input-feedback">
-                                {streetNumberIsValid ? <>&nbsp;</> : 'This value can not exceed 32 characters!'}
+                                {streetNumberIsValid ? <>&nbsp;</> : streetNumberInvalidMessage}
                             </span>
                         </Col>
                         <Col lg={6} md={12} className='mb-3'>
@@ -158,13 +232,25 @@ function DeployTitleContract(props) {
                             <input 
                                 value={apartmentNumber} 
                                 className={apartmentNumberIsValid ? '' : 'invalid-input'} 
-                                type='number'
-                                onChange={(e) => setApartmentNumber(e.target.value)} 
+                                onChange={(e) => {
+                                    if (e.target.value.includes('-')) {
+                                        if (e.target.value.length > 1) {
+                                            return;
+                                        }
+                                        setApartmentNumber(e.target.value);
+                                        return;
+                                    }
+                                    if (checkIfNumberIsValid(e.target.value)) {
+                                        if (!(e.target.value).includes('.')){
+                                            setApartmentNumber(e.target.value);
+                                        }
+                                    }
+                                }}
                                 onClick={() => {setApartmentNumberIsValid(true);}}
-                                placeholder='example: 8' 
+                                placeholder='use "-" if there is none'
                             />
                             <span className="invalid-input-feedback">
-                                {apartmentNumberIsValid ? <>&nbsp;</> : 'This value can not exceed 32 characters!'}
+                                {apartmentNumberIsValid ? <>&nbsp;</> : apartmentNumberInvalidMessage}
                             </span>
                         </Col>
                     </Row>
@@ -174,13 +260,16 @@ function DeployTitleContract(props) {
                             <input 
                                 value={squareMeters} 
                                 className={squareMetresIsValid ? '' : 'invalid-input'} 
-                                type='number' 
-                                onChange={(e) => setSquareMeters(e.target.value)} 
+                                onChange={(e) => {
+                                    if (checkIfNumberIsValid(e.target.value)) {
+                                        setSquareMeters(e.target.value);
+                                    }
+                                }}
                                 onClick={() => {setSquareMetresIsValid(true);}}
                                 placeholder='example: 132' 
                             />
                             <span className="invalid-input-feedback">
-                                {squareMetresIsValid ? <>&nbsp;</> : 'This value can not exceed 32 characters!'}
+                                {squareMetresIsValid ? <>&nbsp;</> : squareMetersInvalidMessage}
                             </span>
                         </Col>
                         <Col lg={6} md={12} className='mb-3'>
@@ -188,12 +277,16 @@ function DeployTitleContract(props) {
                             <input 
                                 value={sellingPrice} 
                                 className={sellingPriceIsValid ? '' : 'invalid-input'} 
-                                onChange={(e) => setSellingPriceString(e.target.value)} 
+                                onChange={(e) => {
+                                    if (checkIfNumberIsValid(e.target.value)) {
+                                        setSellingPrice(e.target.value);
+                                    }
+                                }} 
                                 onClick={() => {setSellingPriceIsValid(true);}}
                                 placeholder='example: 7.543' 
                             />
                             <span className="invalid-input-feedback">
-                                {sellingPriceIsValid ? <>&nbsp;</> : 'This value can not exceed 32 characters!'}
+                                {sellingPriceIsValid ? <>&nbsp;</> : sellingPriceInvalidMessage}
                             </span>
                         </Col>
                     </Row>
@@ -203,8 +296,8 @@ function DeployTitleContract(props) {
                 <Row>
                     <Col xs={12} className='mb-2'>
                     {
-                        valuesAreValid ?
-                            <Button className='submit-btn' onClick={() => {console.log(1);}}>
+                        valuesAreCompleted ?
+                            <Button className='submit-btn' onClick={validateUserInputs}>
                                 Deploy Contract Request
                             </Button> :
                             <Button className='submit-btn disabled-btn'>

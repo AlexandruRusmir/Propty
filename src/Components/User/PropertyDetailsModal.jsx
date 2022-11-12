@@ -12,6 +12,7 @@ import { useWeb3 } from '../../CustomHooks/useWeb3';
 import { useContract } from '../../CustomHooks/useContract';
 import { MdOutlineSell } from "react-icons/md";
 import config from '../../Config/config';
+import { checkIfNumberIsValid } from '../../Helpers/helpers';
 
 function PropertyDetailsModal(props) {
     const web3 = useWeb3().current;
@@ -135,28 +136,6 @@ function PropertyDetailsModal(props) {
         });
     }
 
-    const setSellingPriceString = (price) => {
-        if (price.length === 0) {
-            setSellingPrice(price);
-            return;
-        }
-
-        if (price.length > 31) {
-            return;
-        }
-
-        const splitArray = price.split('.');
-        if (splitArray.length > 2) {
-            return;
-        }
-
-        if (!((price[price.length -1] >= '0' && price[price.length -1] <= '9') || price[price.length - 1] === '.')) {
-            return;
-        }
-
-        setSellingPrice(price);
-    };
-
     const applySellingPriceChange = () => {
         if (sellingPrice != props.sellingPrice) {
             updateContractSellingPrice(sellingPrice).then(() => {
@@ -218,7 +197,12 @@ function PropertyDetailsModal(props) {
                                 Selling Price(ETH):<br/>
                                 <Row>
                                     <Col lg={9} sm={7} xs={12}>
-                                        <input value={sellingPrice} onChange={(e) => setSellingPriceString(e.target.value)} placeholder='example: 7.543' />
+                                        <input value={sellingPrice} onChange={(e) => {
+                                            if (checkIfNumberIsValid(e.target.value)) {
+                                                setSellingPrice(e.target.value);
+                                            }
+                                        }} 
+                                        placeholder='example: 7.543' />
                                     </Col>
                                     <Col>
                                         {

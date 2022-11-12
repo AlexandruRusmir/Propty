@@ -224,7 +224,7 @@ function PropertyCard(props) {
                                     contractState == config.contractState.FOR_SALE ?
                                         <Row>
                                             <Col>
-                                                <Button className='buy-contract-btn' onClick={() => {buyProperty();}}>
+                                                <Button className='buy-contract-btn' onClick={buyProperty}>
                                                     Buy Property <FaEthereum />
                                                 </Button>
                                             </Col>

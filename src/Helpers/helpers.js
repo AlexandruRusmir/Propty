@@ -1,4 +1,4 @@
-export function getNumberOfTrailingCharacters (string = '') {
+export const getNumberOfTrailingCharacters = (string = '') => {
     let characterCount = 0;
     if (!((string[string.length - 1] >= 'a' && string[string.length - 1] <= 'z') ||
             (string[string.length - 1] >= 'A' && string[string.length - 1] <= 'Z') ||
@@ -19,11 +19,11 @@ export function getNumberOfTrailingCharacters (string = '') {
     return characterCount;
 }
 
-export function getSellingPrice (sellingPriceIntegralPart, sellingPriceFractionalPart, sellingPriceFractionalPartLength) {
+export const getSellingPrice = (sellingPriceIntegralPart, sellingPriceFractionalPart, sellingPriceFractionalPartLength) => {
     return (sellingPriceIntegralPart + sellingPriceFractionalPart * 10 ** (-sellingPriceFractionalPartLength)).toFixed(4);
 }
 
-export function getCorrespondingContractStateMessage (enumNumber) {
+export const getCorrespondingContractStateMessage = (enumNumber) => {
     if (enumNumber == 0) {
         return 'Initialized';
     }
@@ -43,7 +43,7 @@ export function getCorrespondingContractStateMessage (enumNumber) {
     return 'Not a valid contract state enum number';
 }
 
-export function getCorrespondingHousingTenure (enumNumber) {
+export const getCorrespondingHousingTenure = (enumNumber) => {
     if (enumNumber == 0) {
         return 'Owner Occupancy';
     }
@@ -75,7 +75,7 @@ export function getCorrespondingHousingTenure (enumNumber) {
     return 'Not a valid housing tenure enum number';
 }
 
-export function getMessageForRequiredDocuments (boolValue) {
+export const getMessageForRequiredDocuments = (boolValue) => {
     switch (boolValue) {
         case 0:
             return 'Not provided';
@@ -85,3 +85,24 @@ export function getMessageForRequiredDocuments (boolValue) {
 
     return 'Invalid bool value'; 
 }
+
+export const checkIfNumberIsValid = (inputValue) => {
+    if (inputValue.length === 0) {
+        return true;
+    }
+    if (inputValue.length > 31) {
+        return false;
+    }
+    const splitArray = inputValue.split('.');
+    if (!splitArray[0].length) {
+        return false;
+    }
+    if (splitArray.length > 2) {
+        return false;
+    }
+    if (!((inputValue[inputValue.length -1] >= '0' && inputValue[inputValue.length -1] <= '9') || inputValue[inputValue.length - 1] === '.')) {
+        return false;
+    }
+
+    return true;
+};
