@@ -118,7 +118,7 @@ function App() {
 		if (!account) {
 			return;
 		}
-		const result = titlesContract.methods.registrarsState(account).call();
+		const result = titlesContract.methods.isRegistrar(account).call();
 		return result
 	}
 
@@ -150,7 +150,7 @@ function App() {
 							} />
 							<Route path="/contract-requests" element={
 								<Container>
-									<HandleContractRequests account={account} balance={balance} network={network}/>
+									<HandleContractRequests account={account} balance={balance} network={network} isRegistrar={isRegistrar}/>
 								</Container>
 							} />
 						</Routes>

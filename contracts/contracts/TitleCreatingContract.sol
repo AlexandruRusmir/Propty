@@ -49,7 +49,10 @@ contract TitleCreatingContract {
         string memory _street,
         string memory _streeNumber,
         uint256 _apartmentNumber,
-        uint256 _squareMeters
+        uint256 _squareMeters,
+        uint256 _sellingPriceIntegralPart,
+        uint256 _sellingPriceFractionalPart,
+        uint256  _sellingPriceFractionalPartLength
     )
         public
     {
@@ -61,7 +64,10 @@ contract TitleCreatingContract {
             _street,
             _streeNumber,
             _apartmentNumber,
-            _squareMeters
+            _squareMeters,
+            _sellingPriceIntegralPart,
+            _sellingPriceFractionalPart,
+            _sellingPriceFractionalPartLength
         );
         titleContracts.push(address(propertyTitle));
         propertyTitleContractsValidaty[address(propertyTitle)] = false;

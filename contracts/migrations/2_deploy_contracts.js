@@ -8,9 +8,11 @@
 //         "Strada Excelentei",
 //         "13A",
 //         7,
-//         100
+//         100,
+//         5,
+//         234,
+//         3
 //     );
-//     // Additional contracts can be deployed here
 // };
 
 var TitleCreatingContract = artifacts.require('TitleCreatingContract');
@@ -21,5 +23,4 @@ module.exports = function(deployer) {
             "0x4C49309510AF9DAb56d1F2464d0BDCa1EaC447f7"
         ]
     );
-    // Additional contracts can be deployed here
 };

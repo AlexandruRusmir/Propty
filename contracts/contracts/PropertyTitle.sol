@@ -35,12 +35,16 @@ struct RequiredPropertyDocuments {
     bool utilityBillsPaid;
 }
 
+struct SellingPrice {
+    uint256 sellingPriceIntegralPart;
+    uint256 sellingPriceFractionalPart;
+    uint256 sellingPriceFractionalPartLength;
+}
+
 
 contract PropertyTitle {
     PropertyTitleContractState public contractState;
-    uint256 public sellingPriceIntegralPart;
-    uint256 public sellingPriceFractionalPart;
-    uint256 public sellingPriceFractionalPartLength;
+    SellingPrice public sellingPrice;
     address public creator;
     address public owner;
     PropertyDetails public propertyDetails;
@@ -54,7 +58,10 @@ contract PropertyTitle {
         string memory _street,
         string memory _streeNumber,
         uint256 _apartmentNumber,
-        uint256 _squareMeters
+        uint256 _squareMeters,
+        uint256 _sellingPriceIntegralPart,
+        uint256 _sellingPriceFractionalPart,
+        uint256  _sellingPriceFractionalPartLength
     )
     {
         creator = _creator;
@@ -66,11 +73,14 @@ contract PropertyTitle {
         propertyDetails.streetNumber = _streeNumber;
         propertyDetails.apartmentNumber = _apartmentNumber;
         propertyDetails.squareMeters = _squareMeters;
+        sellingPrice.sellingPriceIntegralPart = _sellingPriceIntegralPart;
+        sellingPrice.sellingPriceFractionalPart = _sellingPriceFractionalPart;
+        sellingPrice.sellingPriceFractionalPartLength = _sellingPriceFractionalPartLength;
     }
 
     receive() external payable onlyIfPropertyForSale onlyRelevantProperty 
     {
-        uint256 sellingPriceWeiValue = (sellingPriceIntegralPart * 10**18) + (sellingPriceFractionalPart * 10**(18-sellingPriceFractionalPartLength));
+        uint256 sellingPriceWeiValue = (sellingPrice.sellingPriceIntegralPart * 10**18) + (sellingPrice.sellingPriceFractionalPart * 10**(18-sellingPrice.sellingPriceFractionalPartLength));
         require(msg.sender.balance >= sellingPriceWeiValue, 'Insufficient funds');
         payable(owner).transfer(msg.value);
         contractState = PropertyTitleContractState.OWNED;
@@ -123,9 +133,9 @@ contract PropertyTitle {
         onlyOwner
         onlyRelevantProperty
     {
-        sellingPriceIntegralPart = _sellingPriceIntegralPart;
-        sellingPriceFractionalPart = _sellingPriceFractionalPart;
-        sellingPriceFractionalPartLength = _sellingPriceFractionalPartLength;
+        sellingPrice.sellingPriceIntegralPart = _sellingPriceIntegralPart;
+        sellingPrice.sellingPriceFractionalPart = _sellingPriceFractionalPart;
+        sellingPrice.sellingPriceFractionalPartLength = _sellingPriceFractionalPartLength;
         propertyDetails.tenureType = _tenureType;
         propertyDetails.squareMeters = _squareMeters;
     }
@@ -148,13 +158,13 @@ contract PropertyTitle {
         onlyOwner 
         onlyRelevantProperty
     {
-        sellingPriceIntegralPart = _sellingPriceIntegralPart;
-        sellingPriceFractionalPart = _sellingPriceFractionalPart;
-        sellingPriceFractionalPartLength = _sellingPriceFractionalPartLength;
+        sellingPrice.sellingPriceIntegralPart = _sellingPriceIntegralPart;
+        sellingPrice.sellingPriceFractionalPart = _sellingPriceFractionalPart;
+        sellingPrice.sellingPriceFractionalPartLength = _sellingPriceFractionalPartLength;
     }
 
     function getPropertySellingPrice() public view returns (uint256) {
-        uint256 sellingPriceWeiValue = (sellingPriceIntegralPart * 10**18) + (sellingPriceFractionalPart * 10**(18-sellingPriceFractionalPartLength));
+        uint256 sellingPriceWeiValue = (sellingPrice.sellingPriceIntegralPart * 10**18) + (sellingPrice.sellingPriceFractionalPart * 10**(18-sellingPrice.sellingPriceFractionalPartLength));
         return sellingPriceWeiValue;
     }
 

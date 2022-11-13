@@ -17,7 +17,7 @@ function MyProperties(props) {
                 </Col>
                 <Col lg={6} sm={12}>
                     <div className='w-100 h-100 d-flex centered'>
-                        <MyPropertiesCard />
+                        <MyPropertiesCard account={props.account}/>
                     </div>
                 </Col>
             </Row>
@@ -29,7 +29,7 @@ function MyProperties(props) {
                         account={props.account} 
                         balance={props.balance} 
                         network={props.network} 
-                        contractAddress='0x8b7DD12C6a352FB45D7F42A788465174515a3aeB'
+                        contractAddress='0x03a756264a7CC291c91ba7A214D74da1958AAa05'
                     />
                  :
                 <h2>You are not connected to MetaMask</h2>

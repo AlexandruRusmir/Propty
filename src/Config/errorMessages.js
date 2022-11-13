@@ -1,4 +1,5 @@
 const errorMessages = {
+    illegalCharacters: '([{}])*^%$#@~`',
     deployTitleMessages: {
         illegalCharactersInput: 'This input contains illegal characters!',
         invalidHousingTenureValue: 'The provided housing tenure value is invalid!',

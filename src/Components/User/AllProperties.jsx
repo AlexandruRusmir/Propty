@@ -6,7 +6,7 @@ function AllProperties(props) {
     return (
         <div>
             <h1 className='text-center my-5 title-text'>All Registered Properties</h1>
-            <PropertyCard account={props.account} balance={props.balance} network={props.network} contractAddress='0x8b7DD12C6a352FB45D7F42A788465174515a3aeB'/>
+            <PropertyCard account={props.account} balance={props.balance} network={props.network} contractAddress='0xd8C21F189cf3E3bab376fF20d3779e259311D1Ff'/>
         </div>
     );
 }

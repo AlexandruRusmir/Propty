@@ -21,7 +21,8 @@ function MyPropertiesCard(props) {
             <DeployTitleContract
               show={addNewContractShow}
               onAddNewContractHide={() => setAddNewContractShow(false)}
-              key={props.account + 'addPropertModal'}
+              key={props.account + 'addPropertyModal'}
+              account={props.account}
             />
             <div className='centered mt-5 mb-2'>
               <Button className='modify-contract-btn' onClick={() => {setAddNewContractShow(true);}} >Add a Title Contract</Button>

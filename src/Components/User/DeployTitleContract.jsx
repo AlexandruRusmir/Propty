@@ -8,9 +8,12 @@ import Col from 'react-bootstrap/Col';
 import { useState, useEffect, useMemo } from 'react';
 import config from '../../Config/config';
 import errorMessages from '../../Config/errorMessages';
-import { checkIfNumberIsValid } from '../../Helpers/helpers';
+import { checkIfNumberIsValid, getSellingPriceComponentsFromString } from '../../Helpers/helpers';
+import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 
 function DeployTitleContract(props) {
+    const titlesContract = useTitlesContract().current;
+
     const [sellingPrice, setSellingPrice] = useState('');
     const [housingTenure, setHousingTenure] = useState('0');
     const [city, setCity] = useState('');
@@ -67,6 +70,11 @@ function DeployTitleContract(props) {
             setCountryInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
             return false;
         }
+        if (country.includes(errorMessages.illegalCharacters)) {
+            setCountryIsValid(false);
+            setCountryInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
+            return false;
+        }
 
         if (city.length < 1) {
             setCountryIsValid(false);
@@ -76,6 +84,11 @@ function DeployTitleContract(props) {
         if (city.length > 32) {
             setCityIsValid(false);
             setCityInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
+            return false;
+        }
+        if (city.includes(errorMessages.illegalCharacters)) {
+            setCityIsValid(false);
+            setCityInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
             return false;
         }
 
@@ -89,6 +102,11 @@ function DeployTitleContract(props) {
             setStreetInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
             return false;
         }
+        if (street.includes(errorMessages.illegalCharacters)) {
+            setStreetIsValid(false);
+            setStreetInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
+            return false;
+        }
 
         if (streetNumber.length < 1) {
             setStreetNumberIsValid(false);
@@ -100,6 +118,12 @@ function DeployTitleContract(props) {
             setStreetNumberInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
             return false;
         }
+        if (streetNumber.includes(errorMessages.illegalCharacters)) {
+            setStreetNumberIsValid(false);
+            setStreetNumberInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
+            return false;
+        }
+
 
         if (apartmentNumber.length < 1) {
             setApartmentNumberIsValid(false);
@@ -109,6 +133,11 @@ function DeployTitleContract(props) {
         if (apartmentNumber.length > 32) {
             setApartmentNumberIsValid(false);
             setApartmentNumberInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
+            return false;
+        }
+        if (apartmentNumber.includes(errorMessages.illegalCharacters)) {
+            setApartmentNumberIsValid(false);
+            setApartmentNumberInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
             return false;
         }
 
@@ -122,6 +151,11 @@ function DeployTitleContract(props) {
             setSquareMetersInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
             return false;
         }
+        if (squareMeters.includes(errorMessages.illegalCharacters)) {
+            setSquareMetresIsValid(false);
+            setSquareMetersInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
+            return false;
+        }
 
         if (sellingPrice.length < 1) {
             setSellingPriceIsValid(false);
@@ -133,8 +167,38 @@ function DeployTitleContract(props) {
             setSellingPriceInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
             return false;
         }
+        if (sellingPrice.includes(errorMessages.illegalCharacters)) {
+            setSellingPriceIsValid(false);
+            setSellingPriceInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
+            return false;
+        }
 
         return true;
+    }
+
+    const deployTitleContract = async () => {
+        if (!validateUserInputs()) {
+            return;
+        }
+
+        let {sellingPriceIntegralPart, sellingPriceFractionalPart, sellingPriceFractionalPartLength} = getSellingPriceComponentsFromString(sellingPrice);
+
+        titlesContract.methods.deployNewPropertyTitle(
+            props.account,
+            country,
+            city,
+            street,
+            streetNumber,
+            apartmentNumber,
+            squareMeters,
+            sellingPriceIntegralPart,
+            sellingPriceFractionalPart,
+            sellingPriceFractionalPartLength
+        ).send({ from: props.account }).then(() => {
+            console.log('deployed');
+        }).catch((err) => {
+            console.log(err.message);
+        });
     }
 
     return (
@@ -297,7 +361,7 @@ function DeployTitleContract(props) {
                     <Col xs={12} className='mb-2'>
                     {
                         valuesAreCompleted ?
-                            <Button className='submit-btn' onClick={validateUserInputs}>
+                            <Button className='submit-btn' onClick={deployTitleContract}>
                                 Deploy Contract Request
                             </Button> :
                             <Button className='submit-btn disabled-btn'>
