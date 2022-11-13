@@ -19,6 +19,23 @@ export const getNumberOfTrailingCharacters = (string = '') => {
     return characterCount;
 }
 
+export const getSellingPriceComponentsFromString = (sellingPriceString) => {
+    const splitArray = sellingPriceString.split('.');
+    if (splitArray.length > 2) {
+        return;
+    }
+
+    const sellingPriceIntegralPart = splitArray[0];
+    let sellingPriceFractionalPart = 0;
+    let sellingPriceFractionalPartLength = 0;
+    if (splitArray[1]) {
+        sellingPriceFractionalPart = splitArray[1];
+        sellingPriceFractionalPartLength = splitArray[1].length;
+    }
+
+    return {sellingPriceIntegralPart, sellingPriceFractionalPart, sellingPriceFractionalPartLength};
+}
+
 export const getSellingPrice = (sellingPriceIntegralPart, sellingPriceFractionalPart, sellingPriceFractionalPartLength) => {
     return (sellingPriceIntegralPart + sellingPriceFractionalPart * 10 ** (-sellingPriceFractionalPartLength)).toFixed(4);
 }

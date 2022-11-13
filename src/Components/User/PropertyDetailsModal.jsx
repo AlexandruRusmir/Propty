@@ -12,7 +12,7 @@ import { useWeb3 } from '../../CustomHooks/useWeb3';
 import { useContract } from '../../CustomHooks/useContract';
 import { MdOutlineSell } from "react-icons/md";
 import config from '../../Config/config';
-import { checkIfNumberIsValid } from '../../Helpers/helpers';
+import { checkIfNumberIsValid, getSellingPriceComponentsFromString } from '../../Helpers/helpers';
 
 function PropertyDetailsModal(props) {
     const web3 = useWeb3().current;
@@ -42,25 +42,13 @@ function PropertyDetailsModal(props) {
             return;
         }
 
-        const sellingPriceIntegralPart = splitArray[0];
-        if (splitArray[1]) {
-            const sellingPriceFractionalPart = splitArray[1];
-            const sellingPriceFractionalPartLength = splitArray[1].length;
+        let {sellingPriceIntegralPart, sellingPriceFractionalPart, sellingPriceFractionalPartLength} = getSellingPriceComponentsFromString(sellingPriceString);
 
-            contract.methods.setPropertySellingPrice(
-                sellingPriceIntegralPart,
-                sellingPriceFractionalPart,
-                sellingPriceFractionalPartLength
-            ).send({ from: props.account }).then(() => {
-                props.changeSellingPrice(sellingPriceString);
-            }).catch((err) => {
-                console.log(err.message);
-            });
-
-            return;
-        }
-        
-        contract.methods.setPropertySellingPrice(sellingPriceIntegralPart,0,0).send({ from: props.account }).then(() => {
+        contract.methods.setPropertySellingPrice(
+            sellingPriceIntegralPart,
+            sellingPriceFractionalPart,
+            sellingPriceFractionalPartLength
+        ).send({ from: props.account }).then(() => {
             props.changeSellingPrice(sellingPriceString);
         }).catch((err) => {
             console.log(err.message);
@@ -96,41 +84,18 @@ function PropertyDetailsModal(props) {
             return;
         }
 
-        const splitArray = sellingPriceString.split('.');
-        if (splitArray.length > 2) {
-            return;
-        }
+        let {sellingPriceIntegralPart, sellingPriceFractionalPart, sellingPriceFractionalPartLength} = getSellingPriceComponentsFromString(sellingPriceString);
 
-        const sellingPriceIntegralPart = splitArray[0];
-        if (splitArray[1]) {
-            const sellingPriceFractionalPart = splitArray[1];
-            const sellingPriceFractionalPartLength = splitArray[1].length;
-
-            contract.methods.modifyPropertyPriceAndTenureAndMeters(
-                sellingPriceIntegralPart,
-                sellingPriceFractionalPart,
-                sellingPriceFractionalPartLength,
-                housingTenure,
-                squareMeters
-            ).send({ from: props.account }).then(() => {
-                props.changeSellingPrice(sellingPriceString);
-                props.changeHousingTenure(housingTenure);
-                props.changeSquareMeters(squareMeters);
-            });
-
-            return;
-        }
-        
         contract.methods.modifyPropertyPriceAndTenureAndMeters(
             sellingPriceIntegralPart,
-            0,
-            0,
+            sellingPriceFractionalPart,
+            sellingPriceFractionalPartLength,
             housingTenure,
             squareMeters
-            ).send({ from: props.account }).then(() => {
-                props.changeSellingPrice(sellingPriceString);
-                props.changeHousingTenure(housingTenure);
-                props.changeSquareMeters(squareMeters);
+        ).send({ from: props.account }).then(() => {
+            props.changeSellingPrice(sellingPriceString);
+            props.changeHousingTenure(housingTenure);
+            props.changeSquareMeters(squareMeters);
         }).catch((err) => {
             console.log(err.message);
         });
