@@ -92,7 +92,7 @@ contract PropertyTitle {
         PropertyTitleContractState _contractState
     )
         external 
-        onlyIfUserIsRegistrar
+        onlyRegistrar
         onlyRelevantProperty
     {
         owner = _owner;
@@ -163,6 +163,24 @@ contract PropertyTitle {
         sellingPrice.sellingPriceFractionalPartLength = _sellingPriceFractionalPartLength;
     }
 
+    function setRequiredDocumentsState(
+        bool _proofOfIdentity,
+        bool _propertyTitleDeeds,
+        bool _energyPerformanceCertificate,
+        bool _extensionsAndAlterationsDocumentation,
+        bool _utilityBillsPaid
+    )
+        external
+        onlyRegistrar
+        onlyRelevantProperty
+    {
+        requiredDocuments.proofOfIdentity = _proofOfIdentity;
+        requiredDocuments.propertyTitleDeeds = _propertyTitleDeeds;
+        requiredDocuments.energyPerformanceCertificate = _energyPerformanceCertificate;
+        requiredDocuments.extensionsAndAlterationsDocumentation = _extensionsAndAlterationsDocumentation;
+        requiredDocuments.utilityBillsPaid = _utilityBillsPaid;
+    }
+
     function getPropertySellingPrice() public view returns (uint256) {
         uint256 sellingPriceWeiValue = (sellingPrice.sellingPriceIntegralPart * 10**18) + (sellingPrice.sellingPriceFractionalPart * 10**(18-sellingPrice.sellingPriceFractionalPartLength));
         return sellingPriceWeiValue;
@@ -172,21 +190,12 @@ contract PropertyTitle {
         return (creator, owner, contractState);
     }
 
-    function validatePropertyDebts() public view returns (bool) {
-        /// TODO
-        return true;
-        /// TODO
-    }
-
-    function checkIfUserIsRegistrar() public view returns (bool) {
-        //address currentUser = msg.sender;
-        // registrarsArray = CentralContract.getRegistrarsArray();
-        // for (uint256 i = 0; i < registrarsArray.length; i++) {
-        //     if (currentUser == registrarsArray[i]) {
-        //         return true;
-        //     }
-        // }
-        return true;
+    function checkIfAllDocumentsAreProvided() public view returns (bool) {
+        if (requiredDocuments.proofOfIdentity && requiredDocuments.propertyTitleDeeds && requiredDocuments.energyPerformanceCertificate && 
+            requiredDocuments.extensionsAndAlterationsDocumentation && requiredDocuments.utilityBillsPaid) {
+                return true;
+        }
+        return false;
     }
 
     function checkStringsEquality(string memory firstString, string memory secondString) public pure returns (bool) {
@@ -226,11 +235,11 @@ contract PropertyTitle {
     }
 
     modifier onlyIfLegallyAllowed {
-        require(validatePropertyDebts(), "The property is not legally alright.");
+        require(checkIfAllDocumentsAreProvided(), "The property is not legally alright.");
         _;
     }
 
-    modifier onlyIfUserIsRegistrar {
+    modifier onlyRegistrar {
         require(ITitleCreatingContract(creator).checkIfUserIsRegistrar(msg.sender) == true, "Only a registered registrar has access to this action.");
         _;
     }

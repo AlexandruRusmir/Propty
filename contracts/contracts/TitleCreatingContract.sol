@@ -3,6 +3,10 @@ pragma solidity ^0.8.15;
 
 import "./PropertyTitle.sol";
 
+interface IAccessPropertyTitleMethods {
+    function contractState() external view returns (PropertyTitleContractState);
+}
+
 contract TitleCreatingContract {
     address[] public owners;
     mapping (address => bool) public isOwner;
@@ -77,15 +81,15 @@ contract TitleCreatingContract {
         propertyTitleContractsValidaty[_contractAddress] = true;
     }
 
-    function checkIfUserIsOwner(address _userAddress) public view returns (bool) {
-        if (isOwner[_userAddress] == true) {
+    function checkIfUserIsOwner(address userAddress) public view returns (bool) {
+        if (isOwner[userAddress] == true) {
             return true;
         }
         return false;    
     }
 
-    function checkIfUserIsRegistrar(address _userAddress) public view returns (bool) {
-        if (isRegistrar[_userAddress] == true) {
+    function checkIfUserIsRegistrar(address userAddress) public view returns (bool) {
+        if (isRegistrar[userAddress] == true) {
             return true;
         }
         return false;
@@ -101,6 +105,80 @@ contract TitleCreatingContract {
 
     function getTitleContracts() public view returns (address[] memory) {
         return titleContracts;
+    }
+
+    function getPendingTitleContractsCount() public view returns (uint256) {
+        uint256 counter = 0;
+        for (uint256 i = 0; i < titleContracts.length; i++) {
+            if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.PENDING) {
+                counter++;
+            } 
+        }
+
+        return counter;
+    }
+
+    function getActiveTitleContractsCount() public view returns (uint256) {
+        uint256 counter = 0;
+        for (uint256 i = 0; i < titleContracts.length; i++) {
+            if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.OWNED ||
+                IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.FOR_SALE) {
+                counter++;
+            } 
+        }
+
+        return counter;
+    }
+
+    function getNoLongerRelevantTitleContractsCount() public view returns (uint256) {
+        uint256 counter = 0;
+        for (uint256 i = 0; i < titleContracts.length; i++) {
+            if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.NO_LONGER_RELEVANT) {
+                counter++;
+            } 
+        }
+
+        return counter;
+    }
+
+    function getPendingTitleContracts() public view returns (address[] memory) {
+        address[] memory titleContractsAddresses = new address[](getPendingTitleContractsCount());
+
+        uint256 k = 0;
+        for (uint256 i = 0; i < titleContracts.length; i++) {
+            if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.PENDING) {
+                titleContractsAddresses[k++] = titleContracts[i];
+            } 
+        }
+
+        return titleContractsAddresses;
+    }
+
+    function getActiveTitleContracts() public view returns (address[] memory) {
+        address[] memory titleContractsAddresses = new address[](getActiveTitleContractsCount());
+
+        uint256 k = 0;
+        for (uint256 i = 0; i < titleContracts.length; i++) {
+            if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.OWNED ||
+                IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.FOR_SALE) {
+                titleContractsAddresses[k++] = titleContracts[i];
+            }
+        }
+
+        return titleContractsAddresses;
+    }
+
+    function getNoLongerRelevantTitleContracts() public view returns (address[] memory) {
+        address[] memory titleContractsAddresses = new address[](getNoLongerRelevantTitleContractsCount());
+
+        uint256 k = 0;
+        for (uint256 i = 0; i < titleContracts.length; i++) {
+            if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.NO_LONGER_RELEVANT) {
+                titleContractsAddresses[k++] = titleContracts[i];
+            }
+        }
+
+        return titleContractsAddresses;
     }
 
     modifier onlyRegistrar {
