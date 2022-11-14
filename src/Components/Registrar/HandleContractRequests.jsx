@@ -19,13 +19,13 @@ function HandleContractRequests(props) {
     }, [])
 
     const loadContract = async () => {
-        const titleContracts = await getTitleContracts();
+        const titleContracts = await getPendingTitleContracts();
         console.log(titleContracts);
         setTitleContracts(titleContracts);
     }
 
-    const getTitleContracts = async () => {
-        const titleContracts = await titlesContract.methods.getTitleContracts().call();
+    const getPendingTitleContracts = async () => {
+        const titleContracts = await titlesContract.methods.getPendingTitleContracts().call();
         return titleContracts;
     }
 

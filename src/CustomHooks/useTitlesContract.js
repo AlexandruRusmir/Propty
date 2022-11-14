@@ -1,7 +1,7 @@
 import { useRef } from "react"
 import { useWeb3 } from "./useWeb3";
 import titleCreatingContractBuild from 'contracts/TitleCreatingContract.json';
-import config from "../Config/config";
+import config from "../Data/config";
 
 const contractAddress = config.titleDeployingContractAddress;
 

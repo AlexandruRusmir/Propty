@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 import { useState } from 'react';
 import { getCorrespondingContractStateMessage } from '../../Helpers/helpers';
 import { useContract } from '../../CustomHooks/useContract';
-import config from '../../Config/config';
+import config from '../../Data/config';
 
 function StateChangeModal(props) {
     const desiredNewState = props.desiredNewState;

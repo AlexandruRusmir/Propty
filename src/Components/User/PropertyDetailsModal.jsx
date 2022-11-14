@@ -11,7 +11,7 @@ import { Form } from 'react-bootstrap';
 import { useWeb3 } from '../../CustomHooks/useWeb3';
 import { useContract } from '../../CustomHooks/useContract';
 import { MdOutlineSell } from "react-icons/md";
-import config from '../../Config/config';
+import config from '../../Data/config';
 import { checkIfNumberIsValid, getSellingPriceComponentsFromString } from '../../Helpers/helpers';
 
 function PropertyDetailsModal(props) {

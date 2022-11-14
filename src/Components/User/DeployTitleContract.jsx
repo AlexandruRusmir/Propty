@@ -6,8 +6,8 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useState, useEffect, useMemo } from 'react';
-import config from '../../Config/config';
-import errorMessages from '../../Config/errorMessages';
+import config from '../../Data/config';
+import errorMessages from '../../Data/errorMessages';
 import { checkIfNumberIsValid, getSellingPriceComponentsFromString } from '../../Helpers/helpers';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 

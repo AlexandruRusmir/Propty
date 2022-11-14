@@ -3,7 +3,7 @@
 }
 
 .bgimg-1 {
-    background-image: url("../images/modern_building.jpg");
+    background-image: url("../assets/modern_building.jpg");
     min-height: 100vh;
     position: relative;
     background-attachment: fixed;
@@ -13,7 +13,7 @@
 }
 
 .bgimg-2 {
-    background-image: url("../images/web3_wallet.jpg");
+    background-image: url("../assets/web3_wallet.jpg");
     min-height: 550px;
     position: relative;
     background-attachment: fixed;
@@ -23,7 +23,7 @@
 }
 
 .bgimg-3 {
-    background-image: url("../images/person_on_laptop.jpg");
+    background-image: url("../assets/person_on_laptop.jpg");
     min-height: 800px;
     position: relative;
     background-attachment: fixed;
@@ -33,7 +33,7 @@
 }
 
 .bgimg-4 {
-    background-image: url("../images/web3_wallet_2.jpg");
+    background-image: url("../assets/web3_wallet_2.jpg");
     min-height: 800px;
     position: relative;
     background-attachment: fixed;

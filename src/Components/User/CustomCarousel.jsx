@@ -1,7 +1,7 @@
 import Carousel from 'react-bootstrap/Carousel';
-import HouseEditSvg from '../../images/house_edit.svg';
-import QuietTown from '../../images/quiet_town.svg';
-import SelectHouse from '../../images/select_house.svg';
+import HouseEditSvg from '../../assets/house_edit.svg';
+import QuietTown from '../../assets/quiet_town.svg';
+import SelectHouse from '../../assets/select_house.svg';
 import '../../styles/cardAndCarouselStyle.css';
 
 function CustomCarousel() {
