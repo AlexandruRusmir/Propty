@@ -7,6 +7,7 @@ import PropertyDetailsModal from './PropertyDetailsModal';
 import StateChangeModal from './StateChangeModal';
 import { useState, useEffect } from 'react';
 import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContractStateMessage, getCorrespondingHousingTenure, getMessageForRequiredDocuments } from '../../Helpers/helpers';
+import { getTitleContractDetails } from '../../Helpers/contractDataProviders';
 import { useWeb3 } from '../../CustomHooks/useWeb3';
 import { useContract } from '../../CustomHooks/useContract';
 import { FaEthereum } from 'react-icons/fa';
@@ -16,8 +17,8 @@ import config from '../../Data/config';
 
 function PropertyCard(props) {
     const web3 = useWeb3().current;
-    let contractAddress = props.contractAddress;
-    const contract = useContract().current;
+    const contractAddress = props.contractAddress;
+    const contract = useContract(contractAddress).current;
 
     const [contractState, setContractState] = useState('');
     const [sellingPrice, setSellingPrice] = useState('');
@@ -46,51 +47,30 @@ function PropertyCard(props) {
     }, []);
     
     const loadContract = async () => {
-        // const networkId = await web3.eth.net.getId();
+        const titleContractData = await getTitleContractDetails(web3, contractAddress);
 
-        // contractAddress =  propertyTitleBuild.networks[networkId].address;
-
-        const contractState = await web3.eth.getStorageAt(contractAddress, 0);
-        const sellingPriceIntegralPart = await web3.eth.getStorageAt(contractAddress, 1);
-        const sellingPriceFractionalPart = await web3.eth.getStorageAt(contractAddress, 2);
-        const sellingPriceFractionalPartLength = await web3.eth.getStorageAt(contractAddress, 3);
-        const contractCreator = await web3.eth.getStorageAt(contractAddress, 4);
-        const contractOwner = await web3.eth.getStorageAt(contractAddress, 5);
-        const housingTenure = await web3.eth.getStorageAt(contractAddress, 6);
-        const country = await web3.eth.getStorageAt(contractAddress, 7);
-        const city = await web3.eth.getStorageAt(contractAddress, 8);
-        const street = await web3.eth.getStorageAt(contractAddress, 9);
-        const streetNumber = await web3.eth.getStorageAt(contractAddress, 10);
-        const apartmentNumber = await web3.eth.getStorageAt(contractAddress, 11);
-        const squareMeters = await web3.eth.getStorageAt(contractAddress, 12);
-        const proofOfIdentity = await web3.eth.getStorageAt(contractAddress, 13);
-        const propertyTitleDeeds = await web3.eth.getStorageAt(contractAddress, 14);
-        const energyPerformanceCertificate = await web3.eth.getStorageAt(contractAddress, 15);
-        const extensionsAndAlterationsDocumentation = await web3.eth.getStorageAt(contractAddress, 16);
-        const utilityBillsPaid = await web3.eth.getStorageAt(contractAddress, 17);
-
-        setContractState(web3.utils.hexToNumber(contractState));
+        setContractState(web3.utils.hexToNumber(titleContractData.contractState));
         setSellingPrice(
             getSellingPrice(
-                web3.utils.hexToNumber(sellingPriceIntegralPart), 
-                web3.utils.hexToNumber(sellingPriceFractionalPart), 
-                web3.utils.hexToNumber(sellingPriceFractionalPartLength)
+                web3.utils.hexToNumber(titleContractData.sellingPriceIntegralPart), 
+                web3.utils.hexToNumber(titleContractData.sellingPriceFractionalPart), 
+                web3.utils.hexToNumber(titleContractData.sellingPriceFractionalPartLength)
                 )
         );
-        setContractCreator(contractCreator);
-        setContractOwner(contractOwner);
-        setHousingTenure(web3.utils.hexToNumber(housingTenure))
-        setCountry(web3.utils.hexToString(country).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(country))));
-        setCity(web3.utils.hexToString(city).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(city))));
-        setStreet(web3.utils.hexToString(street).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(street))));
-        setStreetNumber(web3.utils.hexToString(streetNumber).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(streetNumber))));
-        setApartmentNumber(web3.utils.hexToNumber(apartmentNumber));
-        setSquareMeters(web3.utils.hexToNumber(squareMeters));
-        setProofOfIdentity(web3.utils.hexToNumber(proofOfIdentity));
-        setPropertyTitleDeeds(web3.utils.hexToNumber(propertyTitleDeeds));
-        setEnergyPerformanceCertificate(web3.utils.hexToNumber(energyPerformanceCertificate));
-        setExtensionsAndAlterationsDocumentation(web3.utils.hexToNumber(extensionsAndAlterationsDocumentation));
-        setUtilityBillsPaid(web3.utils.hexToNumber(utilityBillsPaid));
+        setContractCreator(titleContractData.contractCreator);
+        setContractOwner(titleContractData.contractOwner);
+        setHousingTenure(web3.utils.hexToNumber(titleContractData.housingTenure))
+        setCountry(web3.utils.hexToString(titleContractData.country).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.country))));
+        setCity(web3.utils.hexToString(titleContractData.city).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.city))));
+        setStreet(web3.utils.hexToString(titleContractData.street).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.street))));
+        setStreetNumber(web3.utils.hexToString(titleContractData.streetNumber).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.streetNumber))));
+        setApartmentNumber(web3.utils.hexToNumber(titleContractData.apartmentNumber));
+        setSquareMeters(web3.utils.hexToNumber(titleContractData.squareMeters));
+        setProofOfIdentity(web3.utils.hexToNumber(titleContractData.proofOfIdentity));
+        setPropertyTitleDeeds(web3.utils.hexToNumber(titleContractData.propertyTitleDeeds));
+        setEnergyPerformanceCertificate(web3.utils.hexToNumber(titleContractData.energyPerformanceCertificate));
+        setExtensionsAndAlterationsDocumentation(web3.utils.hexToNumber(titleContractData.extensionsAndAlterationsDocumentation));
+        setUtilityBillsPaid(web3.utils.hexToNumber(titleContractData.utilityBillsPaid));
     }
 
     const getPropertySellingPrice = async () => {

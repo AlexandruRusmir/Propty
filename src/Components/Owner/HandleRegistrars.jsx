@@ -7,6 +7,7 @@ import Row  from 'react-bootstrap/Row';
 import Col  from 'react-bootstrap/Col';
 import { Button } from 'react-bootstrap';
 import AddRegistrarModal from './AddRegistrarModal';
+import { checkIfUserIsRegistrar, getCentralContractRegistrars } from '../../Helpers/contractDataProviders';
 
 function HandleRegistrars(props) {
     const titlesContract = useTitlesContract().current;
@@ -46,26 +47,16 @@ function HandleRegistrars(props) {
     }, [registrars, searchText, seeRemovedRegistrars, seeActiveRegistrars])
 
     const loadCentralContractRegistrars = async () => {
-        const registrarAddresses = await getCentralContractRegistrars();
+        const registrarAddresses = await getCentralContractRegistrars(titlesContract);
         let registrarsArray = [];
         for (let registrarAddress of registrarAddresses) {
-            const addressIsStillRegistrar = await checkIfAddressIsRegistrar(registrarAddress);
+            const addressIsStillRegistrar = await checkIfUserIsRegistrar(titlesContract, registrarAddress);
             registrarsArray.push({
                 address: registrarAddress,
                 isRegistrar: addressIsStillRegistrar
             })
         }
         setRegistrars(registrarsArray);
-    }
-
-    const getCentralContractRegistrars = async () => {
-        const registrars = await titlesContract.methods.getContractRegistrars().call();
-        return registrars;
-    }
-
-    const checkIfAddressIsRegistrar = async (address) => {
-        const isRegistrar = await titlesContract.methods.checkIfUserIsRegistrar(address).call();
-        return isRegistrar;
     }
 
     return (

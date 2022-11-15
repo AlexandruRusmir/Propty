@@ -57,7 +57,7 @@ function Home() {
 
             <div className="bg-dark text-light text-center">
                 <h2 className="text-light py-3">Take a look at all the listed properties!</h2>
-                <Button className='mt-3 mb-4' variant='warning'><Link to="/allproperties" className='nav-link text-dark'><strong>All Properties</strong></Link></Button>
+                <Button className='mt-3 mb-4' variant='warning'><Link to="/all-properties" className='nav-link text-dark'><strong>All Properties</strong></Link></Button>
             </div>
 
             <div className="bgimg-4">

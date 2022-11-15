@@ -11,7 +11,7 @@ import HandleRegistrars from './Components/Owner/HandleRegistrars';
 import { useWeb3 } from './CustomHooks/useWeb3';
 import { useTitlesContract } from './CustomHooks/useTitlesContract';
 import HandleContractRequests from './Components/Registrar/HandleContractRequests';
-
+import { getCentralContractOwners, checkIfUserIsRegistrar } from './Helpers/contractDataProviders'
 
 function App() {
 	const web3 = useWeb3().current;
@@ -99,28 +99,15 @@ function App() {
 	}
 
 	const loadCentralContractData = async () => {
-        const owners = await getCentralContractOwners();
+        const owners = await getCentralContractOwners(titlesContract);
 		const lowerCaseOwnerAdresses = owners.map(ownerAddress => {
 			return ownerAddress.toLowerCase();
 		})
         setCentralContractOwners(lowerCaseOwnerAdresses);
 
-		const userIsRegistrar = await checkIfUserIsRegistrar();
+		const userIsRegistrar = await checkIfUserIsRegistrar(titlesContract, account);
 		setIsRegistrar(userIsRegistrar);
     }
-
-    const getCentralContractOwners = async () => {
-        const owners = titlesContract.methods.getContractOwners().call();
-        return owners;
-    }
-
-	const checkIfUserIsRegistrar = async () => {
-		if (!account) {
-			return;
-		}
-		const result = titlesContract.methods.isRegistrar(account).call();
-		return result
-	}
 
 	return (
 		<>

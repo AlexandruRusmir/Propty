@@ -42,13 +42,15 @@ function AddRegistrarModal(props) {
             return false;
         }
 
-        for (let registrar of props.currentRegistrars) {
-            if ((newRegistrarAddress.toLowerCase() === registrar.address.toLowerCase()) ||
-                (newRegistrarAddress.length === 40 && registrar.address.substring(2).toLowerCase() === newRegistrarAddress.toLowerCase())) {
-                    setErrorMessage('Address already added as Registrar');
-                    setAddressIsValid(false);
-                    return false;
-                }
+        if (props.currentRegistrars) {
+            for (let registrar of props.currentRegistrars) {
+                if ((newRegistrarAddress.toLowerCase() === registrar.address.toLowerCase()) ||
+                    (newRegistrarAddress.length === 40 && registrar.address.substring(2).toLowerCase() === newRegistrarAddress.toLowerCase())) {
+                        setErrorMessage('Address already added as Registrar');
+                        setAddressIsValid(false);
+                        return false;
+                    }
+            }
         }
 
         setErrorMessage('');

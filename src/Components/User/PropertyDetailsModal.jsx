@@ -16,7 +16,7 @@ import { checkIfNumberIsValid, getSellingPriceComponentsFromString } from '../..
 
 function PropertyDetailsModal(props) {
     const web3 = useWeb3().current;
-    const contract = useContract().current;
+    const contract = useContract(props.contractAddress).current;
 
     const [contractState, setContractState] = useState(props.contractState);
     const [sellingPrice, setSellingPrice] = useState(props.sellingPrice.toString());
