@@ -154,6 +154,22 @@ contract TitleCreatingContract {
         return titleContractsAddresses;
     }
 
+    function getPendingTitleContractsByOffsetAndLimit(uint256 offset, uint256 limit) public view returns (address[] memory) {
+        address[] memory titleContractsAddresses = getPendingTitleContractsCount() > offset + limit 
+            ? new address[](limit) 
+            : new address[](getPendingTitleContractsCount() - offset);
+
+        address[] memory pendingTitleContracts = getPendingTitleContracts();
+        for (uint256 i = offset; i < offset + limit; i++) {
+            if (i >= titleContracts.length) {
+                break;
+            }
+            titleContractsAddresses[i - offset] = pendingTitleContracts[i];
+        }
+
+        return titleContractsAddresses;
+    }
+
     function getActiveTitleContracts() public view returns (address[] memory) {
         address[] memory titleContractsAddresses = new address[](getActiveTitleContractsCount());
 

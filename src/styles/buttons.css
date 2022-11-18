@@ -20,6 +20,28 @@
     box-shadow: 0 0 11px rgba(33,33,33,.2);
 }
 
+.see-all-properties-button {
+    font-weight: 600;
+    display: block;
+    padding: 10px 20px;
+    margin: 0 auto;
+    text-align: center;
+    background: rgb(255,193,7);
+    outline: none;
+    border-radius: 6px;
+    color: #FFF;
+    cursor: pointer;
+    border: none;
+    transition: ease-in-out .4s;
+}
+
+.see-all-properties-button:hover, .see-all-properties-button:focus {
+    transform: translateY(-2px);
+    border-color: transparent;
+    background: rgb(235, 178, 8);
+    box-shadow: 0 0 11px rgba(33,33,33,.2);
+}
+
 .list-for-sale-btn {
     width: 200px;
     padding: 6px 10px;
