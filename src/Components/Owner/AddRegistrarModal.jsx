@@ -88,7 +88,7 @@ function AddRegistrarModal(props) {
                 centered
             >
                 <Modal.Header closeButton>
-                    <Modal.Title className='centered mx-3'>
+                    <Modal.Title className='mx-3'>
                         Add a new registrar by providing their address
                     </Modal.Title>
                 </Modal.Header>

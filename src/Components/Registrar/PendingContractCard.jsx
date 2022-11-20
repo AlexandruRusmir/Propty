@@ -6,6 +6,7 @@ import { getTitleContractDetails } from '../../Helpers/contractDataProviders';
 import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContractStateMessage, getCorrespondingHousingTenure, getMessageForRequiredDocuments } from '../../Helpers/helpers';
 import { useWeb3 } from '../../CustomHooks/useWeb3';
 import { Col, Row, Card, Accordion, Button } from 'react-bootstrap';
+import ValidatePropertyModal from './ValidatePropertyModal';
 
 function PendingContractRequest(props) {
     const web3 = useWeb3().current;
@@ -26,6 +27,8 @@ function PendingContractRequest(props) {
     const [energyPerformanceCertificate, setEnergyPerformanceCertificate] = useState('');
     const [extensionsAndAlterationsDocumentation, setExtensionsAndAlterationsDocumentation] = useState('');
     const [utilityBillsPaid, setUtilityBillsPaid] = useState('');
+
+    const [validatePropertyOpen, setValidatePropertyOpen] = useState(false);
 
     useEffect( () => {
         loadContract();
@@ -83,7 +86,19 @@ function PendingContractRequest(props) {
                         </Col>
                     </Row>
                     <Row className='centered'>
-                        <Button>Set something</Button>
+                        <Button className='buy-contract-btn'  onClick={() =>  {setValidatePropertyOpen(true);}}>Validate Property</Button>
+                        <ValidatePropertyModal
+                            key={'validateProperty' + props.contractAddress}
+                            show={validatePropertyOpen}
+                            onValidatePropertyHide={() => {setValidatePropertyOpen(false);}}
+                            contractAddress={props.contractAddress}
+
+                            proofOfIdentity={proofOfIdentity}
+                            propertyTitleDeeds={propertyTitleDeeds}
+                            energyPerformanceCertificate={energyPerformanceCertificate}
+                            extensionsAndAlterationsDocumentation={extensionsAndAlterationsDocumentation}
+                            utilityBillsPaid={utilityBillsPaid}
+                        />
                     </Row>
                 </Card.Body>
             </Card>
