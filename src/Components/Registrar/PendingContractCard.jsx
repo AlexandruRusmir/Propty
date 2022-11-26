@@ -63,7 +63,7 @@ function PendingContractRequest(props) {
        <div>
             <Card
                 id={'pendingPropertyTitle' + props.contractAddress}
-                className="mb-2 mx-5"
+                className="mb-5 mx-5"
                 variant='light'
             >
                 <Card.Header as="h6" className='text-center'>

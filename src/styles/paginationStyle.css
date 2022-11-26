@@ -1,0 +1,10 @@
+.custom-page-link .page-link {
+    color: #2a4661;
+}
+
+.page-item.custom-active-page .page-link{
+    z-index: 3;
+    color: #fff;
+    background-color: #ff4c4c;
+    border-color: #ff4c4c;
+}
