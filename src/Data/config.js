@@ -14,7 +14,37 @@ const config = {
         PUBLIC_HOUSING: 4,
         SQUATTING: 5,
         LAND_TRUST: 6
-    }
+    },
+    selectHousingTenures: [
+        {
+            value: '0',
+            label: 'Owner Occupancy',
+        },
+        {
+            value: '1',
+            label: 'Tenancy',
+        },
+        {
+            value: '2',
+            label: 'Cooperative',
+        },
+        {
+            value: '3',
+            label: 'Condomium',
+        },
+        {
+            value: '4',
+            label: 'Public Housing',
+        },
+        {
+            value: '5',
+            label: 'Squatting',
+        },
+        {
+            value: '6',
+            label: 'Land Trust',
+        },
+    ]
 }
 
 module.exports = config

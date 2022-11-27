@@ -10,6 +10,8 @@ import config from '../../Data/config';
 import errorMessages from '../../Data/errorMessages';
 import { checkIfNumberIsValid, getSellingPriceComponentsFromString } from '../../Helpers/helpers';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
+import { StyledTextField } from '../SyledTextField';
+import MenuItem from '@mui/material/MenuItem';
 
 function DeployTitleContract(props) {
     const titlesContract = useTitlesContract().current;
@@ -53,127 +55,139 @@ function DeployTitleContract(props) {
 
     useMemo(checkIfInputsAreCompleted, [housingTenure, city, country, street, streetNumber, apartmentNumber, squareMeters, sellingPrice]);
 
+    const clearFields = () => {
+        setSellingPrice('');
+        setHousingTenure(0);
+        setCity('');
+        setCountry('');
+        setStreet('');
+        setStreetNumber('');
+        setApartmentNumber('');
+        setSquareMeters('');
+    }
+
     const validateUserInputs = () => {
+        let inputsAreValid = true;
         if (!(housingTenure <= config.housingTenure.LAND_TRUST && housingTenure >= config.housingTenure.OWNER_OCCUPANCY)) {
             setHousingTenureIsValid(false);
             setHousingTenureInvalidMessage(errorMessages.deployTitleMessages.invalidHousingTenureValue);
-            return false;
+            inputsAreValid = false;
         }
 
         if (country.length < 4) {
             setCountryIsValid(false);
             setCountryInvalidMessage(errorMessages.deployTitleMessages.lessThan4CharactersValue);
-            return false;
+            inputsAreValid = false;
         }
         if (country.length > 32) {
             setCountryIsValid(false);
             setCountryInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
-            return false;
+            inputsAreValid = false;
         }
         if (country.includes(errorMessages.illegalCharacters)) {
             setCountryIsValid(false);
             setCountryInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
-            return false;
+            inputsAreValid = false;
         }
 
         if (city.length < 1) {
             setCountryIsValid(false);
             setCityInvalidMessage(errorMessages.deployTitleMessages.lessThan1CharacterValue);
-            return false;
+            inputsAreValid = false;
         }
         if (city.length > 32) {
             setCityIsValid(false);
             setCityInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
-            return false;
+            inputsAreValid = false;
         }
         if (city.includes(errorMessages.illegalCharacters)) {
             setCityIsValid(false);
             setCityInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
-            return false;
+            inputsAreValid=  false;
         }
 
         if (street.length < 4) {
             setStreetIsValid(false);
             setStreetInvalidMessage(errorMessages.deployTitleMessages.lessThan4CharactersValue);
-            return false;
+            inputsAreValid = false;
         }
         if (street.length > 32) {
             setStreetIsValid(false);
             setStreetInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
-            return false;
+            inputsAreValid = false;
         }
         if (street.includes(errorMessages.illegalCharacters)) {
             setStreetIsValid(false);
             setStreetInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
-            return false;
+            inputsAreValid = false;
         }
 
         if (streetNumber.length < 1) {
             setStreetNumberIsValid(false);
             setStreetNumberInvalidMessage(errorMessages.deployTitleMessages.lessThan1CharacterValue);
-            return false;
+            inputsAreValid = false;
         }
         if (streetNumber.length > 32) {
             setStreetNumberIsValid(false);
             setStreetNumberInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
-            return false;
+            inputsAreValid = false;
         }
         if (streetNumber.includes(errorMessages.illegalCharacters)) {
             setStreetNumberIsValid(false);
             setStreetNumberInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
-            return false;
+            inputsAreValid = false;
         }
 
 
         if (apartmentNumber.length < 1) {
             setApartmentNumberIsValid(false);
             setApartmentNumberInvalidMessage(errorMessages.deployTitleMessages.lessThan1CharacterValue);
-            return false;
+            inputsAreValid = false;
         }
         if (apartmentNumber.length > 32) {
             setApartmentNumberIsValid(false);
             setApartmentNumberInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
-            return false;
+            inputsAreValid = false;
         }
         if (apartmentNumber.includes(errorMessages.illegalCharacters)) {
             setApartmentNumberIsValid(false);
             setApartmentNumberInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
-            return false;
+            inputsAreValid = false;
         }
 
         if (squareMeters.length < 1) {
             setSquareMetresIsValid(false);
             setSquareMetersInvalidMessage(errorMessages.deployTitleMessages.lessThan1CharacterValue);
-            return false;
+            inputsAreValid = false;
         }
         if (squareMeters.length > 32) {
             setSquareMetresIsValid(false);
             setSquareMetersInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
-            return false;
+            inputsAreValid = false;
         }
         if (squareMeters.includes(errorMessages.illegalCharacters)) {
             setSquareMetresIsValid(false);
             setSquareMetersInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
-            return false;
+            inputsAreValid = false;
         }
 
         if (sellingPrice.length < 1) {
             setSellingPriceIsValid(false);
             setSellingPriceInvalidMessage(errorMessages.deployTitleMessages.lessThan1CharacterValue);
-            return false;
+            inputsAreValid = false;
         }
         if (sellingPrice.length > 32) {
             setSellingPriceIsValid(false);
             setSellingPriceInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
-            return false;
+            inputsAreValid = false;
         }
         if (sellingPrice.includes(errorMessages.illegalCharacters)) {
             setSellingPriceIsValid(false);
             setSellingPriceInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
-            return false;
+            inputsAreValid = false;
         }
 
-        return true;
+        return inputsAreValid;
     }
 
     const deployTitleContract = async () => {
@@ -195,7 +209,8 @@ function DeployTitleContract(props) {
             sellingPriceFractionalPart,
             sellingPriceFractionalPartLength
         ).send({ from: props.account }).then(() => {
-            console.log('deployed');
+            clearFields();
+            props.onAddNewContractHide();
         }).catch((err) => {
             console.log(err.message);
         });
@@ -214,88 +229,100 @@ function DeployTitleContract(props) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div className='input-box'>
+                <div>
                     <Row className='mx-2'>
                         <Col lg={6} md={12} className='mb-3'>
-                            Housing Tenure: <br/>
-                            <select 
-                                onChange={(e) => {setHousingTenure(e.target.value);}}
-                                className={housingTenureIsValid ? '' : 'invalid-input'} 
-                                onClick={() => {setHousingTenureIsValid(true);}}
+                        <StyledTextField
+                            error={!housingTenureIsValid}
+                            fullWidth
+                            select
+                            label="Housing Tenure"
+                            value={housingTenure}
+                            onClick={() => {setHousingTenureIsValid(true);}}
+                            onChange={(e) => setHousingTenure(e.target.value)}
+                            helperText={
+                                housingTenureIsValid 
+                                    ? "Please select the housing tenure"
+                                    : housingTenureInvalidMessage
+                            }
                             >
-                                <option value={config.housingTenure.OWNER_OCCUPANCY}>Owner Occupancy</option>
-                                <option value={config.housingTenure.TENANCY}>Tenancy</option>
-                                <option value={config.housingTenure.COOPERATIVE}>Cooperative</option>
-                                <option value={config.housingTenure.CONDOMIUM}>Condomium</option>
-                                <option value={config.housingTenure.PUBLIC_HOUSING}>Public Housing</option>
-                                <option value={config.housingTenure.SQUATTING}>Squatting</option>
-                                <option value={config.housingTenure.LAND_TRUST}>Land Trust</option>
-                            </select>
-                            <span className="invalid-input-feedback">
-                                {housingTenureIsValid ? <>&nbsp;</> : housingTenureInvalidMessage}
-                            </span>
+                            {config.selectHousingTenures.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                            </StyledTextField>
                         </Col>
                         <Col lg={6} md={12} className='mb-3'>
-                            Country:<br/>
-                            <input 
+                            <StyledTextField 
+                                error={!countryIsValid}
+                                fullWidth
+                                label="Country"
                                 value={country} 
-                                className={countryIsValid ? '' : 'invalid-input'} 
                                 onChange={(e) => setCountry(e.target.value)} 
                                 onClick={() => {setCountryIsValid(true);}}
-                                placeholder='example: Romania'
-                            />
-                            <span className="invalid-input-feedback">
-                                {countryIsValid ? <>&nbsp;</> : countryInvalidMessage}
-                            </span>
+                                helperText={
+                                    countryIsValid 
+                                        ? "The country where the property is located"
+                                        : countryInvalidMessage
+                                }
+                            ></StyledTextField>
                         </Col>
                     </Row>
                     <Row className='mx-2'>
                         <Col lg={6} md={12} className='mb-3'>
-                            <span>City:</span><br/>
-                            <input 
+                            <StyledTextField 
+                                error={!cityIsValid}
+                                fullWidth
                                 value={city} 
-                                className={cityIsValid ? '' : 'invalid-input'} 
+                                label="City"
                                 onChange={(e) => setCity(e.target.value)} 
                                 onClick={() => {setCityIsValid(true);}}
-                                placeholder='example: Timisoara' 
+                                helperText={
+                                    cityIsValid 
+                                        ? "The city where the property is located"
+                                        : cityInvalidMessage
+                                }
                             />
-                            <span className="invalid-input-feedback">
-                                {cityIsValid ? <>&nbsp;</> : cityInvalidMessage}
-                            </span>
                         </Col>
                         <Col lg={6} md={12} className='mb-3'>
-                            <span>Street:</span><br/>
-                            <input 
+                            <StyledTextField 
+                                error={!streetIsValid}
+                                fullWidth
+                                label="Street"
                                 value={street} 
-                                className={streetIsValid ? '' : 'invalid-input'} 
                                 onChange={(e) => setStreet(e.target.value)} 
                                 onClick={() => {setStreetIsValid(true);}}
-                                placeholder='example: Bulevardul Sperantei' 
+                                helperText={
+                                    streetIsValid 
+                                        ? "The street where the property is located"
+                                        : streetInvalidMessage
+                                }
                             />
-                            <span className="invalid-input-feedback">
-                                {streetIsValid ? <>&nbsp;</> : streetInvalidMessage}
-                            </span>
                         </Col>
                     </Row>
                     <Row className='mx-2'>
                         <Col lg={6} md={12} className='mb-3'>
-                            <span>Street Number:</span><br/>
-                            <input 
+                            <StyledTextField 
+                                error={!streetNumberIsValid}
+                                fullWidth
+                                label="Street Number"
                                 value={streetNumber} 
                                 onChange={(e) => setStreetNumber(e.target.value)} 
                                 onClick={() => {setStreetNumberIsValid(true);}}
-                                className={streetNumberIsValid ? '' : 'invalid-input'} 
-                                placeholder='example: 13A' 
+                                helperText={
+                                    streetNumberIsValid 
+                                        ? "The street number where the property is located"
+                                        : streetNumberInvalidMessage
+                                }
                             />
-                            <span className="invalid-input-feedback">
-                                {streetNumberIsValid ? <>&nbsp;</> : streetNumberInvalidMessage}
-                            </span>
                         </Col>
                         <Col lg={6} md={12} className='mb-3'>
-                            <span>Apartment Number:</span><br/>
-                            <input 
+                            <StyledTextField 
+                                error={!apartmentNumberIsValid}
+                                fullWidth
+                                label="Apartment Number (use - if none)"
                                 value={apartmentNumber} 
-                                className={apartmentNumberIsValid ? '' : 'invalid-input'} 
                                 onChange={(e) => {
                                     if (e.target.value.includes('-')) {
                                         if (e.target.value.length > 1) {
@@ -311,47 +338,52 @@ function DeployTitleContract(props) {
                                     }
                                 }}
                                 onClick={() => {setApartmentNumberIsValid(true);}}
-                                placeholder='use "-" if there is none'
+                                helperText={
+                                    apartmentNumberIsValid 
+                                        ? "The street number where the property is located"
+                                        : apartmentNumberInvalidMessage
+                                }
                             />
-                            <span className="invalid-input-feedback">
-                                {apartmentNumberIsValid ? <>&nbsp;</> : apartmentNumberInvalidMessage}
-                            </span>
                         </Col>
                     </Row>
                     <Row className='mx-2'>
                         <Col lg={6} md={12} className='mb-3'>
-                            <span>Square Meters:</span><br/>
-                            <input 
+                            <StyledTextField 
+                                error={!squareMetresIsValid}
+                                fullWidth
+                                label="Square Metres"
                                 value={squareMeters} 
-                                className={squareMetresIsValid ? '' : 'invalid-input'} 
                                 onChange={(e) => {
                                     if (checkIfNumberIsValid(e.target.value)) {
                                         setSquareMeters(e.target.value);
                                     }
                                 }}
                                 onClick={() => {setSquareMetresIsValid(true);}}
-                                placeholder='example: 132' 
+                                helperText={
+                                    squareMetresIsValid 
+                                        ? "Declared property square meters"
+                                        : squareMetersInvalidMessage
+                                }
                             />
-                            <span className="invalid-input-feedback">
-                                {squareMetresIsValid ? <>&nbsp;</> : squareMetersInvalidMessage}
-                            </span>
                         </Col>
                         <Col lg={6} md={12} className='mb-3'>
-                            <span>Selling Price(ETH):</span><br/>
-                            <input 
+                            <StyledTextField 
+                                error={!sellingPriceIsValid}
+                                fullWidth
+                                label="Selling Price (ETH)"
                                 value={sellingPrice} 
-                                className={sellingPriceIsValid ? '' : 'invalid-input'} 
                                 onChange={(e) => {
                                     if (checkIfNumberIsValid(e.target.value)) {
                                         setSellingPrice(e.target.value);
                                     }
                                 }} 
                                 onClick={() => {setSellingPriceIsValid(true);}}
-                                placeholder='example: 7.543' 
+                                helperText={
+                                    sellingPriceIsValid 
+                                        ? "Property selling price (ETH)"
+                                        : sellingPriceInvalidMessage
+                                }
                             />
-                            <span className="invalid-input-feedback">
-                                {sellingPriceIsValid ? <>&nbsp;</> : sellingPriceInvalidMessage}
-                            </span>
                         </Col>
                     </Row>
                 </div>

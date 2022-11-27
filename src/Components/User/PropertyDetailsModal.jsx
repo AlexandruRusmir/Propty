@@ -13,20 +13,25 @@ import { useContract } from '../../CustomHooks/useContract';
 import { MdOutlineSell } from "react-icons/md";
 import config from '../../Data/config';
 import { checkIfNumberIsValid, getSellingPriceComponentsFromString } from '../../Helpers/helpers';
+import { StyledTextField } from '../SyledTextField';
+import MenuItem from '@mui/material/MenuItem';
+
 
 function PropertyDetailsModal(props) {
     const web3 = useWeb3().current;
     const contract = useContract(props.contractAddress).current;
 
-    const [contractState, setContractState] = useState(props.contractState);
     const [sellingPrice, setSellingPrice] = useState(props.sellingPrice.toString());
     const [housingTenure, setHousingTenure] = useState(props.housingTenure);
-    const [city, setCity] = useState(props.city);
-    const [country, setCountry] = useState(props.country);
-    const [street, setStreet] = useState(props.street);
-    const [streetNumber, setStreetNumber] = useState(props.streetNumber);
-    const [apartmentNumber, setApartmentNumber] = useState(props.apartmentNumber);
     const [squareMeters, setSquareMeters] = useState(props.squareMeters);
+
+    const [housingTenureIsValid, setHousingTenureIsValid] = useState(true);
+    const [sellingPriceIsValid, setSellingPriceIsValid] = useState(true);
+    const [squareMetresIsValid, setSquareMetresIsValid] = useState(true);
+
+    const [housingTenureInvalidMessage, setHousingTenureInvalidMessage] = useState('');
+    const [squareMetersInvalidMessage, setSquareMetersInvalidMessage] = useState('');
+    const [sellingPriceInvalidMessage, setSellingPriceInvalidMessage] = useState('');
 
     const updateContractSellingPrice = async (sellingPriceString) => {
         if (sellingPriceString.length === 0) {
@@ -157,17 +162,26 @@ function PropertyDetailsModal(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <Row>
-                        <Col className='input-box flex-column'>
+                        <Col className='flex-column'>
                             <div className='mx-4 my-3'>
-                                Selling Price(ETH):<br/>
                                 <Row>
                                     <Col lg={9} sm={7} xs={12}>
-                                        <input value={sellingPrice} onChange={(e) => {
+                                        <StyledTextField
+                                            fullWidth
+                                            label="Selling Price (ETH)"
+                                            value={sellingPrice} 
+                                            onClick={() => {setSellingPriceIsValid(true);}}
+                                            onChange={(e) => {
                                             if (checkIfNumberIsValid(e.target.value)) {
                                                 setSellingPrice(e.target.value);
+                                                }
+                                            }} 
+                                            helperText={
+                                                housingTenureIsValid 
+                                                    ? "New Selling Price"
+                                                    : sellingPriceInvalidMessage
                                             }
-                                        }} 
-                                        placeholder='example: 7.543' />
+                                        />
                                     </Col>
                                     <Col>
                                         {
@@ -185,18 +199,28 @@ function PropertyDetailsModal(props) {
                             </div>
 
                             <div className='mx-4 my-3'>
-                                <span>Housing Tenure: </span><br/>
                                 <Row>
                                     <Col lg={9} sm={7} xs={12}>
-                                        <select value={housingTenure} onChange={(e) => {setHousingTenure(e.target.value);}}>
-                                            <option value={config.housingTenure.OWNER_OCCUPANCY}>Owner Occupancy</option>
-                                            <option value={config.housingTenure.TENANCY}>Tenancy</option>
-                                            <option value={config.housingTenure.COOPERATIVE}>Cooperative</option>
-                                            <option value={config.housingTenure.CONDOMIUM}>Condomium</option>
-                                            <option value={config.housingTenure.PUBLIC_HOUSING}>Public Housing</option>
-                                            <option value={config.housingTenure.SQUATTING}>Squatting</option>
-                                            <option value={config.housingTenure.LAND_TRUST}>Land Trust</option>
-                                        </select>
+                                    <StyledTextField
+                                        fullWidth
+                                        select
+                                        label="Housing Tenure"
+                                        value={housingTenure}
+                                        onClick={() => {setHousingTenureIsValid(true);}}
+                                        onChange={(e) => setHousingTenure(e.target.value)}
+                                        helperText={
+                                            housingTenureIsValid 
+                                                ? "New Housing Tenure"
+                                                : housingTenureInvalidMessage
+                                        }
+                                    >
+                                        {config.selectHousingTenures.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </StyledTextField>
+
                                     </Col>
                                     <Col>
                                         {
@@ -213,10 +237,24 @@ function PropertyDetailsModal(props) {
                             </div>
 
                             <div className='mx-4 my-3'>
-                                Square Metres:<br/>
                                 <Row>
                                     <Col lg={9} sm={7} xs={12}>
-                                        <input type='number' value={squareMeters} onChange={(e) => setSquareMeters(e.target.value)} placeholder='example: 152' />
+                                        <StyledTextField
+                                            fullWidth
+                                            label="Square Metres"
+                                            value={squareMeters} 
+                                            onClick={() => {setSquareMetresIsValid(true);}}
+                                            onChange={(e) => {
+                                                if (checkIfNumberIsValid(e.target.value)) {
+                                                    setSquareMeters(e.target.value);
+                                                }
+                                            }}
+                                            helperText={
+                                                squareMetresIsValid 
+                                                    ? "New Square Meters Value"
+                                                    : squareMetersInvalidMessage
+                                            }
+                                        />
                                     </Col>
                                     <Col>
                                         {
