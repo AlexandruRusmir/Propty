@@ -87,7 +87,7 @@ body {
 }
 
 .registrar-search-checkboxes {
-    padding-left: 0;
+    margin-top: -3px;
 }
 
 .small-text {
@@ -125,9 +125,12 @@ body {
         padding-left: 5%
         ;
     }
+}
+
+@media (max-width: 991.9px) {
     .registrar-search-checkboxes {
         margin-top: 10px;
-        padding-left: 6%;
+        padding-left: 10%;
     }
 }
 

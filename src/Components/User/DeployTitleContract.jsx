@@ -10,7 +10,7 @@ import config from '../../Data/config';
 import errorMessages from '../../Data/errorMessages';
 import { checkIfNumberIsValid, getSellingPriceComponentsFromString } from '../../Helpers/helpers';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
-import { StyledTextField } from '../SyledTextField';
+import { StyledTextField } from '../StyledTextField';
 import MenuItem from '@mui/material/MenuItem';
 
 function DeployTitleContract(props) {

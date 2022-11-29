@@ -8,6 +8,9 @@ import Col  from 'react-bootstrap/Col';
 import { Button } from 'react-bootstrap';
 import AddRegistrarModal from './AddRegistrarModal';
 import { checkIfUserIsRegistrar, getCentralContractRegistrars } from '../../Helpers/contractDataProviders';
+import { StyledTextField } from '../StyledTextField';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 function HandleRegistrars(props) {
     const titlesContract = useTitlesContract().current;
@@ -86,13 +89,15 @@ function HandleRegistrars(props) {
                         <Button className='add-new-registrar-btn' onClick={() => {setAddRegistrarOpen(true);}}>Add a new Registrar</Button>
                     </Col>
                 </Row>
-                <Row className='input-box mt-4 mb-2'>
+                <Row className='mt-4 mb-2'>
                     <Col xs={12} className='registrar-search'>
                         <h5>Filter Registrars:</h5>
                     </Col>
-                    <Col lg={9} xs={12} className='registrar-search' >
-                        <input 
-                            placeholder='Search for registrar by address' 
+                    <Col lg={9} xs={12} className='mt-2 registrar-search' >
+                        <StyledTextField 
+                            fullWidth
+                            style={{background: "#FFF"}}
+                            label='Search for registrar by address' 
                             value={searchText}
                             onChange={(e) => {
                                 setSearchText(e.target.value);
@@ -102,20 +107,25 @@ function HandleRegistrars(props) {
                     <Col lg={3} xs={12} className='registrar-search-checkboxes'>
                         <Row>
                             <Col lg={12} sm={6}>
-                                <input type='checkbox' id='removed-registrars'
-                                    onClick={() => {
-                                        setSeeRemovedRegistrars(!seeRemovedRegistrars);
+                                <FormControlLabel
+                                    checked={seeRemovedRegistrars}
+                                    control={<Checkbox size="small" color="default"/>}
+                                    color="default"
+                                    label="Removed registrars"
+                                    onChange={(e) => {
+                                        setSeeRemovedRegistrars(e.target.checked);
                                     }}
                                 />
-                                <label for='removed-registrars' className='checkbox-label'>Removed Registrars</label>
                             </Col>
                             <Col lg={12} sm={6}>
-                                <input type='checkbox' id='active-registrars'
-                                    onClick={() => {
-                                        setSeeActiveRegistrars(!seeActiveRegistrars);
+                                <FormControlLabel
+                                    checked={seeActiveRegistrars}
+                                    control={<Checkbox size="small" color="default"/>}
+                                    label="Active registrars"
+                                    onChange={(e) => {
+                                        setSeeActiveRegistrars(e.target.checked);
                                     }}
                                 />
-                                <label for='active-registrars' className='checkbox-label'>Active Registrars</label>
                             </Col>
                         </Row>
                     </Col>

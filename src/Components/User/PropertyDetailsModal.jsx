@@ -13,7 +13,7 @@ import { useContract } from '../../CustomHooks/useContract';
 import { MdOutlineSell } from "react-icons/md";
 import config from '../../Data/config';
 import { checkIfNumberIsValid, getSellingPriceComponentsFromString } from '../../Helpers/helpers';
-import { StyledTextField } from '../SyledTextField';
+import { StyledTextField } from '../StyledTextField';
 import MenuItem from '@mui/material/MenuItem';
 
 

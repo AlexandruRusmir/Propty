@@ -8,6 +8,7 @@ import Col from 'react-bootstrap/Col';
 import { useState, useEffect } from 'react';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import Web3 from 'web3';
+import { StyledTextField } from '../StyledTextField';
 
 function AddRegistrarModal(props) {
     const titlesContract = useTitlesContract().current;
@@ -92,13 +93,17 @@ function AddRegistrarModal(props) {
                         Add a new registrar by providing their address
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body className='mx-3 input-box'>
+                <Modal.Body className='mx-3'>
                     <div>
                         <p>Please introduce the account address of the person you would like to add as a registrar:</p>
                     </div>
                     <div>
-                        <input type='text' value={newRegistrarAddress} onChange={(e) => {setNewRegistrarAddress(e.target.value);}}
-                            placeholder='New registrar address (0x8mD4y...)' />
+                        <StyledTextField
+                            fullWidth
+                            label="New Registrar Address"
+                            value={newRegistrarAddress} 
+                            onChange={(e) => {setNewRegistrarAddress(e.target.value);}}
+                        />
                     </div>
                     <p id='error-message' className='error-message mt-2 text-center'>{errorMessage}</p>
                 </Modal.Body>
