@@ -190,6 +190,10 @@ contract PropertyTitle {
         return (creator, owner, contractState);
     }
 
+    function getFullPropertyAddress() public view returns (string memory) {
+        return string.concat(propertyDetails.country, propertyDetails.city, propertyDetails.street, propertyDetails.streetNumber);
+    }
+
     function checkIfAllDocumentsAreProvided() public view returns (bool) {
         if (requiredDocuments.proofOfIdentity && requiredDocuments.propertyTitleDeeds && requiredDocuments.energyPerformanceCertificate && 
             requiredDocuments.extensionsAndAlterationsDocumentation && requiredDocuments.utilityBillsPaid) {

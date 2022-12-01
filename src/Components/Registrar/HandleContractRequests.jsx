@@ -44,7 +44,7 @@ function HandleContractRequests(props) {
     }
 
     const getPendingTitleContractsByOffsetAndLimit = async () => {
-        const titleContracts = await titlesContract.methods.getPendingTitleContractsByOffsetAndLimit(currentContractsOffset, paginationLimits.pendingTitleContractsLimit).call();
+        const titleContracts = await titlesContract.methods.getPendingContractsByOffsetAndLimit(currentContractsOffset, paginationLimits.pendingTitleContractsLimit).call();
         return titleContracts;
     }
 

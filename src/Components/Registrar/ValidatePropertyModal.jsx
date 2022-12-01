@@ -46,7 +46,7 @@ function ValidatePropertyModal(props) {
                                     }}
                                     value={proofOfIdentity}
                                 />
-                                <label for='proof-of-identity' className='checkbox-label'>Proof of identity</label>
+                                <label htmlFor='proof-of-identity' className='checkbox-label'>Proof of identity</label>
                             </div>
                         
                             <div>
@@ -56,7 +56,7 @@ function ValidatePropertyModal(props) {
                                     }}
                                     value={propertyTitleDeeds}
                                 />
-                                <label for='property-title-deeds' className='checkbox-label'>Property Title Deeds</label>
+                                <label htmlFor='property-title-deeds' className='checkbox-label'>Property Title Deeds</label>
                             </div>
 
                             <div>
@@ -66,7 +66,7 @@ function ValidatePropertyModal(props) {
                                     }}
                                     value={energyPerformanceCertificate}
                                 />
-                                <label for='energy-performance-certificate' className='checkbox-label'>Energy Performance Certificate</label>
+                                <label htmlFor='energy-performance-certificate' className='checkbox-label'>Energy Performance Certificate</label>
                             </div>
 
                             <div>
@@ -76,7 +76,7 @@ function ValidatePropertyModal(props) {
                                     }}
                                     value={extensionsAndAlterationsDocumentation}
                                 />
-                                <label for='extensions-and-alterations-documentation' className='checkbox-label'>Extensions and Alterations Documentation</label>
+                                <label htmlFor='extensions-and-alterations-documentation' className='checkbox-label'>Extensions and Alterations Documentation</label>
                             </div>
 
                             <div>
@@ -86,7 +86,7 @@ function ValidatePropertyModal(props) {
                                     }}
                                     value={utilityBillsPaid}
                                 />
-                                <label for='utility-bills-paid' className='checkbox-label'>Utility bills paid</label>
+                                <label htmlFor='utility-bills-paid' className='checkbox-label'>Utility bills paid</label>
                             </div>
                         </Col>
                     </Row>

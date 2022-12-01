@@ -1,10 +1,11 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.15;
+pragma solidity ^0.8.16;
 
 import "./PropertyTitle.sol";
 
 interface IAccessPropertyTitleMethods {
     function contractState() external view returns (PropertyTitleContractState);
+    function getFullPropertyAddress() external view returns (string memory);
 }
 
 contract TitleCreatingContract {
@@ -15,7 +16,7 @@ contract TitleCreatingContract {
     mapping (address => bool) public isRegistrar;
 
     address[] public titleContracts;
-    mapping (address => bool) public propertyTitleContractsValidaty;
+    mapping (address => bool) public propertyTitleContractsValidity;
 
     constructor(address[] memory _owners)
     {
@@ -74,11 +75,11 @@ contract TitleCreatingContract {
             _sellingPriceFractionalPartLength
         );
         titleContracts.push(address(propertyTitle));
-        propertyTitleContractsValidaty[address(propertyTitle)] = false;
+        propertyTitleContractsValidity[address(propertyTitle)] = false;
     }
 
     function validatePropertyTitleContract(address _contractAddress) public onlyRegistrar {
-        propertyTitleContractsValidaty[_contractAddress] = true;
+        propertyTitleContractsValidity[_contractAddress] = true;
     }
 
     function checkIfUserIsOwner(address userAddress) public view returns (bool) {
@@ -108,93 +109,142 @@ contract TitleCreatingContract {
     }
 
     function getPendingTitleContractsCount() public view returns (uint256) {
-        uint256 counter = 0;
+        uint256 k = 0;
         for (uint256 i = 0; i < titleContracts.length; i++) {
             if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.PENDING) {
-                counter++;
+                k++;
             } 
         }
 
-        return counter;
+        return k;
     }
 
-    function getActiveTitleContractsCount() public view returns (uint256) {
-        uint256 counter = 0;
+    function getActiveContractsByAddressCount(string memory addressToSearchFor) public view returns (uint256) {
+        uint256 k = 0;
+        for (uint256 i = 0; i < titleContracts.length; i++) {
+            if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.OWNED ||
+                IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.FOR_SALE &&
+                stringContains(IAccessPropertyTitleMethods(titleContracts[i]).getFullPropertyAddress(), addressToSearchFor)) {
+                k++;
+            } 
+        }
+
+        return k;
+    }
+
+    function getActiveContractsCount() public view returns (uint256) {
+        uint256 k = 0;
         for (uint256 i = 0; i < titleContracts.length; i++) {
             if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.OWNED ||
                 IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.FOR_SALE) {
-                counter++;
+                k++;
             } 
         }
 
-        return counter;
-    }
-
-    function getNoLongerRelevantTitleContractsCount() public view returns (uint256) {
-        uint256 counter = 0;
-        for (uint256 i = 0; i < titleContracts.length; i++) {
-            if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.NO_LONGER_RELEVANT) {
-                counter++;
-            } 
-        }
-
-        return counter;
+        return k;
     }
 
     function getPendingTitleContracts() public view returns (address[] memory) {
-        address[] memory titleContractsAddresses = new address[](getPendingTitleContractsCount());
+        address[] memory contractsAddresses = new address[](getPendingTitleContractsCount());
 
         uint256 k = 0;
         for (uint256 i = 0; i < titleContracts.length; i++) {
             if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.PENDING) {
-                titleContractsAddresses[k++] = titleContracts[i];
+                contractsAddresses[k++] = titleContracts[i];
             } 
         }
 
-        return titleContractsAddresses;
+        return contractsAddresses;
     }
 
-    function getPendingTitleContractsByOffsetAndLimit(uint256 offset, uint256 limit) public view returns (address[] memory) {
-        address[] memory titleContractsAddresses = getPendingTitleContractsCount() > offset + limit 
+    function getPendingContractsByOffsetAndLimit(uint256 offset, uint256 limit) public view returns (address[] memory) {
+        uint256 pendingTitleContractsCount = getPendingTitleContractsCount();
+        require(pendingTitleContractsCount > offset, "Offset greater than list length");
+
+        address[] memory contractsAddresses = pendingTitleContractsCount > offset + limit 
             ? new address[](limit) 
-            : new address[](getPendingTitleContractsCount() - offset);
+            : new address[](pendingTitleContractsCount - offset);
 
         address[] memory pendingTitleContracts = getPendingTitleContracts();
         for (uint256 i = offset; i < offset + limit; i++) {
             if (i >= titleContracts.length) {
                 break;
             }
-            titleContractsAddresses[i - offset] = pendingTitleContracts[i];
+            contractsAddresses[i - offset] = pendingTitleContracts[i];
         }
 
-        return titleContractsAddresses;
+        return contractsAddresses;
     }
 
     function getActiveTitleContracts() public view returns (address[] memory) {
-        address[] memory titleContractsAddresses = new address[](getActiveTitleContractsCount());
+        address[] memory contractsAddresses = new address[](getActiveContractsCount());
 
         uint256 k = 0;
         for (uint256 i = 0; i < titleContracts.length; i++) {
             if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.OWNED ||
                 IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.FOR_SALE) {
-                titleContractsAddresses[k++] = titleContracts[i];
+                contractsAddresses[k++] = titleContracts[i];
             }
+        }
+
+        return contractsAddresses;
+    }
+
+    function getActiveContractsByAddress(string memory addressToSearchFor) public view returns (address[] memory) {
+        address[] memory contractsAddresses = new address[](getActiveContractsByAddressCount(addressToSearchFor));
+
+        address[] memory activeTitleContracts = getActiveTitleContracts();
+        uint256 k = 0;
+        for (uint256 i = 0; i < activeTitleContracts.length; i++) {
+            if (stringContains(IAccessPropertyTitleMethods(titleContracts[i]).getFullPropertyAddress(), addressToSearchFor)) {
+                contractsAddresses[k++] = titleContracts[i];
+            }
+        }
+
+        return contractsAddresses;
+    }
+
+    function getActiveContractsByAddressAndOffsetAndLimit(string memory addressToSearchFor, uint256 offset, uint256 limit)  public view returns (address[] memory) {
+        uint256 activeContractsByAddressCount = getActiveContractsByAddressCount(addressToSearchFor);
+        require(activeContractsByAddressCount > offset, "Offset greater than list length");
+
+        address[] memory titleContractsAddresses = activeContractsByAddressCount > offset + limit 
+            ? new address[](limit) 
+            : new address[](activeContractsByAddressCount - offset);
+
+        address[] memory activeContractsByAddress = getActiveContractsByAddress(addressToSearchFor);
+        for (uint256 i = offset; i < offset + limit; i++) {
+            if (i >= activeContractsByAddress.length) {
+                break;
+            }
+            titleContractsAddresses[i - offset] = activeContractsByAddress[i];
+
         }
 
         return titleContractsAddresses;
     }
 
-    function getNoLongerRelevantTitleContracts() public view returns (address[] memory) {
-        address[] memory titleContractsAddresses = new address[](getNoLongerRelevantTitleContractsCount());
+    function stringContains(string memory stringToSearchIn, string memory stringToSearchFor) public pure returns (bool) {
+        bytes memory stringToSearchForBytes = bytes (stringToSearchFor);
+        bytes memory stringToSearchInBytes = bytes (stringToSearchIn);
 
-        uint256 k = 0;
-        for (uint256 i = 0; i < titleContracts.length; i++) {
-            if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.NO_LONGER_RELEVANT) {
-                titleContractsAddresses[k++] = titleContracts[i];
+        require(stringToSearchInBytes.length >= stringToSearchForBytes.length);
+
+        bool found = false;
+        for (uint i = 0; i <= stringToSearchInBytes.length - stringToSearchForBytes.length; i++) {
+            bool flag = true;
+            for (uint j = 0; j < stringToSearchForBytes.length; j++)
+                if (stringToSearchForBytes [i + j] != stringToSearchForBytes [j]) {
+                    flag = false;
+                    break;
+                }
+            if (flag) {
+                found = true;
+                break;
             }
         }
-
-        return titleContractsAddresses;
+        
+        return found;
     }
 
     modifier onlyRegistrar {
