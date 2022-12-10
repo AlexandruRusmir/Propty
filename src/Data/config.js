@@ -1,5 +1,5 @@
 const config = {
-    titleDeployingContractAddress: '0x624E115Daa39CebE587235cBFa10003E7dfCa424',
+    titleDeployingContractAddress: '0x701e2D6B5c29873079A028fe511067B01AF5CdF6',
     contractState: {
         PENDING: 0,
         OWNED: 1, 
@@ -44,7 +44,9 @@ const config = {
             value: '6',
             label: 'Land Trust',
         },
-    ]
+    ],
+    documentsProvidedMessage: 'Provided',
+    documentsNotProvidedMessage: 'Not Provided'
 }
 
 module.exports = config

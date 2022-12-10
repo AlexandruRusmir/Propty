@@ -6,7 +6,7 @@ import { Col, Row, Card, Accordion, Button } from 'react-bootstrap';
 import PropertyDetailsModal from './PropertyDetailsModal';
 import StateChangeModal from './StateChangeModal';
 import { useState, useEffect } from 'react';
-import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContractStateMessage, getCorrespondingHousingTenure, getMessageForRequiredDocuments } from '../../Helpers/helpers';
+import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContractStateMessage, getCorrespondingHousingTenure } from '../../Helpers/helpers';
 import { getTitleContractDetails } from '../../Helpers/contractDataProviders';
 import { useWeb3 } from '../../CustomHooks/useWeb3';
 import { useContract } from '../../CustomHooks/useContract';
@@ -66,11 +66,11 @@ function PropertyCard(props) {
         setStreetNumber(web3.utils.hexToString(titleContractData.streetNumber).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.streetNumber))));
         setApartmentNumber(web3.utils.hexToNumber(titleContractData.apartmentNumber));
         setSquareMeters(web3.utils.hexToNumber(titleContractData.squareMeters));
-        setProofOfIdentity(web3.utils.hexToNumber(titleContractData.proofOfIdentity));
-        setPropertyTitleDeeds(web3.utils.hexToNumber(titleContractData.propertyTitleDeeds));
-        setEnergyPerformanceCertificate(web3.utils.hexToNumber(titleContractData.energyPerformanceCertificate));
-        setExtensionsAndAlterationsDocumentation(web3.utils.hexToNumber(titleContractData.extensionsAndAlterationsDocumentation));
-        setUtilityBillsPaid(web3.utils.hexToNumber(titleContractData.utilityBillsPaid));
+        setProofOfIdentity(web3.utils.hexToString(titleContractData.proofOfIdentity).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.proofOfIdentity))));
+        setPropertyTitleDeeds(web3.utils.hexToString(titleContractData.propertyTitleDeeds).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.propertyTitleDeeds))));
+        setEnergyPerformanceCertificate(web3.utils.hexToString(titleContractData.energyPerformanceCertificate).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.energyPerformanceCertificate))));
+        setExtensionsAndAlterationsDocumentation(web3.utils.hexToString(titleContractData.extensionsAndAlterationsDocumentation).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.extensionsAndAlterationsDocumentation))));
+        setUtilityBillsPaid(web3.utils.hexToNumber(web3.utils.hexToString(titleContractData.utilityBillsPaid).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.utilityBillsPaid)))));
     }
 
     const getPropertySellingPrice = async () => {
@@ -242,11 +242,11 @@ function PropertyCard(props) {
                                         <Accordion.Item eventKey="0">
                                             <Accordion.Header className='mx-2'><span>Required Property Documents</span></Accordion.Header>
                                             <Accordion.Body>
-                                                <p>Proof of Identity: {getMessageForRequiredDocuments(proofOfIdentity)}</p>
-                                                <p>Property Title Deeds: {getMessageForRequiredDocuments(propertyTitleDeeds)}</p>
-                                                <p>Energy Performance Certificate: {getMessageForRequiredDocuments(energyPerformanceCertificate)}</p>
-                                                <p>Extensions and Alterations Documentation: {getMessageForRequiredDocuments(extensionsAndAlterationsDocumentation)}</p>
-                                                <p>Utility Bills Paid: {getMessageForRequiredDocuments(utilityBillsPaid)}</p>
+                                                <p>Proof of Identity: {proofOfIdentity}</p>
+                                                <p>Property Title Deeds: {propertyTitleDeeds}</p>
+                                                <p>Energy Performance Certificate: {energyPerformanceCertificate}</p>
+                                                <p>Extensions and Alterations Documentation: {extensionsAndAlterationsDocumentation}</p>
+                                                <p>Utility Bills Paid: {utilityBillsPaid}</p>
                                             </Accordion.Body>
                                         </Accordion.Item>
                                     </Accordion>

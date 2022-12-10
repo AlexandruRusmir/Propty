@@ -8,7 +8,7 @@ import { useWeb3 } from '../../CustomHooks/useWeb3';
 import { Col, Row, Card, Accordion, Button } from 'react-bootstrap';
 import ValidatePropertyModal from './ValidatePropertyModal';
 
-function PendingContractRequest(props) {
+function PendingContractCard(props) {
     const web3 = useWeb3().current;
     const titlesContract = useTitlesContract().current;
     const contract = useContract(props.contractAddress).current;
@@ -52,11 +52,6 @@ function PendingContractRequest(props) {
         setStreetNumber(web3.utils.hexToString(titleContractData.streetNumber).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.streetNumber))));
         setApartmentNumber(web3.utils.hexToNumber(titleContractData.apartmentNumber));
         setSquareMeters(web3.utils.hexToNumber(titleContractData.squareMeters));
-        setProofOfIdentity(web3.utils.hexToNumber(titleContractData.proofOfIdentity));
-        setPropertyTitleDeeds(web3.utils.hexToNumber(titleContractData.propertyTitleDeeds));
-        setEnergyPerformanceCertificate(web3.utils.hexToNumber(titleContractData.energyPerformanceCertificate));
-        setExtensionsAndAlterationsDocumentation(web3.utils.hexToNumber(titleContractData.extensionsAndAlterationsDocumentation));
-        setUtilityBillsPaid(web3.utils.hexToNumber(titleContractData.utilityBillsPaid));
     }
 
     return (
@@ -88,16 +83,11 @@ function PendingContractRequest(props) {
                     <Row className='centered'>
                         <Button className='buy-contract-btn'  onClick={() =>  {setValidatePropertyOpen(true);}}>Validate Property</Button>
                         <ValidatePropertyModal
+                            account={props.account}
                             key={'validateProperty' + props.contractAddress}
                             show={validatePropertyOpen}
                             onValidatePropertyHide={() => {setValidatePropertyOpen(false);}}
                             contractAddress={props.contractAddress}
-
-                            proofOfIdentity={proofOfIdentity}
-                            propertyTitleDeeds={propertyTitleDeeds}
-                            energyPerformanceCertificate={energyPerformanceCertificate}
-                            extensionsAndAlterationsDocumentation={extensionsAndAlterationsDocumentation}
-                            utilityBillsPaid={utilityBillsPaid}
                         />
                     </Row>
                 </Card.Body>
@@ -106,4 +96,4 @@ function PendingContractRequest(props) {
     );
 }
 
-export default PendingContractRequest;
+export default PendingContractCard;

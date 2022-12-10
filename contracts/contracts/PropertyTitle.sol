@@ -28,11 +28,11 @@ struct PropertyDetails {
 }
 
 struct RequiredPropertyDocuments {
-    bool proofOfIdentity;
-    bool propertyTitleDeeds;
-    bool energyPerformanceCertificate;
-    bool extensionsAndAlterationsDocumentation;
-    bool utilityBillsPaid;
+    string proofOfIdentityState;
+    string propertyTitleDeedsState;
+    string energyPerformanceCertificateState;
+    string extensionsAndAlterationsDocumentationState;
+    string utilityBillsPaidState;
 }
 
 struct SellingPrice {
@@ -76,6 +76,12 @@ contract PropertyTitle {
         sellingPrice.sellingPriceIntegralPart = _sellingPriceIntegralPart;
         sellingPrice.sellingPriceFractionalPart = _sellingPriceFractionalPart;
         sellingPrice.sellingPriceFractionalPartLength = _sellingPriceFractionalPartLength;
+
+        requiredDocuments.proofOfIdentityState = 'Not Provided';
+        requiredDocuments.propertyTitleDeedsState = 'Not Provided';
+        requiredDocuments.energyPerformanceCertificateState = 'Not Provided';
+        requiredDocuments.extensionsAndAlterationsDocumentationState = 'Not Provided';
+        requiredDocuments.utilityBillsPaidState = 'Not Provided';
     }
 
     receive() external payable onlyIfPropertyForSale onlyRelevantProperty 
@@ -138,14 +144,17 @@ contract PropertyTitle {
         sellingPrice.sellingPriceFractionalPartLength = _sellingPriceFractionalPartLength;
         propertyDetails.tenureType = _tenureType;
         propertyDetails.squareMeters = _squareMeters;
+        contractState = PropertyTitleContractState.PENDING;
     }
 
     function modifyPropertyTenureType(HousingTenure _tenureType) external onlyIfLegallyAllowed onlyOwner onlyRelevantProperty {
         propertyDetails.tenureType = _tenureType;
+        contractState = PropertyTitleContractState.PENDING;
     }
 
     function modifyPropertySquareMeters(uint256 _squareMeters) external onlyIfLegallyAllowed onlyOwner onlyRelevantProperty {
         propertyDetails.squareMeters = _squareMeters;
+        contractState = PropertyTitleContractState.PENDING;
     }
 
     function setPropertySellingPrice(
@@ -163,22 +172,24 @@ contract PropertyTitle {
         sellingPrice.sellingPriceFractionalPartLength = _sellingPriceFractionalPartLength;
     }
 
-    function setRequiredDocumentsState(
-        bool _proofOfIdentity,
-        bool _propertyTitleDeeds,
-        bool _energyPerformanceCertificate,
-        bool _extensionsAndAlterationsDocumentation,
-        bool _utilityBillsPaid
+    function setRequiredDocumentsStateAndContractState(
+        string memory _proofOfIdentity,
+        string memory _propertyTitleDeeds,
+        string memory _energyPerformanceCertificate,
+        string memory _extensionsAndAlterationsDocumentation,
+        string memory _utilityBillsPaid,
+        PropertyTitleContractState _contractState
     )
         external
         onlyRegistrar
         onlyRelevantProperty
     {
-        requiredDocuments.proofOfIdentity = _proofOfIdentity;
-        requiredDocuments.propertyTitleDeeds = _propertyTitleDeeds;
-        requiredDocuments.energyPerformanceCertificate = _energyPerformanceCertificate;
-        requiredDocuments.extensionsAndAlterationsDocumentation = _extensionsAndAlterationsDocumentation;
-        requiredDocuments.utilityBillsPaid = _utilityBillsPaid;
+        requiredDocuments.proofOfIdentityState = _proofOfIdentity;
+        requiredDocuments.propertyTitleDeedsState = _propertyTitleDeeds;
+        requiredDocuments.energyPerformanceCertificateState = _energyPerformanceCertificate;
+        requiredDocuments.extensionsAndAlterationsDocumentationState = _extensionsAndAlterationsDocumentation;
+        requiredDocuments.utilityBillsPaidState = _utilityBillsPaid;
+        contractState = _contractState;
     }
 
     function getPropertySellingPrice() public view returns (uint256) {
@@ -195,8 +206,11 @@ contract PropertyTitle {
     }
 
     function checkIfAllDocumentsAreProvided() public view returns (bool) {
-        if (requiredDocuments.proofOfIdentity && requiredDocuments.propertyTitleDeeds && requiredDocuments.energyPerformanceCertificate && 
-            requiredDocuments.extensionsAndAlterationsDocumentation && requiredDocuments.utilityBillsPaid) {
+        if (checkStringsEquality(requiredDocuments.proofOfIdentityState, 'Provided') 
+            && checkStringsEquality(requiredDocuments.propertyTitleDeedsState, 'Provided') 
+            && checkStringsEquality(requiredDocuments.energyPerformanceCertificateState, 'Provided') 
+            && checkStringsEquality(requiredDocuments.extensionsAndAlterationsDocumentationState, 'Provided') 
+            && checkStringsEquality(requiredDocuments.utilityBillsPaidState, 'Provided')) {
                 return true;
         }
         return false;

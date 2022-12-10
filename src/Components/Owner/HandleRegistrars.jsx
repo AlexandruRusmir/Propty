@@ -109,7 +109,7 @@ function HandleRegistrars(props) {
                             <Col lg={12} sm={6}>
                                 <FormControlLabel
                                     checked={seeRemovedRegistrars}
-                                    control={<Checkbox size="small" color="default"/>}
+                                    control={<Checkbox size="small" color="success"/>}
                                     color="default"
                                     label="Removed registrars"
                                     onChange={(e) => {
@@ -120,7 +120,7 @@ function HandleRegistrars(props) {
                             <Col lg={12} sm={6}>
                                 <FormControlLabel
                                     checked={seeActiveRegistrars}
-                                    control={<Checkbox size="small" color="default"/>}
+                                    control={<Checkbox size="small" color="success"/>}
                                     label="Active registrars"
                                     onChange={(e) => {
                                         setSeeActiveRegistrars(e.target.checked);

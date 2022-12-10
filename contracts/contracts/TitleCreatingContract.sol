@@ -104,11 +104,11 @@ contract TitleCreatingContract {
         return registrars;
     }
 
-    function getTitleContracts() public view returns (address[] memory) {
+    function getContracts() public view returns (address[] memory) {
         return titleContracts;
     }
 
-    function getPendingTitleContractsCount() public view returns (uint256) {
+    function getPendingContractsCount() public view returns (uint256) {
         uint256 k = 0;
         for (uint256 i = 0; i < titleContracts.length; i++) {
             if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.PENDING) {
@@ -117,6 +117,38 @@ contract TitleCreatingContract {
         }
 
         return k;
+    }
+
+    function getPendingContracts() public view returns (address[] memory) {
+        address[] memory contracts = new address[](getPendingContractsCount());
+
+        uint256 k = 0;
+        for (uint256 i = 0; i < titleContracts.length; i++) {
+            if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.PENDING) {
+                contracts[k++] = titleContracts[i];
+            } 
+        }
+
+        return contracts;
+    }
+
+    function getPendingContractsByOffsetAndLimit(uint256 offset, uint256 limit) public view returns (address[] memory) {
+        uint256 pendingContractsCount = getPendingContractsCount();
+        require(pendingContractsCount > offset, "Offset greater than list length");
+
+        address[] memory contracts = pendingContractsCount > offset + limit 
+            ? new address[](limit) 
+            : new address[](pendingContractsCount - offset);
+
+        address[] memory pendingContracts = getPendingContracts();
+        for (uint256 i = offset; i < offset + limit; i++) {
+            if (i >= titleContracts.length) {
+                break;
+            }
+            contracts[i - offset] = pendingContracts[i];
+        }
+
+        return contracts;
     }
 
     function getActiveContractsByAddressCount(string memory addressToSearchFor) public view returns (uint256) {
@@ -144,71 +176,39 @@ contract TitleCreatingContract {
         return k;
     }
 
-    function getPendingTitleContracts() public view returns (address[] memory) {
-        address[] memory contractsAddresses = new address[](getPendingTitleContractsCount());
-
-        uint256 k = 0;
-        for (uint256 i = 0; i < titleContracts.length; i++) {
-            if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.PENDING) {
-                contractsAddresses[k++] = titleContracts[i];
-            } 
-        }
-
-        return contractsAddresses;
-    }
-
-    function getPendingContractsByOffsetAndLimit(uint256 offset, uint256 limit) public view returns (address[] memory) {
-        uint256 pendingTitleContractsCount = getPendingTitleContractsCount();
-        require(pendingTitleContractsCount > offset, "Offset greater than list length");
-
-        address[] memory contractsAddresses = pendingTitleContractsCount > offset + limit 
-            ? new address[](limit) 
-            : new address[](pendingTitleContractsCount - offset);
-
-        address[] memory pendingTitleContracts = getPendingTitleContracts();
-        for (uint256 i = offset; i < offset + limit; i++) {
-            if (i >= titleContracts.length) {
-                break;
-            }
-            contractsAddresses[i - offset] = pendingTitleContracts[i];
-        }
-
-        return contractsAddresses;
-    }
-
-    function getActiveTitleContracts() public view returns (address[] memory) {
-        address[] memory contractsAddresses = new address[](getActiveContractsCount());
+    function getActiveContracts() public view returns (address[] memory) {
+        address[] memory contracts = new address[](getActiveContractsCount());
 
         uint256 k = 0;
         for (uint256 i = 0; i < titleContracts.length; i++) {
             if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.OWNED ||
                 IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.FOR_SALE) {
-                contractsAddresses[k++] = titleContracts[i];
+                contracts[k++] = titleContracts[i];
             }
         }
 
-        return contractsAddresses;
+        return contracts;
     }
 
     function getActiveContractsByAddress(string memory addressToSearchFor) public view returns (address[] memory) {
-        address[] memory contractsAddresses = new address[](getActiveContractsByAddressCount(addressToSearchFor));
+        address[] memory contracts = new address[](getActiveContractsByAddressCount(addressToSearchFor));
 
-        address[] memory activeTitleContracts = getActiveTitleContracts();
+        address[] memory activeContracts = getActiveContracts();
         uint256 k = 0;
-        for (uint256 i = 0; i < activeTitleContracts.length; i++) {
-            if (stringContains(IAccessPropertyTitleMethods(titleContracts[i]).getFullPropertyAddress(), addressToSearchFor)) {
-                contractsAddresses[k++] = titleContracts[i];
+        for (uint256 i = 0; i < activeContracts.length; i++) {
+            if (stringContains(IAccessPropertyTitleMethods(activeContracts[i]).getFullPropertyAddress(), addressToSearchFor)) {
+                contracts[k++] = activeContracts[i];
             }
         }
 
-        return contractsAddresses;
+        return contracts;
     }
 
     function getActiveContractsByAddressAndOffsetAndLimit(string memory addressToSearchFor, uint256 offset, uint256 limit)  public view returns (address[] memory) {
         uint256 activeContractsByAddressCount = getActiveContractsByAddressCount(addressToSearchFor);
         require(activeContractsByAddressCount > offset, "Offset greater than list length");
 
-        address[] memory titleContractsAddresses = activeContractsByAddressCount > offset + limit 
+        address[] memory contracts = activeContractsByAddressCount > offset + limit 
             ? new address[](limit) 
             : new address[](activeContractsByAddressCount - offset);
 
@@ -217,11 +217,82 @@ contract TitleCreatingContract {
             if (i >= activeContractsByAddress.length) {
                 break;
             }
-            titleContractsAddresses[i - offset] = activeContractsByAddress[i];
+            contracts[i - offset] = activeContractsByAddress[i];
 
         }
 
-        return titleContractsAddresses;
+        return contracts;
+    }
+
+    function getForSaleContractsByAddressCount(string memory addressToSearchFor) public view returns (uint256) {
+        uint256 k = 0;
+        for (uint256 i = 0; i < titleContracts.length; i++) {
+            if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.FOR_SALE &&
+                stringContains(IAccessPropertyTitleMethods(titleContracts[i]).getFullPropertyAddress(), addressToSearchFor)) {
+                k++;
+            }
+        }
+
+        return k;
+    }
+
+    function getForSaleContractsCount() public view returns (uint256) {
+        uint256 k = 0;
+        for (uint256 i = 0; i < titleContracts.length; i++) {
+            if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.FOR_SALE) {
+                k++;
+            } 
+        }
+
+        return k;
+    }
+
+
+    function getForSaleContracts() public view returns (address[] memory) {
+        address[] memory contracts = new address[](getForSaleContractsCount());
+
+        uint256 k = 0;
+        for (uint256 i = 0; i < titleContracts.length; i++) {
+            if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.FOR_SALE) {
+                contracts[k++] = titleContracts[i];
+            }
+        }
+
+        return contracts;
+    }
+
+    function getForSaleContractsByAddress(string memory addressToSearchFor) public view returns (address[] memory) {
+        address[] memory contracts = new address[](getActiveContractsByAddressCount(addressToSearchFor));
+
+        address[] memory activeContracts = getActiveContracts();
+        uint256 k = 0;
+        for (uint256 i = 0; i < activeContracts.length; i++) {
+            if (stringContains(IAccessPropertyTitleMethods(activeContracts[i]).getFullPropertyAddress(), addressToSearchFor)) {
+                contracts[k++] = activeContracts[i];
+            }
+        }
+
+        return contracts;
+    }
+
+    function getForSaleContractsByAddressAndOffsetAndLimit(string memory addressToSearchFor, uint256 offset, uint256 limit)  public view returns (address[] memory) {
+        uint256 forSaleContractsByAddressCount = getForSaleContractsByAddressCount(addressToSearchFor);
+        require(forSaleContractsByAddressCount > offset, "Offset greater than list length");
+
+        address[] memory contracts = forSaleContractsByAddressCount > offset + limit 
+            ? new address[](limit) 
+            : new address[](forSaleContractsByAddressCount - offset);
+
+        address[] memory forSaleContractsByAddress = getForSaleContractsByAddress(addressToSearchFor);
+        for (uint256 i = offset; i < offset + limit; i++) {
+            if (i >= forSaleContractsByAddress.length) {
+                break;
+            }
+            contracts[i - offset] = forSaleContractsByAddress[i];
+
+        }
+
+        return contracts;
     }
 
     function stringContains(string memory stringToSearchIn, string memory stringToSearchFor) public pure returns (bool) {

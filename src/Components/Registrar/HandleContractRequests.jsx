@@ -3,7 +3,7 @@ import '../../styles/style.css';
 import '../../styles/paginationStyle.css';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import { useNavigate } from 'react-router-dom';
-import PendingContractRequest from './PendingContractCard';
+import PendingContractCard from './PendingContractCard';
 import paginationLimits from '../../Data/paginationLimits';
 import CustomPagination from '../CustomPagination';
 
@@ -15,8 +15,6 @@ function HandleContractRequests(props) {
     const [pendingTitleContractsCount, setPendingTitleContractsCount] = useState(0);
     const [filteredPendingTitleContracts, setFilteredPendingTitleContracts] = useState([]);
     const [currentContractsOffset, setCurrentContractsOffset] = useState(0);
-
-    let paginationControl ;
 
     useEffect( () => {
         if (!props.isRegistrar) {
@@ -31,15 +29,15 @@ function HandleContractRequests(props) {
     }, [currentContractsOffset])
 
     const loadContract = async () => {
-        const titleContractsCount = await getPendingTitleContractsContract();
+        const titleContractsCount = await getPendingTitleContractsCount();
         const titleContracts = await getPendingTitleContractsByOffsetAndLimit();
 
         setFilteredPendingTitleContracts(titleContracts);
         setPendingTitleContractsCount(titleContractsCount);
     }
 
-    const getPendingTitleContractsContract = async () => {
-        const titleContracts = await titlesContract.methods.getPendingTitleContractsCount().call();
+    const getPendingTitleContractsCount = async () => {
+        const titleContracts = await titlesContract.methods.getPendingContractsCount().call();
         return titleContracts;
     }
 
@@ -59,7 +57,7 @@ function HandleContractRequests(props) {
                     <>
                         {
                             filteredPendingTitleContracts.map((contractAddress) => (
-                                <PendingContractRequest key={contractAddress} contractAddress={contractAddress} />
+                                <PendingContractCard key={contractAddress} contractAddress={contractAddress} account={props.account}/>
                             ))
                         }
                         <div className='centered'>
