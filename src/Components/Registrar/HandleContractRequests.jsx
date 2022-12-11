@@ -30,8 +30,12 @@ function HandleContractRequests(props) {
 
     const loadContract = async () => {
         const titleContractsCount = await getPendingTitleContractsCount();
-        const titleContracts = await getPendingTitleContractsByOffsetAndLimit();
-
+        let titleContracts = []
+        try {
+            titleContracts = await getPendingTitleContractsByOffsetAndLimit();
+        } catch (err) {
+            console.log(err.message);
+        }
         setFilteredPendingTitleContracts(titleContracts);
         setPendingTitleContractsCount(titleContractsCount);
     }
@@ -46,6 +50,12 @@ function HandleContractRequests(props) {
         return titleContracts;
     }
 
+    const loadNewContracts = async () => {
+        loadContract().then().catch((err) => {
+            setFilteredPendingTitleContracts([]);
+        });
+    }
+
     return (
         <>
             <div>
@@ -53,11 +63,16 @@ function HandleContractRequests(props) {
             </div>
             <div>
                 {
-                    filteredPendingTitleContracts ?
+                    filteredPendingTitleContracts.length > 0 ?
                     <>
                         {
                             filteredPendingTitleContracts.map((contractAddress) => (
-                                <PendingContractCard key={contractAddress} contractAddress={contractAddress} account={props.account}/>
+                                <PendingContractCard 
+                                    key={contractAddress} 
+                                    contractAddress={contractAddress} 
+                                    account={props.account}
+                                    loadNewContracts={async () => {await loadNewContracts();}}
+                                />
                             ))
                         }
                         <div className='centered'>
@@ -73,7 +88,7 @@ function HandleContractRequests(props) {
                         </div>
                     </> :
                     <div className='centered'>
-                        <h3>There are currently no pending contracts.</h3>
+                        <h4>There are no pending contracts to show right now.</h4>
                     </div>
                 }
             </div>

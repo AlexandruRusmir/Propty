@@ -142,7 +142,7 @@ contract TitleCreatingContract {
 
         address[] memory pendingContracts = getPendingContracts();
         for (uint256 i = offset; i < offset + limit; i++) {
-            if (i >= titleContracts.length) {
+            if (i >= pendingContracts.length) {
                 break;
             }
             contracts[i - offset] = pendingContracts[i];

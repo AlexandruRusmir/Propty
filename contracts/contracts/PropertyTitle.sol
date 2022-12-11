@@ -99,6 +99,7 @@ contract PropertyTitle {
     )
         external 
         onlyRegistrar
+        onlyNotOwner
         onlyRelevantProperty
     {
         owner = _owner;
@@ -182,6 +183,7 @@ contract PropertyTitle {
     )
         external
         onlyRegistrar
+        onlyNotOwner
         onlyRelevantProperty
     {
         requiredDocuments.proofOfIdentityState = _proofOfIdentity;
@@ -259,6 +261,11 @@ contract PropertyTitle {
 
     modifier onlyRegistrar {
         require(ITitleCreatingContract(creator).checkIfUserIsRegistrar(msg.sender) == true, "Only a registered registrar has access to this action.");
+        _;
+    }
+
+    modifier onlyNotOwner {
+        require(msg.sender != owner, "You can not validate your own property");
         _;
     }
 

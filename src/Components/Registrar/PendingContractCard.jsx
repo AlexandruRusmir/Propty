@@ -3,15 +3,14 @@ import '../../styles/style.css';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import { useContract } from '../../CustomHooks/useContract';
 import { getTitleContractDetails } from '../../Helpers/contractDataProviders';
-import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContractStateMessage, getCorrespondingHousingTenure, getMessageForRequiredDocuments } from '../../Helpers/helpers';
+import { getNumberOfTrailingCharacters, getSellingPrice, getApartmentNumberToDisplay, getCorrespondingHousingTenure } from '../../Helpers/helpers';
 import { useWeb3 } from '../../CustomHooks/useWeb3';
 import { Col, Row, Card, Accordion, Button } from 'react-bootstrap';
+import config  from '../../Data/config';
 import ValidatePropertyModal from './ValidatePropertyModal';
 
 function PendingContractCard(props) {
     const web3 = useWeb3().current;
-    const titlesContract = useTitlesContract().current;
-    const contract = useContract(props.contractAddress).current;
 
     const [contractOwner, setContractOwner] = useState('');
     const [sellingPrice, setSellingPrice] = useState('');
@@ -22,12 +21,8 @@ function PendingContractCard(props) {
     const [streetNumber, setStreetNumber] = useState('');
     const [apartmentNumber, setApartmentNumber] = useState('');
     const [squareMeters, setSquareMeters] = useState('');
-    const [proofOfIdentity, setProofOfIdentity] = useState('');
-    const [propertyTitleDeeds, setPropertyTitleDeeds] = useState('');
-    const [energyPerformanceCertificate, setEnergyPerformanceCertificate] = useState('');
-    const [extensionsAndAlterationsDocumentation, setExtensionsAndAlterationsDocumentation] = useState('');
-    const [utilityBillsPaid, setUtilityBillsPaid] = useState('');
 
+    const [registrarIsAlsoOwner, setRegistrarIsAlsoOwner] = useState(false);
     const [validatePropertyOpen, setValidatePropertyOpen] = useState(false);
 
     useEffect( () => {
@@ -50,8 +45,18 @@ function PendingContractCard(props) {
         setCity(web3.utils.hexToString(titleContractData.city).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.city))));
         setStreet(web3.utils.hexToString(titleContractData.street).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.street))));
         setStreetNumber(web3.utils.hexToString(titleContractData.streetNumber).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.streetNumber))));
-        setApartmentNumber(web3.utils.hexToNumber(titleContractData.apartmentNumber));
+        setApartmentNumber(getApartmentNumberToDisplay(web3.utils.hexToNumber(titleContractData.apartmentNumber)));
         setSquareMeters(web3.utils.hexToNumber(titleContractData.squareMeters));
+
+        if (props.account.toLowerCase() === contractOwner.toLowerCase()) {
+            setRegistrarIsAlsoOwner(true);
+        }
+    }
+
+    const loadNewContractsIfContractIsValidated = (newState) => {
+        if (newState == config.contractState.OWNED) {
+            props.loadNewContracts();
+        }
     }
 
     return (
@@ -81,14 +86,24 @@ function PendingContractCard(props) {
                         </Col>
                     </Row>
                     <Row className='centered'>
-                        <Button className='buy-contract-btn'  onClick={() =>  {setValidatePropertyOpen(true);}}>Validate Property</Button>
-                        <ValidatePropertyModal
-                            account={props.account}
-                            key={'validateProperty' + props.contractAddress}
-                            show={validatePropertyOpen}
-                            onValidatePropertyHide={() => {setValidatePropertyOpen(false);}}
-                            contractAddress={props.contractAddress}
-                        />
+                        {
+                            registrarIsAlsoOwner ? 
+                            <div>
+                                <Button className='buy-contract-btn'  onClick={() =>  {setValidatePropertyOpen(true);}}>Validate Property</Button>
+                                <ValidatePropertyModal
+                                    account={props.account}
+                                    key={'validateProperty' + props.contractAddress}
+                                    show={validatePropertyOpen}
+                                    onValidatePropertyHide={() => {setValidatePropertyOpen(false);}}
+                                    contractAddress={props.contractAddress}
+                                    loadNewContractsIfContractIsValidated={loadNewContractsIfContractIsValidated}
+                                />
+                            </div> :
+                            <div className='text-center mt-3'>
+                                <p className='small-text'>This property belongs to you, you can not validate it's documents</p>
+                            </div>
+                        }
+                        
                     </Row>
                 </Card.Body>
             </Card>

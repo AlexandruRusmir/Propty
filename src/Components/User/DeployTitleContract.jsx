@@ -197,13 +197,14 @@ function DeployTitleContract(props) {
 
         let {sellingPriceIntegralPart, sellingPriceFractionalPart, sellingPriceFractionalPartLength} = getSellingPriceComponentsFromString(sellingPrice);
 
+        const apartmentNumberToDeploy = apartmentNumber === '-' ? 0 : apartmentNumber;
         titlesContract.methods.deployNewPropertyTitle(
             props.account,
             country,
             city,
             street,
             streetNumber,
-            apartmentNumber,
+            apartmentNumberToDeploy,
             squareMeters,
             sellingPriceIntegralPart,
             sellingPriceFractionalPart,
@@ -355,7 +356,9 @@ function DeployTitleContract(props) {
                                 value={squareMeters} 
                                 onChange={(e) => {
                                     if (checkIfNumberIsValid(e.target.value)) {
-                                        setSquareMeters(e.target.value);
+                                        if (!(e.target.value).includes('.')){
+                                            setSquareMeters(e.target.value);
+                                        }
                                     }
                                 }}
                                 onClick={() => {setSquareMetresIsValid(true);}}

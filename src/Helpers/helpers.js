@@ -123,3 +123,10 @@ export const checkIfNumberIsValid = (inputValue) => {
 
     return true;
 };
+
+export const getApartmentNumberToDisplay = (apartmentNumber) => {
+    if (apartmentNumber == 0) {
+        return '-';
+    }
+    return apartmentNumber;
+}

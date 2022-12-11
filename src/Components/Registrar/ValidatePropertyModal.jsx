@@ -13,7 +13,6 @@ import { getNumberOfTrailingCharacters } from '../../Helpers/helpers';
 
 function ValidatePropertyModal(props) {
     const web3 = useWeb3().current;
-    const titlesContract = useTitlesContract().current;
     const contract = useContract(props.contractAddress).current;
 
     const [proofOfIdentity, setProofOfIdentity] = useState(Boolean(props.proofOfIdentity));
@@ -114,7 +113,7 @@ function ValidatePropertyModal(props) {
             setInitialExtensionsAndAlterationsDocumentation(extensionsAndAlterationsDocumentation);
             setInitialUtilityBillsPaid(utilityBillsPaid);
             props.onValidatePropertyHide();
-            
+            props.loadNewContractsIfContractIsValidated(newContractState);
         }).catch((err) => {
             console.log(err.message);
         });
