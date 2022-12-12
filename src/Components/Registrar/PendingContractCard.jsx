@@ -29,6 +29,15 @@ function PendingContractCard(props) {
         loadContract();
     }, [])
 
+    useEffect(() => {
+        if (props.account.toLowerCase() === contractOwner.toLowerCase()) {
+            setRegistrarIsAlsoOwner(true);
+        }
+        else {
+            setRegistrarIsAlsoOwner(false);
+        }
+    }, [contractOwner])
+
     const loadContract = async () => {
         const titleContractData = await getTitleContractDetails(web3, props.contractAddress);
 
@@ -47,10 +56,6 @@ function PendingContractCard(props) {
         setStreetNumber(web3.utils.hexToString(titleContractData.streetNumber).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.streetNumber))));
         setApartmentNumber(getApartmentNumberToDisplay(web3.utils.hexToNumber(titleContractData.apartmentNumber)));
         setSquareMeters(web3.utils.hexToNumber(titleContractData.squareMeters));
-
-        if (props.account.toLowerCase() === contractOwner.toLowerCase()) {
-            setRegistrarIsAlsoOwner(true);
-        }
     }
 
     const loadNewContractsIfContractIsValidated = (newState) => {
@@ -87,8 +92,8 @@ function PendingContractCard(props) {
                     </Row>
                     <Row className='centered'>
                         {
-                            registrarIsAlsoOwner ? 
-                            <div>
+                            !registrarIsAlsoOwner ? 
+                            <div className='centered mt-2'>
                                 <Button className='buy-contract-btn'  onClick={() =>  {setValidatePropertyOpen(true);}}>Validate Property</Button>
                                 <ValidatePropertyModal
                                     account={props.account}

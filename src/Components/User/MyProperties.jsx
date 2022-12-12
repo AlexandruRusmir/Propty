@@ -24,15 +24,10 @@ function MyProperties(props) {
                 
             {
                 props.account ?
-                    <PropertyCard 
-                        key=''
-                        account={props.account} 
-                        balance={props.balance} 
-                        network={props.network} 
-                        contractAddress='0x03a756264a7CC291c91ba7A214D74da1958AAa05'
-                    />
+                    <>
+                    </>
                  :
-                <h2>You are not connected to MetaMask</h2>
+                <h4 className='text-center'>You are not connected to MetaMask. Please connect in order to see your registered properties</h4>
             }
             
         </div>
