@@ -8,6 +8,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import paginationLimits from '../../Data/paginationLimits';
 import { Col, Row } from 'react-bootstrap';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
+import CustomPagination from '../CustomPagination';
 
 function AllProperties(props) {
     const titlesContract = useTitlesContract().current;
@@ -16,25 +17,46 @@ function AllProperties(props) {
     const [onlyForSalePropertiesCheck, setOnlyForSalePropetiesCheck] = useState(false);
 
     const [activeTitleContractsCount, setActiveTitleContractsCount] = useState(0);
-    const [filteredActiveTitleContracts, setFilteredActiveTitleContracts] = useState([]);
+    const [ filteredActiveTitleContracts, setFilteredActiveTitleContracts] = useState([]);
     const [currentContractsOffset, setCurrentContractsOffset] = useState(0);
 
     useEffect(() => {
-        loadContract();
+        loadContract(false);
     }, [])
 
-    const loadContract = async () => {
-        const titleContractsCount = await getActiveTitleContractsByAddressCount();
-        let titleContracts = []
+    const loadContract = async (onlyForSale = false) => {
+        if (!onlyForSale) {
+            const titleContractsCount = await getActiveTitleContractsByAddressCount();
+            let titleContracts = [];
+            try {
+                titleContracts = await getActiveTitleContractsByAddressAndOffsetAndLimit();
+            } catch (err) {
+                console.log(err.message);
+            }
+            setActiveTitleContractsCount(titleContractsCount);
+            setFilteredActiveTitleContracts(titleContracts);
+            return;
+        }
+        const titleContractsCount = await getForSaleTitleContractsByAddressCount();
+        console.log('for sale count:' + titleContractsCount);
+        let titleContracts = [];
         try {
-            titleContracts = await getActiveTitleContractsByAddressAndOffsetAndLimit();
+            titleContracts = await getForSaleTitleContractsByAddressAndOffsetAndLimit();
         } catch (err) {
             console.log(err.message);
         }
-        console.log(titleContracts);
         setActiveTitleContractsCount(titleContractsCount);
         setFilteredActiveTitleContracts(titleContracts);
     }
+
+    useEffect(() => {
+        setCurrentContractsOffset(0);
+    }, [onlyForSalePropertiesCheck, searchText])
+
+    useEffect(() => {
+        console.log(currentContractsOffset);
+        loadContract(onlyForSalePropertiesCheck);
+    }, [currentContractsOffset])
 
     const getActiveTitleContractsByAddressCount = async () => {
         const titleContracts = await titlesContract.methods.getActiveContractsByAddressCount(searchText).call();
@@ -51,9 +73,17 @@ function AllProperties(props) {
         return titleContracts;
     }
 
-    const getForSaleTitleContractsByOffsetAndLimit = async () => {
+    const getForSaleTitleContractsByAddressAndOffsetAndLimit = async () => {
         const titleContracts = await titlesContract.methods.getForSaleContractsByAddressAndOffsetAndLimit(searchText, currentContractsOffset, paginationLimits.activeTitleContractsLimit).call();
         return titleContracts;
+    }
+
+    const getNewActiveContracts = async () => {
+        if (onlyForSalePropertiesCheck) {
+            loadContract(true);
+            return;
+        }
+        loadContract(false);
     }
 
     return (
@@ -71,27 +101,35 @@ function AllProperties(props) {
                         }}
                     />
                 </Col>
-                <Col lg={3} xs={12} className='only-for-sale-switch'>
-                    <FormControlLabel
-                        control={
-                            <StyledSwitch 
-                                onChange={(e) => setOnlyForSalePropetiesCheck(e.target.checked)}
-                                inputProps={{ 'aria-label': 'controlled' }}
-                            />
-                        }
-                        label='For sale only'
-                    />
-                </Col>
+                
             </Row>
-            <div>
+            <div className='mt-5'>
                 {
-                    filteredActiveTitleContracts
+                    filteredActiveTitleContracts.length > 0
                         ? 
                             <>
-                                bro
+                                {
+                                    filteredActiveTitleContracts.map((contractAddress) => (
+                                        <PropertyCard
+                                            className='mb-5'
+                                            key={contractAddress} 
+                                            contractAddress={contractAddress} 
+                                            account={props.account}
+                                        />
+                                    ))
+                                }
+                                <div className='centered mb-5 mt-4'>
+                                    <CustomPagination
+                                        elementsCount={activeTitleContractsCount}
+                                        elementsPerPage={paginationLimits.activeTitleContractsLimit}
+                                        setNewOffset={(newOffset) => {console.log(newOffset); setCurrentContractsOffset(newOffset);}}
+                                        getNewElements={async () => {
+                                        }}
+                                    />
+                                </div>
                             </>
                         :
-                            <div className='text-center mt-5'>
+                            <div className='text-center'>
                                 <h4>There are no active title contracts currently registered for that search input.</h4>
                             </div>
                 }

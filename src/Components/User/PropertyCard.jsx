@@ -70,7 +70,7 @@ function PropertyCard(props) {
         setPropertyTitleDeeds(web3.utils.hexToString(titleContractData.propertyTitleDeeds).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.propertyTitleDeeds))));
         setEnergyPerformanceCertificate(web3.utils.hexToString(titleContractData.energyPerformanceCertificate).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.energyPerformanceCertificate))));
         setExtensionsAndAlterationsDocumentation(web3.utils.hexToString(titleContractData.extensionsAndAlterationsDocumentation).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.extensionsAndAlterationsDocumentation))));
-        setUtilityBillsPaid(web3.utils.hexToNumber(web3.utils.hexToString(titleContractData.utilityBillsPaid).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.utilityBillsPaid)))));
+        setUtilityBillsPaid(web3.utils.hexToString(titleContractData.utilityBillsPaid).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.utilityBillsPaid))));
     }
 
     const getPropertySellingPrice = async () => {
@@ -127,6 +127,7 @@ function PropertyCard(props) {
                                                 {
                                                     housingTenure == config.housingTenure.OWNER_OCCUPANCY || housingTenure == config.housingTenure.CONDOMIUM ?
                                                     <Button className='list-for-sale-btn' onClick={() => {
+                                                        console.log(contractAddress);
                                                         setDesiredNewState(config.contractState.FOR_SALE);
                                                         setStateChangeOpen(true);
                                                     }}>

@@ -75,7 +75,7 @@ function HandleContractRequests(props) {
                                 />
                             ))
                         }
-                        <div className='centered'>
+                        <div className='centered mb-5 mt-4'>
                             <CustomPagination
                                 elementsCount={pendingTitleContractsCount}
                                 elementsPerPage={paginationLimits.pendingTitleContractsLimit}

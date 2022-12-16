@@ -13,9 +13,10 @@ import config from '../../Data/config';
 function StateChangeModal(props) {
     const desiredNewState = props.desiredNewState;
     const contractAddress = props.contractAddress;
-    const contract = useContract().current;
+    const contract = useContract(contractAddress).current;
 
     const setPropertyForSale = async () => {
+        console.log(contractAddress);
         contract.methods.modifyContractState(config.contractState.FOR_SALE).send({ from: props.account }).then(() => {
             props.changeContractState(config.contractState.FOR_SALE);
             props.onStateChangeHide();

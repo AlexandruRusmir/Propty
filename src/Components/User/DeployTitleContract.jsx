@@ -212,8 +212,11 @@ function DeployTitleContract(props) {
         ).send({ from: props.account }).then(() => {
             clearFields();
             props.onAddNewContractHide();
+            props.setDeployConfirmAlertOpen(true);
         }).catch((err) => {
             console.log(err.message);
+            props.onAddNewContractHide();
+            props.setFailConfirmAlertOpen(true);
         });
     }
 
@@ -225,7 +228,7 @@ function DeployTitleContract(props) {
             centered
         >
             <Modal.Header closeButton>
-                <Modal.Title className='mx-3'>
+                <Modal.Title className='ms-4 mr-1'>
                     Add new Property Title Contract
                 </Modal.Title>
             </Modal.Header>

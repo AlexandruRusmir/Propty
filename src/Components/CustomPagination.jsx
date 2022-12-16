@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import Pagination from '@mui/material/Pagination';
-import paginationLimits from '../Data/paginationLimits';
 import { useCustomPagination } from '../CustomHooks/useCustomPagination';
 
 function CustomPagination(props) {
@@ -8,14 +7,14 @@ function CustomPagination(props) {
     const [activePage, setActivePage] = useState(1);
 
     const handlePageChange = async (event, page) => {
-        props.setNewOffset((page-1) * paginationLimits.pendingTitleContractsLimit);
+        await props.setNewOffset((page-1) * props.elementsPerPage);
         await props.getNewElements();
         setActivePage(page);
     }
 
     return (
         <Pagination
-            count={Number(props.elementsCount)}
+            count={Math.ceil(Number(props.elementsCount / props.elementsPerPage))}
             size="large"
             page={activePage}
             variant="outlined"

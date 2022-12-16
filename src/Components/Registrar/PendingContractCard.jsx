@@ -8,6 +8,8 @@ import { useWeb3 } from '../../CustomHooks/useWeb3';
 import { Col, Row, Card, Accordion, Button } from 'react-bootstrap';
 import config  from '../../Data/config';
 import ValidatePropertyModal from './ValidatePropertyModal';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 function PendingContractCard(props) {
     const web3 = useWeb3().current;
@@ -24,6 +26,9 @@ function PendingContractCard(props) {
 
     const [registrarIsAlsoOwner, setRegistrarIsAlsoOwner] = useState(false);
     const [validatePropertyOpen, setValidatePropertyOpen] = useState(false);
+
+    const [changesMadeAlertOpen, setChangesMadeAlertOpen] = useState(false);
+    const [validatedContractAlertOpen, setValidatedContractAlertOpen] = useState(false);
 
     useEffect( () => {
         loadContract();
@@ -61,7 +66,26 @@ function PendingContractCard(props) {
     const loadNewContractsIfContractIsValidated = (newState) => {
         if (newState == config.contractState.OWNED) {
             props.loadNewContracts();
+            setValidatedContractAlertOpen(true);
+            return;
         }
+        setChangesMadeAlertOpen(true);
+    }
+
+    const handleChangesMadeAlertClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+      
+        setChangesMadeAlertOpen(false);
+    }
+
+    const handleValidatedContractAlertClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+      
+        setValidatedContractAlertOpen(false);
     }
 
     return (
@@ -112,6 +136,30 @@ function PendingContractCard(props) {
                     </Row>
                 </Card.Body>
             </Card>
+            <Snackbar open={changesMadeAlertOpen} autoHideDuration={4000} onClose={handleChangesMadeAlertClose}>
+                <MuiAlert
+                    variant="filled"
+                    onClose={handleChangesMadeAlertClose}
+                    severity="success"
+                    sx={{ width: "360px" }}
+                >
+                    <div className='centered'>
+                        Documents state successfully changed!
+                    </div>
+                </MuiAlert>
+            </Snackbar>
+            <Snackbar open={validatedContractAlertOpen} autoHideDuration={4000} onClose={handleValidatedContractAlertClose}>
+                <MuiAlert
+                    variant="filled"
+                    onClose={handleValidatedContractAlertClose}
+                    severity="success"
+                    sx={{ width: "330px" }}
+                >
+                    <div className='centered'>
+                        Contract successfully activated!
+                    </div>
+                </MuiAlert>
+            </Snackbar>
         </div>
     );
 }
