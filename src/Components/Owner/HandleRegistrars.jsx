@@ -11,6 +11,8 @@ import { checkIfUserIsRegistrar, getCentralContractRegistrars } from '../../Help
 import { StyledTextField } from '../StyledTextField';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 function HandleRegistrars(props) {
     const titlesContract = useTitlesContract().current;
@@ -23,6 +25,8 @@ function HandleRegistrars(props) {
     const [searchText, setSearchText] = useState('');
     const [seeRemovedRegistrars, setSeeRemovedRegistrars] = useState(false);
     const [seeActiveRegistrars, setSeeActiveRegistrars] = useState(false);
+
+    const [addedNewRegistrarAlertOpen, setAddedNewRegistrarAlertOpen] = useState(false);
 
     useEffect(() => {
         if (!props.owners.includes(props.account)) {
@@ -62,6 +66,14 @@ function HandleRegistrars(props) {
         setRegistrars(registrarsArray);
     }
 
+    const handleAddedNewRegistrarAlertClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+      
+        setAddedNewRegistrarAlertOpen(false);
+    }
+
     return (
         <>
             <div>
@@ -71,14 +83,15 @@ function HandleRegistrars(props) {
                 <AddRegistrarModal
                     show = {addRegistrarOpen}
                     onAddRegistrarHide = {() => setAddRegistrarOpen(false)}
-
+                    setAddedNewRegistrarAlertOpen={setAddedNewRegistrarAlertOpen}
                     addNewRegistrar = {(newRegistrar) => {
                         setRegistrars([
                         {
-                        address: newRegistrar,
-                        isRegistrar: true
-                    }, ...registrars]
-                    );}}
+                            address: newRegistrar,
+                            isRegistrar: true
+                        }, ...registrars]);
+                    }}
+                    loadCentralContractRegistrars={loadCentralContractRegistrars}
 
                     account = {props.account}
                     currentRegistrars = {registrars}
@@ -109,7 +122,7 @@ function HandleRegistrars(props) {
                             <Col lg={12} sm={6}>
                                 <FormControlLabel
                                     checked={seeRemovedRegistrars}
-                                    control={<Checkbox size="small" color="success"/>}
+                                    control={<Checkbox size="small" color="default"/>}
                                     color="default"
                                     label="Removed registrars"
                                     onChange={(e) => {
@@ -120,7 +133,7 @@ function HandleRegistrars(props) {
                             <Col lg={12} sm={6}>
                                 <FormControlLabel
                                     checked={seeActiveRegistrars}
-                                    control={<Checkbox size="small" color="success"/>}
+                                    control={<Checkbox size="small" color="default"/>}
                                     label="Active registrars"
                                     onChange={(e) => {
                                         setSeeActiveRegistrars(e.target.checked);
@@ -135,13 +148,31 @@ function HandleRegistrars(props) {
                 {
                     filteredRegistrars ?
                     filteredRegistrars.map(({address, isRegistrar}) => (
-                        <RegistrarCard account={props.account} key={address} address={address} isRegistrar={isRegistrar} />
+                        <RegistrarCard
+                            account={props.account}
+                            key={address} 
+                            address={address} 
+                            isRegistrar={isRegistrar} 
+                            loadCentralContractRegistrars={loadCentralContractRegistrars}
+                        />
                     )) :
                     <div className='centered'>
                         <h3>There are no registrars currently added!</h3>
                     </div>
                 }
             </div>
+            <Snackbar open={addedNewRegistrarAlertOpen} autoHideDuration={4000} onClose={handleAddedNewRegistrarAlertClose}>
+                <MuiAlert
+                    variant="filled"
+                    onClose={handleAddedNewRegistrarAlertClose}
+                    severity="success"
+                    sx={{ width: "330px" }}
+                >
+                    <div className='centered'>
+                        Registrar successfully activated!
+                    </div>
+                </MuiAlert>
+            </Snackbar>
         </>
     );
 }

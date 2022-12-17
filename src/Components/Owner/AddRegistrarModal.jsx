@@ -74,7 +74,9 @@ function AddRegistrarModal(props) {
         titlesContract.methods.addRegistrars([newRegistrarAddress]).send({ from: props.account }).then(() => {
             props.addNewRegistrar(newRegistrarAddress);
             props.onAddRegistrarHide();
+            props.setAddedNewRegistrarAlertOpen(true);
         }).catch((err) => {
+            props.onAddRegistrarHide();
             console.log(err.message);
         });
     }

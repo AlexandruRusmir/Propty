@@ -24,7 +24,6 @@ function PendingContractCard(props) {
     const [apartmentNumber, setApartmentNumber] = useState('');
     const [squareMeters, setSquareMeters] = useState('');
 
-    const [registrarIsAlsoOwner, setRegistrarIsAlsoOwner] = useState(false);
     const [validatePropertyOpen, setValidatePropertyOpen] = useState(false);
 
     const [changesMadeAlertOpen, setChangesMadeAlertOpen] = useState(false);
@@ -33,15 +32,6 @@ function PendingContractCard(props) {
     useEffect( () => {
         loadContract();
     }, [])
-
-    useEffect(() => {
-        if (props.account.toLowerCase() === contractOwner.toLowerCase()) {
-            setRegistrarIsAlsoOwner(true);
-        }
-        else {
-            setRegistrarIsAlsoOwner(false);
-        }
-    }, [contractOwner])
 
     const loadContract = async () => {
         const titleContractData = await getTitleContractDetails(web3, props.contractAddress);
@@ -116,7 +106,7 @@ function PendingContractCard(props) {
                     </Row>
                     <Row className='centered'>
                         {
-                            !registrarIsAlsoOwner ? 
+                            props.account !== contractOwner ? 
                             <div className='centered mt-2'>
                                 <Button className='buy-contract-btn'  onClick={() =>  {setValidatePropertyOpen(true);}}>Validate Property</Button>
                                 <ValidatePropertyModal

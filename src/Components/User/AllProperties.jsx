@@ -3,12 +3,11 @@ import PropertyCard from './PropertyCard';
 import '../../styles/style.css';
 import '../../styles/allPropertiesStyle.css';
 import { StyledTextField } from '../StyledTextField';
-import { StyledSwitch } from '../StyledSwitch';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import paginationLimits from '../../Data/paginationLimits';
-import { Col, Row } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import CustomPagination from '../CustomPagination';
+import { Link } from 'react-router-dom';
 
 function AllProperties(props) {
     const titlesContract = useTitlesContract().current;
@@ -35,6 +34,8 @@ function AllProperties(props) {
             }
             setActiveTitleContractsCount(titleContractsCount);
             setFilteredActiveTitleContracts(titleContracts);
+            const test = await titlesContract.methods.stringContains('aufgjejo', 'mn').call();
+            console.log(test);
             return;
         }
         const titleContractsCount = await getForSaleTitleContractsByAddressCount();
@@ -54,7 +55,6 @@ function AllProperties(props) {
     }, [onlyForSalePropertiesCheck, searchText])
 
     useEffect(() => {
-        console.log(currentContractsOffset);
         loadContract(onlyForSalePropertiesCheck);
     }, [currentContractsOffset])
 
@@ -89,19 +89,23 @@ function AllProperties(props) {
     return (
         <div>
             <h1 className='text-center my-5 title-text'>All Registered Properties</h1>
+            <Row>
+                <Col className='d-flex justify-content-end mx-5'>
+                    <Link to='/' className='add-new-registrar-btn text-light nav-link'>Go House Hunting</Link>
+                </Col>
+            </Row>
             <Row className='properties-search-box'>
-                <Col lg={9} xs={12}>
+                <Col xs={12}>
                     <StyledTextField 
                         fullWidth
                         style={{background: "#FFF"}}
-                        label='Search for properties by location' 
+                        label='Search for active properties by the corresponding location' 
                         value={searchText}
                         onChange={(e) => {
                             setSearchText(e.target.value);
                         }}
                     />
                 </Col>
-                
             </Row>
             <div className='mt-5'>
                 {
@@ -122,7 +126,7 @@ function AllProperties(props) {
                                     <CustomPagination
                                         elementsCount={activeTitleContractsCount}
                                         elementsPerPage={paginationLimits.activeTitleContractsLimit}
-                                        setNewOffset={(newOffset) => {console.log(newOffset); setCurrentContractsOffset(newOffset);}}
+                                        setNewOffset={(newOffset) => {setCurrentContractsOffset(newOffset);}}
                                         getNewElements={async () => {
                                         }}
                                     />

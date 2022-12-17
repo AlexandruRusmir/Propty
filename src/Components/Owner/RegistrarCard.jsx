@@ -43,8 +43,9 @@ function RegistrarCard(props) {
                             isRegistrar ?
                             <Button className='remove-registrar-btn'
                                 onClick={() => {
-                                    removeRegistrarRole(props.address).then(() => {
+                                    removeRegistrarRole(props.address).then(async () => {
                                         setIsRegistrar(false);
+                                        await props.loadCentralContractRegistrars();
                                     }).catch(err => {
                                         console.log(err);
                                     })
@@ -54,8 +55,9 @@ function RegistrarCard(props) {
                             </Button> :
                             <Button className='add-registrar-btn'
                                 onClick={() => {
-                                    addRegistrarRole(props.address).then(() => {
+                                    addRegistrarRole(props.address).then(async () => {
                                         setIsRegistrar(true);
+                                        await props.loadCentralContractRegistrars();
                                     }).catch( err => {
                                         console.log(err);
                                     })
