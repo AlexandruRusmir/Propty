@@ -13,7 +13,6 @@ function AllProperties(props) {
     const titlesContract = useTitlesContract().current;
 
     const [searchText, setSearchText] = useState('');
-    const [onlyForSalePropertiesCheck, setOnlyForSalePropetiesCheck] = useState(false);
 
     const [activeTitleContractsCount, setActiveTitleContractsCount] = useState(0);
     const [ filteredActiveTitleContracts, setFilteredActiveTitleContracts] = useState([]);
@@ -23,42 +22,35 @@ function AllProperties(props) {
         loadContract(false);
     }, [])
 
-    const loadContract = async (onlyForSale = false) => {
-        if (!onlyForSale) {
-            const titleContractsCount = await getActiveTitleContractsByAddressCount();
-            let titleContracts = [];
-            try {
-                titleContracts = await getActiveTitleContractsByAddressAndOffsetAndLimit();
-            } catch (err) {
-                console.log(err.message);
-            }
-            setActiveTitleContractsCount(titleContractsCount);
-            setFilteredActiveTitleContracts(titleContracts);
-            const test = await titlesContract.methods.stringContains('aufgjejo', 'mn').call();
-            console.log(test);
-            return;
-        }
-        const titleContractsCount = await getForSaleTitleContractsByAddressCount();
-        console.log('for sale count:' + titleContractsCount);
+    const loadContract = async () => {
+        const titleContractsCount = await getActiveTitleContractsByAddressCount();
         let titleContracts = [];
         try {
-            titleContracts = await getForSaleTitleContractsByAddressAndOffsetAndLimit();
+            titleContracts = await getActiveTitleContractsByAddressAndOffsetAndLimit();
         } catch (err) {
             console.log(err.message);
         }
         setActiveTitleContractsCount(titleContractsCount);
         setFilteredActiveTitleContracts(titleContracts);
+        
+        // const titleContractsCount = await getForSaleTitleContractsByAddressCount();
+        // let titleContracts = [];
+        // try {
+        //     titleContracts = await getForSaleTitleContractsByAddressAndOffsetAndLimit();
+        // } catch (err) {
+        //     console.log(err.message);
+        // }
+        // setActiveTitleContractsCount(titleContractsCount);
+        // setFilteredActiveTitleContracts(titleContracts);
     }
 
     useEffect(() => {
         setCurrentContractsOffset(0);
-    }, [onlyForSalePropertiesCheck, searchText])
-
-    useEffect(() => {
-        loadContract(onlyForSalePropertiesCheck);
-    }, [currentContractsOffset])
+        loadContract()
+    }, [searchText])
 
     const getActiveTitleContractsByAddressCount = async () => {
+        console.log(searchText);
         const titleContracts = await titlesContract.methods.getActiveContractsByAddressCount(searchText).call();
         return titleContracts;
     }
@@ -76,14 +68,6 @@ function AllProperties(props) {
     const getForSaleTitleContractsByAddressAndOffsetAndLimit = async () => {
         const titleContracts = await titlesContract.methods.getForSaleContractsByAddressAndOffsetAndLimit(searchText, currentContractsOffset, paginationLimits.activeTitleContractsLimit).call();
         return titleContracts;
-    }
-
-    const getNewActiveContracts = async () => {
-        if (onlyForSalePropertiesCheck) {
-            loadContract(true);
-            return;
-        }
-        loadContract(false);
     }
 
     return (

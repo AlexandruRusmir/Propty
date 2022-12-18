@@ -6,6 +6,7 @@ import "./PropertyTitle.sol";
 interface IAccessPropertyTitleMethods {
     function contractState() external view returns (PropertyTitleContractState);
     function getFullPropertyAddress() external view returns (string memory);
+    function owner() external view returns (address);
 }
 
 contract TitleCreatingContract {
@@ -154,8 +155,8 @@ contract TitleCreatingContract {
     function getActiveContractsByAddressCount(string memory addressToSearchFor) public view returns (uint256) {
         uint256 k = 0;
         for (uint256 i = 0; i < titleContracts.length; i++) {
-            if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.OWNED ||
-                IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.FOR_SALE &&
+            if ((IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.OWNED ||
+                IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.FOR_SALE) &&
                 stringContains(IAccessPropertyTitleMethods(titleContracts[i]).getFullPropertyAddress(), addressToSearchFor)) {
                 k++;
             } 
@@ -295,6 +296,31 @@ contract TitleCreatingContract {
         return contracts;
     }
 
+    function getAccountContractsCount(address account) public view returns (uint256)
+    {
+        uint256 k = 0;
+        for (uint256 i = 0; i < titleContracts.length; i++) {
+            if (IAccessPropertyTitleMethods(titleContracts[i]).owner() == account) {
+                k++;
+            } 
+        }
+
+        return k;
+    }
+
+    function getAccountContracts(address account) public view returns (address[] memory)
+    {
+        address[] memory contracts = new address[](getAccountContractsCount(account));
+        uint256 k = 0;
+        for (uint256 i = 0; i < titleContracts.length; i++) {
+            if (IAccessPropertyTitleMethods(titleContracts[i]).owner() == account) {
+                contracts[k++] = titleContracts[i];
+            }
+        }
+
+        return contracts;
+    }
+
     function stringContains(string memory stringToSearchIn, string memory stringToSearchFor) public pure returns (bool) {
         bytes memory stringToSearchForBytes = bytes (stringToSearchFor);
         bytes memory stringToSearchInBytes = bytes (stringToSearchIn);
@@ -305,7 +331,7 @@ contract TitleCreatingContract {
         for (uint i = 0; i <= stringToSearchInBytes.length - stringToSearchForBytes.length; i++) {
             bool flag = true;
             for (uint j = 0; j < stringToSearchForBytes.length; j++)
-                if (stringToSearchForBytes [i + j] != stringToSearchForBytes [j]) {
+                if (stringToSearchInBytes[i + j] != stringToSearchForBytes[j]) {
                     flag = false;
                     break;
                 }
