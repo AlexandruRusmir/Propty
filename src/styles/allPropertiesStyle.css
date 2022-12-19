@@ -7,6 +7,16 @@
     align-items: center;
 }
 
+.top-image {
+    height: 200px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.for-sale-or-all-properties-link {
+    height: 36px;
+}
+
 @media (max-width: 992px) {
     .only-for-sale-switch{
         margin-top: 10px;
@@ -20,5 +30,9 @@
 @media (max-width: 556px) {
     .properties-search-box {
         margin: 4px 0;
+    }
+
+    .top-image {
+        display: none !important;
     }
 }

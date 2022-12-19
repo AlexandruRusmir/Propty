@@ -67,7 +67,7 @@ function MyPropertiesCard(props) {
             <MuiAlert
               variant="filled"
               onClose={handleDeployFailAlertClose}
-              severity="success"
+              severity="warning"
               sx={{ width: "310px" }}
             >
                 <div className='centered'>
