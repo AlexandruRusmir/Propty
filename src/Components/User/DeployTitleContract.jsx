@@ -213,6 +213,7 @@ function DeployTitleContract(props) {
             clearFields();
             props.onAddNewContractHide();
             props.setDeployConfirmAlertOpen(true);
+            props.loadMyProperties();
         }).catch((err) => {
             console.log(err.message);
             props.onAddNewContractHide();

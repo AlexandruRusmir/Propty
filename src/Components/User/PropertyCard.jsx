@@ -103,7 +103,7 @@ function PropertyCard(props) {
             <Card
                 key = ''
                 id={'propertyTitle' + country + city + street  + streetNumber + apartmentNumber}
-                className="mb-2 mx-5"
+                className="my-4 mx-5"
                 variant='light'
             >
                 <Card.Header className='text-center'>
@@ -114,88 +114,97 @@ function PropertyCard(props) {
                                     <strong>You are the Owner of this Contract</strong>
                                 </p>
                                 <Row>
-                                    <Col lg={4} md={12}>
-                                        {
-                                            contractState == config.contractState.FOR_SALE ?
-                                            <Button className='remove-listing-btn' onClick={() => {
-                                                setDesiredNewState(config.contractState.OWNED);
-                                                setStateChangeOpen(true);
-                                            }}>
-                                                Remove Listing <CgPlayListRemove size={22}/>
-                                            </Button> :
+                                {
+                                    contractState != config.contractState.PENDING
+                                        ?
                                             <>
+                                                <Col lg={4} md={12}>
                                                 {
-                                                    housingTenure == config.housingTenure.OWNER_OCCUPANCY || housingTenure == config.housingTenure.CONDOMIUM ?
-                                                    <Button className='list-for-sale-btn' onClick={() => {
-                                                        console.log(contractAddress);
-                                                        setDesiredNewState(config.contractState.FOR_SALE);
+                                                    contractState == config.contractState.FOR_SALE ?
+                                                    <Button className='remove-listing-btn' onClick={() => {
+                                                        setDesiredNewState(config.contractState.OWNED);
                                                         setStateChangeOpen(true);
                                                     }}>
-                                                        List For Sale <MdOutlineSell size={22}/>
+                                                        Remove Listing <CgPlayListRemove size={22}/>
                                                     </Button> :
-                                                    <Button className='list-for-sale-btn disabled-btn'>
-                                                        List For Sale <MdOutlineSell size={22}/>
-                                                    </Button>
+                                                    <>
+                                                        {
+                                                            housingTenure == config.housingTenure.OWNER_OCCUPANCY || housingTenure == config.housingTenure.CONDOMIUM ?
+                                                            <Button className='list-for-sale-btn' onClick={() => {
+                                                                console.log(contractAddress);
+                                                                setDesiredNewState(config.contractState.FOR_SALE);
+                                                                setStateChangeOpen(true);
+                                                            }}>
+                                                                List For Sale <MdOutlineSell size={22}/>
+                                                            </Button> :
+                                                            <Button className='list-for-sale-btn disabled-btn'>
+                                                                List For Sale <MdOutlineSell size={22}/>
+                                                            </Button>
+                                                        }
+                                                    </>
                                                 }
+                                                </Col>
+                                                <Col lg={4} md={12}>
+                                                    <Button onClick={() => setContractEditOpen(true)} className='modify-contract-btn'>
+                                                        Modify Contract <MdOutlineEditLocationAlt size={22}/>
+                                                    </Button>
+                                                </Col>
+                        
+                                                <Col lg={4} md={12}>
+                                                    <Button className='disable-contract-btn' onClick={() => {
+                                                        setDesiredNewState(config.contractState.NO_LONGER_RELEVANT);
+                                                        setStateChangeOpen(true);
+                                                    }}>
+                                                        Invalidate Contract <MdRemoveDone size={22}/>
+                                                    </Button>
+                                                </Col>
+                                                <StateChangeModal
+                                                    show={stateChangeOpen}
+                                                    onStateChangeHide={() => setStateChangeOpen(false)}
+                                                    desiredNewState = {desiredNewState}
+
+                                                    account = {props.account}
+                                                    contractAddress = {contractAddress}
+                                                    country = {country}
+                                                    city = {city}
+                                                    street = {street}
+                                                    streetNumber = {streetNumber}
+                                                    apartmentNumber = {apartmentNumber}
+
+                                                    changeContractState = {(newContractState) => {setContractState(newContractState)}}
+                                                />
+
+                                                <PropertyDetailsModal
+                                                    show={contractEditOpen}
+                                                    onDetailsEditHide={() => setContractEditOpen(false)}
+
+                                                    account = {props.account}
+                                                    contractAddress = {contractAddress}
+                                                    contractState = {contractState}
+                                                    sellingPrice = {sellingPrice}
+                                                    housingTenure = {housingTenure}
+                                                    country = {country}
+                                                    city = {city}
+                                                    street = {street}
+                                                    streetNumber = {streetNumber}
+                                                    apartmentNumber = {apartmentNumber}
+                                                    squareMeters = {squareMeters}
+                                                    proofOfIdentity = {proofOfIdentity}
+                                                    propertyTitleDeeds = {propertyTitleDeeds}
+                                                    energyPerformanceCertificate = {energyPerformanceCertificate}
+                                                    extensionsAndAlterationsDocumentation = {extensionsAndAlterationsDocumentation}
+                                                    utilityBillsPaid = {utilityBillsPaid}
+
+                                                    changeSellingPrice = {(sellingPrice) => {setSellingPrice(sellingPrice);}}
+                                                    changeHousingTenure = {(housingTenure) => {setHousingTenure(housingTenure);}}
+                                                    changeSquareMeters = {(squareMeters) => {setSquareMeters(squareMeters);}}
+                                                />
                                             </>
-                                        }
-                                    </Col>
-                                    <Col lg={4} md={12}>
-                                        <Button onClick={() => setContractEditOpen(true)} className='modify-contract-btn'>
-                                            Modify Contract <MdOutlineEditLocationAlt size={22}/>
-                                        </Button>
-                                    </Col>
-                
-                                    <Col lg={4} md={12}>
-                                        <Button className='disable-contract-btn' onClick={() => {
-                                            setDesiredNewState(config.contractState.NO_LONGER_RELEVANT);
-                                            setStateChangeOpen(true);
-                                        }}>
-                                            Invalidate Contract <MdRemoveDone size={22}/>
-                                        </Button>
-                                    </Col>
-                                    <StateChangeModal
-                                        show={stateChangeOpen}
-                                        onStateChangeHide={() => setStateChangeOpen(false)}
-                                        desiredNewState = {desiredNewState}
-
-                                        account = {props.account}
-                                        contractAddress = {contractAddress}
-                                        country = {country}
-                                        city = {city}
-                                        street = {street}
-                                        streetNumber = {streetNumber}
-                                        apartmentNumber = {apartmentNumber}
-
-                                        changeContractState = {(newContractState) => {setContractState(newContractState)}}
-                                    />
+                                        :
+                                            <>
+                                            </>
+                                }
                                 </Row>
-
-                                <PropertyDetailsModal
-                                    show={contractEditOpen}
-                                    onDetailsEditHide={() => setContractEditOpen(false)}
-
-                                    account = {props.account}
-                                    contractAddress = {contractAddress}
-                                    contractState = {contractState}
-                                    sellingPrice = {sellingPrice}
-                                    housingTenure = {housingTenure}
-                                    country = {country}
-                                    city = {city}
-                                    street = {street}
-                                    streetNumber = {streetNumber}
-                                    apartmentNumber = {apartmentNumber}
-                                    squareMeters = {squareMeters}
-                                    proofOfIdentity = {proofOfIdentity}
-                                    propertyTitleDeeds = {propertyTitleDeeds}
-                                    energyPerformanceCertificate = {energyPerformanceCertificate}
-                                    extensionsAndAlterationsDocumentation = {extensionsAndAlterationsDocumentation}
-                                    utilityBillsPaid = {utilityBillsPaid}
-
-                                    changeSellingPrice = {(sellingPrice) => {setSellingPrice(sellingPrice);}}
-                                    changeHousingTenure = {(housingTenure) => {setHousingTenure(housingTenure);}}
-                                    changeSquareMeters = {(squareMeters) => {setSquareMeters(squareMeters);}}
-                                />
                             </>:
                             <> 
                                 <p className='mb-3'>

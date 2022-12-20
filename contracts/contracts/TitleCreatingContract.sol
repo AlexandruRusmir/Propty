@@ -300,9 +300,10 @@ contract TitleCreatingContract {
     {
         uint256 k = 0;
         for (uint256 i = 0; i < titleContracts.length; i++) {
-            if (IAccessPropertyTitleMethods(titleContracts[i]).owner() == account) {
+            if (IAccessPropertyTitleMethods(titleContracts[i]).owner() == account && 
+                IAccessPropertyTitleMethods(titleContracts[i]).contractState() != PropertyTitleContractState.NO_LONGER_RELEVANT) {
                 k++;
-            } 
+            }
         }
 
         return k;

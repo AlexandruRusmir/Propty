@@ -41,7 +41,6 @@ function AllProperties(props) {
     }, [searchText])
 
     const getActiveTitleContractsByAddressCount = async () => {
-        console.log(searchText);
         const titleContracts = await titlesContract.methods.getActiveContractsByAddressCount(searchText).call();
         return titleContracts;
     }

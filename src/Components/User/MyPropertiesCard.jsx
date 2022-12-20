@@ -39,6 +39,7 @@ function MyPropertiesCard(props) {
               </Card.Text>
               <Card.Img variant="bottom" style={{height: '100px'}} src={HouseInHand} />
               <DeployTitleContract
+                loadMyProperties={async () => {await props.loadMyProperties()}}
                 show={addNewContractShow}
                 onAddNewContractHide={() => setAddNewContractShow(false)}
                 key={props.account + 'addPropertyModal'}
@@ -47,7 +48,7 @@ function MyPropertiesCard(props) {
                 setDeployFailAlertOpen={setDeployFailAlertOpen}
               />
               <div className='centered mt-5 mb-2'>
-                <Button className='modify-contract-btn' onClick={() => {setAddNewContractShow(true);}} >Add a Title Contract</Button>
+                <Button className='modify-contract-btn' onClick={() => {setAddNewContractShow(true);}} >Add a new Property</Button>
               </div>
           </Card.Body>
         </Card>

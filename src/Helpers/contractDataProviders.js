@@ -59,3 +59,8 @@ export const checkIfUserIsRegistrar = async (titlesContract, userAddress) => {
     const result = titlesContract.methods.isRegistrar(userAddress).call();
     return result
 }
+
+export const getPropertiesForAccount = async (titlesContract, account) => {
+    const titleContracts = await titlesContract.methods.getAccountContracts(account).call();
+    return titleContracts;
+}
