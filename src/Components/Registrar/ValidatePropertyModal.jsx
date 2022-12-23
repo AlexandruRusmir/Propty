@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import '../../styles/style.css';
-import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import { useContract } from '../../CustomHooks/useContract';
 import { useWeb3 } from '../../CustomHooks/useWeb3';
 import { getTitleContractDetails } from '../../Helpers/contractDataProviders';
@@ -9,7 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { contractState, documentsProvidedMessage, documentsNotProvidedMessage } from '../../Data/config';
 import { getNumberOfTrailingCharacters } from '../../Helpers/helpers';
-
+import { loadPropertyRequiredDocumentsState } from '../../Helpers/externalDataProviders';
 
 function ValidatePropertyModal(props) {
     const web3 = useWeb3().current;
@@ -29,6 +28,8 @@ function ValidatePropertyModal(props) {
 
     const [allDocumentsAreValid, setAllDocumentsAreValid] = useState(false);
     const [allLeastOneDocumentValidatyChanged, setAllLeastOneDocumentValidatyChanged] = useState(false);
+
+    const [propertyRequiredDocumentsState, setPropertyRequiredDocumentsState] = useState({});
 
     useEffect(() => {
         loadContract();
@@ -95,6 +96,9 @@ function ValidatePropertyModal(props) {
         else {
             setInitialUtilityBillsPaid(false);
         }
+        
+        const propertyRequiredDocumentsState = await loadPropertyRequiredDocumentsState(titleContractData.street);
+        setPropertyRequiredDocumentsState(propertyRequiredDocumentsState);
     }
 
     const applyDocumentsStateChanges = async (activateContract = false) => {
@@ -130,67 +134,117 @@ function ValidatePropertyModal(props) {
             >
                 <Modal.Header closeButton>
                     <Modal.Title className='mx-3'>
-                        Validate Property Modal
+                        Validate Property Documents State
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className='mx-3'>
                     <Row>
-                        <Col xs={12}>
-                            <div>
-                                <FormControlLabel
-                                    checked={proofOfIdentity}
-                                    control={<Checkbox inputProps={{ 'aria-label': 'controlled' }}/>}
-                                    label="Proof of identity"
-                                    onChange={(e) => {
-                                        setProofOfIdentity(e.target.checked);
-                                    }}
-                                />
+                        <Col lg={6} md={12}>
+                            <FormControlLabel
+                                checked={proofOfIdentity}
+                                control={<Checkbox inputProps={{ 'aria-label': 'controlled' }}/>}
+                                label="Proof of identity"
+                                onChange={(e) => {
+                                    setProofOfIdentity(e.target.checked);
+                                }}
+                            />
+                        </Col>
+                        <Col lg={6} md={12}>
+                            <p>
+                                {
+                                    propertyRequiredDocumentsState.proofOfIdentityState
+                                        ? 'bro'
+                                        : 'sis'
+                                }
+                            </p>
+                        </Col>
+                    </Row>
+                
+                    <Row>
+                        <Col lg={6} md={12}>
+                            <FormControlLabel
+                                checked={propertyTitleDeeds}
+                                control={<Checkbox inputProps={{ 'aria-label': 'controlled' }}/>}
+                                label="Property Title Deeds"
+                                onChange={(e) => {
+                                    setPropertyTitleDeeds(e.target.checked);
+                                }}
+                            />
+                        </Col>
+                        <Col lg={6} md={12}>
+                            <p>
+                                {
+                                    propertyRequiredDocumentsState.propertyTitleDeedsState
+                                        ? 'bro'
+                                        : 'sis'
+                                }
+                            </p>
+                        </Col>
+                    </Row>
 
-                            </div>
-                        
-                            <div>
-                                <FormControlLabel
-                                    checked={propertyTitleDeeds}
-                                    control={<Checkbox inputProps={{ 'aria-label': 'controlled' }}/>}
-                                    label="Property Title Deeds"
-                                    onChange={(e) => {
-                                        setPropertyTitleDeeds(e.target.checked);
-                                    }}
-                                />
-                            </div>
+                    <Row>
+                        <Col lg={6} md={12}>
+                            <FormControlLabel
+                                checked={energyPerformanceCertificate}
+                                control={<Checkbox inputProps={{ 'aria-label': 'controlled' }}/>}
+                                label="Energy Performance Certificate"
+                                onChange={(e) => {
+                                    setEnergyPerformanceCertificate(e.target.checked);
+                                }}
+                            />
+                        </Col>
+                        <Col lg={6} md={12}>
+                            <p>
+                                {
+                                    propertyRequiredDocumentsState.energyPerformanceCertificateState
+                                        ? 'bro'
+                                        : 'sis'
+                                }
+                            </p>
+                        </Col>
+                    </Row>
 
-                            <div>
-                                <FormControlLabel
-                                    checked={energyPerformanceCertificate}
-                                    control={<Checkbox inputProps={{ 'aria-label': 'controlled' }}/>}
-                                    label="Energy Performance Certificate"
-                                    onChange={(e) => {
-                                        setEnergyPerformanceCertificate(e.target.checked);
-                                    }}
-                                />
-                            </div>
+                    <Row>
+                        <Col lg={6} md={12}>
+                            <FormControlLabel
+                                checked={extensionsAndAlterationsDocumentation}
+                                control={<Checkbox inputProps={{ 'aria-label': 'controlled' }}/>}
+                                label="Extensions and alterations documentation"
+                                onChange={(e) => {
+                                    setExtensionsAndAlterationsDocumentation(e.target.checked);
+                                }}
+                            />
+                        </Col>
+                        <Col lg={6} md={12}>
+                            <p>
+                                {
+                                    propertyRequiredDocumentsState.extensionsAndAlterationsDocumentationState
+                                        ? 'bro'
+                                        : 'sis'
+                                }
+                            </p>
+                        </Col>
+                    </Row>
 
-                            <div>
-                                <FormControlLabel
-                                    checked={extensionsAndAlterationsDocumentation}
-                                    control={<Checkbox inputProps={{ 'aria-label': 'controlled' }}/>}
-                                    label="Extensions and alterations documentation"
-                                    onChange={(e) => {
-                                        setExtensionsAndAlterationsDocumentation(e.target.checked);
-                                    }}
-                                />
-                            </div>
-
-                            <div>
-                                <FormControlLabel
-                                    checked={utilityBillsPaid}
-                                    control={<Checkbox inputProps={{ 'aria-label': 'controlled' }}/>}
-                                    label="Utility bills paid"
-                                    onChange={(e) => {
-                                        setUtilityBillsPaid(e.target.checked);
-                                    }}
-                                />
-                            </div>
+                    <Row>
+                        <Col lg={6} md={12}>
+                            <FormControlLabel
+                                checked={utilityBillsPaid}
+                                control={<Checkbox inputProps={{ 'aria-label': 'controlled' }}/>}
+                                label="Utility bills paid"
+                                onChange={(e) => {
+                                    setUtilityBillsPaid(e.target.checked);
+                                }}
+                            />
+                        </Col>
+                        <Col lg={6} md={12}>
+                            <p>
+                                {
+                                    propertyRequiredDocumentsState.proofOfIdentityState
+                                        ? 'bro'
+                                        : 'sis'
+                                }
+                            </p>
                         </Col>
                     </Row>
                 </Modal.Body>
