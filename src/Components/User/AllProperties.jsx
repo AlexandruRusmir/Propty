@@ -36,16 +36,23 @@ function AllProperties(props) {
     }
 
     useEffect(() => {
-        setCurrentContractsOffset(0);
         loadContract();
     }, [searchText])
+
+    useEffect(() => {
+        loadContract();
+    }, [currentContractsOffset])
 
     const getActiveTitleContractsByAddressCount = async () => {
         const titleContracts = await titlesContract.methods.getActiveContractsByAddressCount(searchText).call();
         return titleContracts;
     }
 
-    const getActiveTitleContractsByAddressAndOffsetAndLimit = async () => {
+    const getActiveTitleContractsByAddressAndOffsetAndLimit = async (offset = null) => {
+        let contractsOffset = currentContractsOffset;
+        if (typeof offset == 'number') {
+            contractsOffset = offset
+        }
         const titleContracts = await titlesContract.methods.getActiveContractsByAddressAndOffsetAndLimit(searchText, currentContractsOffset, paginationLimits.activeTitleContractsLimit).call();
         return titleContracts;
     }
@@ -73,6 +80,7 @@ function AllProperties(props) {
                         label='Search for active properties by the corresponding location' 
                         value={searchText}
                         onChange={(e) => {
+                            setCurrentContractsOffset(0);
                             setSearchText(e.target.value);
                         }}
                     />
@@ -93,21 +101,21 @@ function AllProperties(props) {
                                         />
                                     ))
                                 }
-                                <div className='centered mb-5 mt-4'>
-                                    <CustomPagination
-                                        elementsCount={activeTitleContractsCount}
-                                        elementsPerPage={paginationLimits.activeTitleContractsLimit}
-                                        setNewOffset={(newOffset) => {setCurrentContractsOffset(newOffset);}}
-                                        getNewElements={async () => {
-                                        }}
-                                    />
-                                </div>
                             </>
                         :
                             <div className='text-center'>
                                 <h4>There are no active title contracts currently registered for that search input.</h4>
                             </div>
                 }
+                <div className='centered mb-5 mt-4'>
+                    <CustomPagination
+                        elementsCount={activeTitleContractsCount}
+                        elementsPerPage={paginationLimits.activeTitleContractsLimit}
+                        setNewOffset={(newOffset) => {setCurrentContractsOffset(newOffset);}}
+                        getNewElements={async () => {
+                        }}
+                    />
+                </div>
             </div>
         </div>
     );

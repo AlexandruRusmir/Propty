@@ -74,9 +74,9 @@ function DeployTitleContract(props) {
             inputsAreValid = false;
         }
 
-        if (country.length < 4) {
+        if (country.length < 3) {
             setCountryIsValid(false);
-            setCountryInvalidMessage(errorMessages.deployTitleMessages.lessThan4CharactersValue);
+            setCountryInvalidMessage(errorMessages.deployTitleMessages.lessThan3CharactersValue);
             inputsAreValid = false;
         }
         if (country.length > 32) {
@@ -108,7 +108,7 @@ function DeployTitleContract(props) {
 
         if (street.length < 4) {
             setStreetIsValid(false);
-            setStreetInvalidMessage(errorMessages.deployTitleMessages.lessThan4CharactersValue);
+            setStreetInvalidMessage(errorMessages.deployTitleMessages.lessThan3CharactersValue);
             inputsAreValid = false;
         }
         if (street.length > 32) {

@@ -57,7 +57,9 @@ function MyProperties(props) {
                                         }
                                     </>
                                 :
-                                    <h4>There currently are no active or pending contracts corresponding to this account</h4>
+                                    <div className='text-center'>
+                                        <h4>There currently are no active or pending contracts registered under this account.</h4>
+                                    </div>
                         }
                     </div>
                 :

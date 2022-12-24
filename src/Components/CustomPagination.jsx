@@ -4,12 +4,14 @@ import { useCustomPagination } from '../CustomHooks/useCustomPagination';
 
 function CustomPagination(props) {
     const customPaginationControl = useCustomPagination(props.elementsCount, props.elementsPerPage);
-    const [activePage, setActivePage] = useState(1);
+    const [activePage, setActivePage] = useState(props.startingPage ?? 1);
 
     const handlePageChange = async (event, page) => {
-        await props.setNewOffset((page-1) * props.elementsPerPage);
+        const pageNumber = Math.max(1, page);
+        const currentPage = Math.min(pageNumber, Number(props.elementsCount / props.elementsPerPage));
+        await props.setNewOffset((currentPage-1) * props.elementsPerPage);
         await props.getNewElements();
-        setActivePage(page);
+        setActivePage(currentPage);
     }
 
     return (
