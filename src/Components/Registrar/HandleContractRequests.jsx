@@ -75,22 +75,22 @@ function HandleContractRequests(props) {
                                 />
                             ))
                         }
-                        <div className='centered mb-5 mt-4'>
-                            <CustomPagination
-                                elementsCount={pendingTitleContractsCount}
-                                elementsPerPage={paginationLimits.pendingTitleContractsLimit}
-                                setNewOffset={(newOffset) => {setCurrentContractsOffset(newOffset);}}
-                                getNewElements={async () => {
-                                    const titleContracts = await getPendingTitleContractsByOffsetAndLimit();
-                                    setFilteredPendingTitleContracts(titleContracts);
-                                }}
-                            />
-                        </div>
                     </> :
                     <div className='centered'>
-                        <h4>There are no pending contracts to show right now.</h4>
+                        <h4>There are no pending contracts to show right now on this page.</h4>
                     </div>
                 }
+                <div className='centered mb-5 mt-4'>
+                    <CustomPagination
+                        elementsCount={pendingTitleContractsCount}
+                        elementsPerPage={paginationLimits.pendingTitleContractsLimit}
+                        setNewOffset={(newOffset) => {setCurrentContractsOffset(newOffset);}}
+                        getNewElements={async () => {
+                            const titleContracts = await getPendingTitleContractsByOffsetAndLimit();
+                            setFilteredPendingTitleContracts(titleContracts);
+                        }}
+                    />
+                </div>
             </div>
         </>
     );

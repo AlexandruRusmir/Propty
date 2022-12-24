@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import '../../styles/style.css';
+import '../../styles/contractRequestsStyle.css';
 import { useContract } from '../../CustomHooks/useContract';
 import { useWeb3 } from '../../CustomHooks/useWeb3';
 import { getTitleContractDetails } from '../../Helpers/contractDataProviders';
@@ -128,7 +129,7 @@ function ValidatePropertyModal(props) {
             <Modal
                 show = {props.show}
                 onHide = {props.onValidatePropertyHide}
-                size = 'xl'
+                size = 'md'
                 aria-labelledby='addRegistrarModal'
                 centered
             >
@@ -139,118 +140,118 @@ function ValidatePropertyModal(props) {
                 </Modal.Header>
                 <Modal.Body className='mx-3'>
                     <Row>
-                        <Col lg={6} md={12}>
+                        <Col xs={12}>
                             <FormControlLabel
                                 checked={proofOfIdentity}
-                                control={<Checkbox inputProps={{ 'aria-label': 'controlled' }}/>}
+                                control={<Checkbox color='success' inputProps={{ 'aria-label': 'controlled' }}/>}
                                 label="Proof of identity"
                                 onChange={(e) => {
                                     setProofOfIdentity(e.target.checked);
                                 }}
                             />
                         </Col>
-                        <Col lg={6} md={12}>
-                            <p>
+                        <Col xs={12}>
+                            <div className='document-text'>
                                 {
                                     propertyRequiredDocumentsState.proofOfIdentityState
-                                        ? 'bro'
-                                        : 'sis'
+                                        ? <p className='document-found'>This document's validity is confirmed</p>
+                                        : <p className='document-not-found'>This document's validity could not be confirmed</p>
                                 }
-                            </p>
+                            </div>
                         </Col>
                     </Row>
                 
                     <Row>
-                        <Col lg={6} md={12}>
+                        <Col xs={12}>
                             <FormControlLabel
                                 checked={propertyTitleDeeds}
-                                control={<Checkbox inputProps={{ 'aria-label': 'controlled' }}/>}
+                                control={<Checkbox color='success' inputProps={{ 'aria-label': 'controlled' }}/>}
                                 label="Property Title Deeds"
                                 onChange={(e) => {
                                     setPropertyTitleDeeds(e.target.checked);
                                 }}
                             />
                         </Col>
-                        <Col lg={6} md={12}>
-                            <p>
+                        <Col xs={12}>
+                            <div className='document-text'>
                                 {
                                     propertyRequiredDocumentsState.propertyTitleDeedsState
-                                        ? 'bro'
-                                        : 'sis'
+                                        ? <p className='document-found'>This document's validity is confirmed</p>
+                                        : <p className='document-not-found'>This document's validity could not be confirmed</p>
                                 }
-                            </p>
+                            </div>
                         </Col>
                     </Row>
 
                     <Row>
-                        <Col lg={6} md={12}>
+                        <Col xs={12}>
                             <FormControlLabel
                                 checked={energyPerformanceCertificate}
-                                control={<Checkbox inputProps={{ 'aria-label': 'controlled' }}/>}
+                                control={<Checkbox color='success' inputProps={{ 'aria-label': 'controlled' }}/>}
                                 label="Energy Performance Certificate"
                                 onChange={(e) => {
                                     setEnergyPerformanceCertificate(e.target.checked);
                                 }}
                             />
                         </Col>
-                        <Col lg={6} md={12}>
-                            <p>
+                        <Col xs={12}>
+                            <div className='document-text'>
                                 {
                                     propertyRequiredDocumentsState.energyPerformanceCertificateState
-                                        ? 'bro'
-                                        : 'sis'
+                                        ? <p className='document-found'>This document's validity is confirmed</p>
+                                        : <p className='document-not-found'>This document's validity could not be confirmed</p>
                                 }
-                            </p>
+                            </div>
                         </Col>
                     </Row>
 
                     <Row>
-                        <Col lg={6} md={12}>
+                        <Col xs={12}>
                             <FormControlLabel
                                 checked={extensionsAndAlterationsDocumentation}
-                                control={<Checkbox inputProps={{ 'aria-label': 'controlled' }}/>}
+                                control={<Checkbox color='success' inputProps={{ 'aria-label': 'controlled' }}/>}
                                 label="Extensions and alterations documentation"
                                 onChange={(e) => {
                                     setExtensionsAndAlterationsDocumentation(e.target.checked);
                                 }}
                             />
                         </Col>
-                        <Col lg={6} md={12}>
-                            <p>
+                        <Col xs={12}>
+                            <div className='document-text'>
                                 {
                                     propertyRequiredDocumentsState.extensionsAndAlterationsDocumentationState
-                                        ? 'bro'
-                                        : 'sis'
+                                        ? <p className='document-found'>This document's validity is confirmed</p>
+                                        : <p className='document-not-found'>This document's validity could not be confirmed</p>
                                 }
-                            </p>
+                            </div>
                         </Col>
                     </Row>
 
                     <Row>
-                        <Col lg={6} md={12}>
+                        <Col xs={12}>
                             <FormControlLabel
                                 checked={utilityBillsPaid}
-                                control={<Checkbox inputProps={{ 'aria-label': 'controlled' }}/>}
+                                control={<Checkbox color='success' inputProps={{ 'aria-label': 'controlled' }}/>}
                                 label="Utility bills paid"
                                 onChange={(e) => {
                                     setUtilityBillsPaid(e.target.checked);
                                 }}
                             />
                         </Col>
-                        <Col lg={6} md={12}>
-                            <p>
+                        <Col xs={12}>
+                            <div className='document-text'>
                                 {
                                     propertyRequiredDocumentsState.proofOfIdentityState
-                                        ? 'bro'
-                                        : 'sis'
+                                        ? <p className='document-found'>This document's validity is confirmed</p>
+                                        : <p className='document-not-found'>This document's validity could not be confirmed</p>
                                 }
-                            </p>
+                            </div>
                         </Col>
                     </Row>
                 </Modal.Body>
                 <Modal.Footer className='centered'>
                     <Row>
-                        <Col lg={6} xs={12} className='mt-2 mb-3 centered'>
+                        <Col xs={12} className='mt-2 mb-3 centered'>
                             {
                                 allLeastOneDocumentValidatyChanged
                                     ?   <Button className='submit-btn'
@@ -263,7 +264,7 @@ function ValidatePropertyModal(props) {
                                         </Button>
                             }
                         </Col>
-                        <Col lg={6} xs={12} className='mt-2 mb-3 centered'>
+                        <Col xs={12} className='mt-2 mb-3 centered'>
                             {
                                 allDocumentsAreValid 
                                     ?   <Button className='submit-btn'
@@ -278,7 +279,7 @@ function ValidatePropertyModal(props) {
                         </Col>
                         <Col xs={12}>
                             <div className='text-center'>
-                                <p className='small-text'>This operation will change the state of the title contract according to this input!</p>
+                                <p className='small-text'>This operation will change the state of the required documents inside the contract!</p>
                             </div>
                         </Col>
                     </Row>

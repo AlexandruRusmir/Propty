@@ -1,0 +1,13 @@
+.document-text {
+    margin-left: 2px;
+}
+
+.document-found {
+    color: #37a569;
+    opacity: .9;
+}
+
+.document-not-found {
+    color: 	#e9ba00;
+    opacity: .9;
+}
