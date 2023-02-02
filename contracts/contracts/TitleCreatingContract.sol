@@ -157,7 +157,7 @@ contract TitleCreatingContract {
         for (uint256 i = 0; i < titleContracts.length; i++) {
             if ((IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.OWNED ||
                 IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.FOR_SALE) &&
-                stringContains(IAccessPropertyTitleMethods(titleContracts[i]).getFullPropertyAddress(), addressToSearchFor)) {
+                stringContains(toLower(IAccessPropertyTitleMethods(titleContracts[i]).getFullPropertyAddress()), toLower(addressToSearchFor))) {
                 k++;
             } 
         }
@@ -197,7 +197,7 @@ contract TitleCreatingContract {
         address[] memory activeContracts = getActiveContracts();
         uint256 k = 0;
         for (uint256 i = 0; i < activeContracts.length; i++) {
-            if (stringContains(IAccessPropertyTitleMethods(activeContracts[i]).getFullPropertyAddress(), addressToSearchFor)) {
+            if (stringContains(toLower(IAccessPropertyTitleMethods(activeContracts[i]).getFullPropertyAddress()), toLower(addressToSearchFor))) {
                 contracts[k++] = activeContracts[i];
             }
         }
@@ -229,7 +229,7 @@ contract TitleCreatingContract {
         uint256 k = 0;
         for (uint256 i = 0; i < titleContracts.length; i++) {
             if (IAccessPropertyTitleMethods(titleContracts[i]).contractState() == PropertyTitleContractState.FOR_SALE &&
-                stringContains(IAccessPropertyTitleMethods(titleContracts[i]).getFullPropertyAddress(), addressToSearchFor)) {
+                stringContains(toLower(IAccessPropertyTitleMethods(titleContracts[i]).getFullPropertyAddress()), toLower(addressToSearchFor))) {
                 k++;
             }
         }
@@ -268,7 +268,7 @@ contract TitleCreatingContract {
         address[] memory activeContracts = getActiveContracts();
         uint256 k = 0;
         for (uint256 i = 0; i < activeContracts.length; i++) {
-            if (stringContains(IAccessPropertyTitleMethods(activeContracts[i]).getFullPropertyAddress(), addressToSearchFor)) {
+            if (stringContains(toLower(IAccessPropertyTitleMethods(activeContracts[i]).getFullPropertyAddress()), toLower(addressToSearchFor))) {
                 contracts[k++] = activeContracts[i];
             }
         }
@@ -343,6 +343,19 @@ contract TitleCreatingContract {
         }
         
         return found;
+    }
+
+    function toLower(string memory str) public pure returns (string memory) {
+        bytes memory bStr = bytes(str);
+        bytes memory bLower = new bytes(bStr.length);
+        for (uint i = 0; i < bStr.length; i++) {
+            if ((uint8(bStr[i]) >= 65) && (uint8(bStr[i]) <= 90)) {
+                bLower[i] = bytes1(uint8(bStr[i]) + 32);
+            } else {
+                bLower[i] = bStr[i];
+            }
+        }
+        return string(bLower);
     }
 
     modifier onlyRegistrar {
