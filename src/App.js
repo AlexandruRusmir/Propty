@@ -38,7 +38,6 @@ function App() {
 
 		const messageReceiveFunction = async (message) => {
 			await loadBalance();
-			console.log(message);
 		}
 
 		window.ethereum.on('accountsChanged', accountsChangeFunction);

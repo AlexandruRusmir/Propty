@@ -108,7 +108,7 @@ function PropertyCard(props) {
             >
                 <Card.Header className='text-center'>
                     {
-                        props.account.toLowerCase() == contractOwner ?
+                        contractOwner.includes(props.account.toLowerCase().slice(2)) ?
                             <>
                                 <p>
                                     <strong>You are the Owner of this Contract</strong>

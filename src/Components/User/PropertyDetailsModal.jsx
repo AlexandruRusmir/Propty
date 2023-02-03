@@ -55,6 +55,7 @@ function PropertyDetailsModal(props) {
             sellingPriceFractionalPartLength
         ).send({ from: props.account }).then(() => {
             props.changeSellingPrice(sellingPriceString);
+            props.onDetailsEditHide();
         }).catch((err) => {
             console.log(err.message);
         });
@@ -67,6 +68,7 @@ function PropertyDetailsModal(props) {
 
         contract.methods.modifyPropertyTenureType(housingTenure).send({ from: props.account }).then(() => {
             props.changeHousingTenure(housingTenure);
+            props.onDetailsEditHide();
         });
     }
 
@@ -77,6 +79,7 @@ function PropertyDetailsModal(props) {
 
         contract.methods.modifyPropertySquareMeters(squareMeters).send({ from: props.account }).then(() => {
             props.changeSquareMeters(squareMeters);
+            props.onDetailsEditHide();
         });
     }
 
@@ -101,6 +104,7 @@ function PropertyDetailsModal(props) {
             props.changeSellingPrice(sellingPriceString);
             props.changeHousingTenure(housingTenure);
             props.changeSquareMeters(squareMeters);
+            props.onDetailsEditHide();
         }).catch((err) => {
             console.log(err.message);
         });
@@ -109,7 +113,6 @@ function PropertyDetailsModal(props) {
     const applySellingPriceChange = () => {
         if (sellingPrice != props.sellingPrice) {
             updateContractSellingPrice(sellingPrice).then(() => {
-                props.onDetailsEditHide();
             }).catch( err => {
                 console.log(err);
             });
@@ -119,7 +122,6 @@ function PropertyDetailsModal(props) {
     const applyHousingTenureChange = () => {
         if (housingTenure != props.housingTenure) {
             updateContractHousingTenure(sellingPrice).then(() => {
-                props.onDetailsEditHide();
             }).catch( err => {
                 console.log(err);
             });
@@ -129,7 +131,6 @@ function PropertyDetailsModal(props) {
     const applySquareMetersChange = () => {
         if (squareMeters != props.squareMeters) {
             updateContractSquareMeters(squareMeters).then(() => {
-                props.onDetailsEditHide();
             }).catch( err => {
                 console.log(err);
             });
@@ -138,7 +139,6 @@ function PropertyDetailsModal(props) {
 
     const applyAllContractChanges = () => {
         updateContractPriceAndTenureAndMeters(sellingPrice).then(() => {
-            props.onDetailsEditHide();
         }).catch( err => {
             console.log(err);
         });
