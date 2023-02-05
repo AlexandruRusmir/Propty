@@ -6,15 +6,15 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useState } from 'react';
-import Web3 from 'web3';
-import { Form } from 'react-bootstrap';
 import { useWeb3 } from '../../CustomHooks/useWeb3';
 import { useContract } from '../../CustomHooks/useContract';
-import { MdOutlineSell } from "react-icons/md";
 import config from '../../Data/config';
 import { checkIfNumberIsValid, getSellingPriceComponentsFromString } from '../../Helpers/helpers';
 import { StyledTextField } from '../StyledTextField';
 import MenuItem from '@mui/material/MenuItem';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import errorMessages from '../../Data/errorMessages';
 
 
 function PropertyDetailsModal(props) {
@@ -33,19 +33,28 @@ function PropertyDetailsModal(props) {
     const [squareMetersInvalidMessage, setSquareMetersInvalidMessage] = useState('');
     const [sellingPriceInvalidMessage, setSellingPriceInvalidMessage] = useState('');
 
+    const [contractStateIsBeingChanged, setContractStateIsBeingChanged] = useState(false);
+    const [contractStateIsBeingChangedAlertOpen, setContractStateIsBeingChangedAlertOpen] = useState(false);
+
     const updateContractSellingPrice = async (sellingPriceString) => {
         if (sellingPriceString.length === 0) {
+            setSellingPriceInvalidMessage(errorMessages.deployTitleMessages.lessThan1CharacterValue);
             return;
         }
 
-        if (sellingPriceString.length > 17) {
+        if (sellingPriceString.length > 32) {
+            setSellingPriceInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
             return;
         }
 
         const splitArray = sellingPriceString.split('.');
         if (splitArray.length > 2) {
+            setSellingPriceInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
             return;
         }
+
+        setContractStateIsBeingChanged(true);
+        setContractStateIsBeingChangedAlertOpen(true);
 
         let {sellingPriceIntegralPart, sellingPriceFractionalPart, sellingPriceFractionalPartLength} = getSellingPriceComponentsFromString(sellingPriceString);
 
@@ -56,41 +65,92 @@ function PropertyDetailsModal(props) {
         ).send({ from: props.account }).then(() => {
             props.changeSellingPrice(sellingPriceString);
             props.onDetailsEditHide();
+            setContractStateIsBeingChanged(false);
+            setContractStateIsBeingChangedAlertOpen(false);
         }).catch((err) => {
             console.log(err.message);
+            setContractStateIsBeingChanged(false);
+            setContractStateIsBeingChangedAlertOpen(false);
         });
     }
 
     const updateContractHousingTenure = async () => {
-        if (housingTenure.length === 0) {
+        if (!(housingTenure <= config.housingTenure.LAND_TRUST && housingTenure >= config.housingTenure.OWNER_OCCUPANCY)) {
+            setHousingTenureInvalidMessage(errorMessages.deployTitleMessages.invalidHousingTenureValue);
             return;
         }
+
+        setContractStateIsBeingChanged(true);
+        setContractStateIsBeingChangedAlertOpen(true);
 
         contract.methods.modifyPropertyTenureType(housingTenure).send({ from: props.account }).then(() => {
             props.changeHousingTenure(housingTenure);
             props.onDetailsEditHide();
+            setContractStateIsBeingChanged(false);
+            setContractStateIsBeingChangedAlertOpen(false);
+        }).catch((err) => {
+            console.log(err.message);
+            setContractStateIsBeingChanged(false);
+            setContractStateIsBeingChangedAlertOpen(false);
         });
     }
 
     const updateContractSquareMeters = async () => {
         if (squareMeters.length === 0) {
+            setSquareMetersInvalidMessage(errorMessages.deployTitleMessages.lessThan1CharacterValue);
             return;
         }
+
+        if (squareMeters.length > 32) {
+            setSquareMetersInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
+            return;
+        }
+
+        setContractStateIsBeingChanged(true);
+        setContractStateIsBeingChangedAlertOpen(true);
 
         contract.methods.modifyPropertySquareMeters(squareMeters).send({ from: props.account }).then(() => {
             props.changeSquareMeters(squareMeters);
             props.onDetailsEditHide();
+            setContractStateIsBeingChanged(false);
+            setContractStateIsBeingChangedAlertOpen(false);
+        }).catch((err) => {
+            console.log(err.message);
+            setContractStateIsBeingChanged(false);
+            setContractStateIsBeingChangedAlertOpen(false);
         });
     }
 
     const updateContractPriceAndTenureAndMeters = async (sellingPriceString) => {
         if (sellingPriceString.length === 0) {
+            setSellingPriceInvalidMessage(errorMessages.deployTitleMessages.lessThan1CharacterValue);
+            return;
+        }
+        if (sellingPriceString.length > 32) {
+            setSellingPriceInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
+            return;
+        }
+        const splitArray = sellingPriceString.split('.');
+        if (splitArray.length > 2) {
+            setSellingPriceInvalidMessage(errorMessages.deployTitleMessages.illegalCharactersInput);
+            return;
+        }
+        if (!(housingTenure <= config.housingTenure.LAND_TRUST && housingTenure >= config.housingTenure.OWNER_OCCUPANCY)) {
+            setHousingTenureInvalidMessage(errorMessages.deployTitleMessages.invalidHousingTenureValue);
+            return;
+        }
+        if (squareMeters.length === 0) {
+            setSquareMetersInvalidMessage(errorMessages.deployTitleMessages.lessThan1CharacterValue);
             return;
         }
 
-        if (sellingPriceString.length > 17) {
+        if (squareMeters.length > 32) {
+            setSquareMetersInvalidMessage(errorMessages.deployTitleMessages.moreThan32CharactersValue);
             return;
         }
+
+        setContractStateIsBeingChanged(true);
+        setContractStateIsBeingChangedAlertOpen(true);
 
         let {sellingPriceIntegralPart, sellingPriceFractionalPart, sellingPriceFractionalPartLength} = getSellingPriceComponentsFromString(sellingPriceString);
 
@@ -105,8 +165,12 @@ function PropertyDetailsModal(props) {
             props.changeHousingTenure(housingTenure);
             props.changeSquareMeters(squareMeters);
             props.onDetailsEditHide();
+            setContractStateIsBeingChanged(false);
+            setContractStateIsBeingChangedAlertOpen(false);
         }).catch((err) => {
             console.log(err.message);
+            setContractStateIsBeingChanged(false);
+            setContractStateIsBeingChangedAlertOpen(false);
         });
     }
 
@@ -144,6 +208,15 @@ function PropertyDetailsModal(props) {
         });
     }
 
+    const handleContractIsBeingChangedAlertClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+      
+        setContractStateIsBeingChangedAlertOpen(false);
+    }
+
+
     return (
         <div>
             <Modal
@@ -168,6 +241,7 @@ function PropertyDetailsModal(props) {
                                     <Col lg={9} sm={7} xs={12}>
                                         <StyledTextField
                                             fullWidth
+                                            error={!sellingPriceIsValid}
                                             label="Selling Price (ETH)"
                                             value={sellingPrice} 
                                             onClick={() => {setSellingPriceIsValid(true);}}
@@ -185,7 +259,7 @@ function PropertyDetailsModal(props) {
                                     </Col>
                                     <Col>
                                         {
-                                            sellingPrice == props.sellingPrice ?
+                                            sellingPrice == props.sellingPrice || contractStateIsBeingChanged ?
                                                 <Button className='apply-change-btn disabled-btn'>
                                                     Apply Change
                                                 </Button> :
@@ -204,6 +278,7 @@ function PropertyDetailsModal(props) {
                                     <StyledTextField
                                         fullWidth
                                         select
+                                        error={!housingTenureIsValid}
                                         label="Housing Tenure"
                                         value={housingTenure}
                                         onClick={() => {setHousingTenureIsValid(true);}}
@@ -224,7 +299,7 @@ function PropertyDetailsModal(props) {
                                     </Col>
                                     <Col>
                                         {
-                                            housingTenure == props.housingTenure ?
+                                            housingTenure == props.housingTenure || contractStateIsBeingChanged ?
                                                 <Button className='apply-change-btn disabled-btn'>
                                                     Request Change
                                                 </Button> :
@@ -241,6 +316,7 @@ function PropertyDetailsModal(props) {
                                     <Col lg={9} sm={7} xs={12}>
                                         <StyledTextField
                                             fullWidth
+                                            error={!squareMetresIsValid}
                                             label="Square Metres"
                                             value={squareMeters} 
                                             onClick={() => {setSquareMetresIsValid(true);}}
@@ -258,13 +334,13 @@ function PropertyDetailsModal(props) {
                                     </Col>
                                     <Col>
                                         {
-                                            squareMeters == props.squareMeters ?
-                                            <Button className='apply-change-btn disabled-btn'>
-                                                Request Change
-                                            </Button> :
-                                            <Button className='apply-change-btn' onClick={() => {applySquareMetersChange();}}>
-                                                Request Change
-                                            </Button>
+                                            squareMeters == props.squareMeters || contractStateIsBeingChanged ?
+                                                <Button className='apply-change-btn disabled-btn'>
+                                                    Request Change
+                                                </Button> :
+                                                <Button className='apply-change-btn' onClick={() => {applySquareMetersChange();}}>
+                                                    Request Change
+                                                </Button>
                                         }
                                     </Col>
                                 </Row>
@@ -276,13 +352,13 @@ function PropertyDetailsModal(props) {
                     <Row>
                         <Col xs={12}>
                             {
-                                squareMeters == props.squareMeters && sellingPrice == props.sellingPrice && housingTenure == props.housingTenure ?
-                                <Button className='submit-btn disabled-btn'>
-                                    Save Contract Changes
-                                </Button> :
-                                <Button className='submit-btn' onClick={() => {applyAllContractChanges();}}>
-                                    Save Contract Changes
-                                </Button>
+                                (squareMeters == props.squareMeters && sellingPrice == props.sellingPrice && housingTenure == props.housingTenure) || contractStateIsBeingChanged ?
+                                    <Button className='submit-btn disabled-btn'>
+                                        Save Contract Changes
+                                    </Button> :
+                                    <Button className='submit-btn' onClick={() => {applyAllContractChanges();}}>
+                                        Save Contract Changes
+                                    </Button>
                             }
                             
                         </Col>
@@ -292,6 +368,18 @@ function PropertyDetailsModal(props) {
                     </Row>
                 </Modal.Footer>
             </Modal>
+            <Snackbar open={contractStateIsBeingChangedAlertOpen} autoHideDuration={6000} onClose={handleContractIsBeingChangedAlertClose}>
+                <MuiAlert
+                    variant="filled"
+                    onClose={handleContractIsBeingChangedAlertClose}
+                    severity="info"
+                    sx={{ width: "636px" }}
+                >
+                    <div className='centered'>
+                        Please confirm the transaction and wait for the state of your contract to be changed.
+                    </div>
+                </MuiAlert>
+            </Snackbar>
         </div>
     )
 }

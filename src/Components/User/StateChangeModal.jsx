@@ -9,38 +9,68 @@ import { useState } from 'react';
 import { getCorrespondingContractStateMessage } from '../../Helpers/helpers';
 import { useContract } from '../../CustomHooks/useContract';
 import config from '../../Data/config';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 function StateChangeModal(props) {
     const desiredNewState = props.desiredNewState;
     const contractAddress = props.contractAddress;
     const contract = useContract(contractAddress).current;
 
+    const [contractStateIsBeingChanged, setContractStateIsBeingChanged] = useState(false);
+    const [contractStateIsBeingChangedAlertOpen, setContractStateIsBeingChangedAlertOpen] = useState(false);
+
     const setPropertyForSale = async () => {
-        console.log(contractAddress);
+        setContractStateIsBeingChanged(true);
+        setContractStateIsBeingChangedAlertOpen(true);
         contract.methods.modifyContractState(config.contractState.FOR_SALE).send({ from: props.account }).then(() => {
             props.changeContractState(config.contractState.FOR_SALE);
             props.onStateChangeHide();
+            setContractStateIsBeingChanged(false);
+            setContractStateIsBeingChangedAlertOpen(false);
         }).catch((err) => {
             console.log(err.message);
+            setContractStateIsBeingChanged(false);
+            setContractStateIsBeingChangedAlertOpen(false);
         });
     }
 
     const removePropertyForSaleListing = async () => {
+        setContractStateIsBeingChanged(true);
+        setContractStateIsBeingChangedAlertOpen(true);
         contract.methods.modifyContractState(config.contractState.OWNED).send({ from: props.account }).then(() => {
             props.changeContractState(config.contractState.OWNED);
             props.onStateChangeHide();
+            setContractStateIsBeingChanged(false);
+            setContractStateIsBeingChangedAlertOpen(false);
         }).catch((err) => {
             console.log(err.message);
+            setContractStateIsBeingChanged(false);
+            setContractStateIsBeingChangedAlertOpen(false);
         });
     }
 
     const permanentlyDisableContract = async () => {
+        setContractStateIsBeingChanged(true);
+        setContractStateIsBeingChangedAlertOpen(true);
         contract.methods.modifyContractState(config.contractState.NO_LONGER_RELEVANT).send({ from: props.account }).then(() => {
             props.changeContractState(config.contractState.NO_LONGER_RELEVANT);
             props.onStateChangeHide();
+            setContractStateIsBeingChanged(false);
+            setContractStateIsBeingChangedAlertOpen(false);
         }).catch((err) => {
             console.log(err.message);
+            setContractStateIsBeingChanged(false);
+            setContractStateIsBeingChangedAlertOpen(false);
         });
+    }
+
+    const handleContractIsBeingChangedAlertClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+      
+        setContractStateIsBeingChangedAlertOpen(false);
     }
 
     return (
@@ -93,21 +123,57 @@ function StateChangeModal(props) {
                         <Col xs={12}>
                             {
                                 desiredNewState == config.contractState.FOR_SALE ?
-                                <Button className='submit-btn' onClick={async () => {await setPropertyForSale();}}>
-                                    List For Sale
-                                </Button> :
+                                <>
+                                    {
+                                        !contractStateIsBeingChanged ?
+                                        <Button className='submit-btn' onClick={async () => {await setPropertyForSale();}}>
+                                            List For Sale
+                                        </Button> :
+                                        <Button className='submit-btn disabled-btn'>
+                                            List For Sale
+                                        </Button>
+                                    }
+                                </> :
                                 desiredNewState == config.contractState.NO_LONGER_RELEVANT ?
-                                <Button className='submit-btn' onClick={async () => {await permanentlyDisableContract();}}>
-                                    Disable Contract
-                                </Button> :
-                                <Button className='submit-btn' onClick={async () => {await removePropertyForSaleListing();}}>
-                                    Remove Listing
-                                </Button>
+                                <>
+                                    {
+                                        !contractStateIsBeingChanged ?
+                                        <Button className='submit-btn' onClick={async () => {await permanentlyDisableContract();}}>
+                                            Disable Contract
+                                        </Button> :
+                                        <Button className='submit-btn disabled-btn'>
+                                            Disable Contract
+                                        </Button>
+                                    }
+                                </> :
+                                <>
+                                    {
+                                        !contractStateIsBeingChanged ?
+                                        <Button className='submit-btn' onClick={async () => {await removePropertyForSaleListing();}}>
+                                            Remove Listing
+                                        </Button> :
+                                        <Button className='submit-btn disabled-btn'>
+                                            Remove Listing
+                                        </Button>
+                                    }
+                                </>
                             }
                         </Col>
                     </Row>
                 </Modal.Footer>
             </Modal>
+            <Snackbar open={contractStateIsBeingChangedAlertOpen} autoHideDuration={5000} onClose={handleContractIsBeingChangedAlertClose}>
+                <MuiAlert
+                    variant="filled"
+                    onClose={handleContractIsBeingChangedAlertClose}
+                    severity="info"
+                    sx={{ width: "636px" }}
+                >
+                    <div className='centered'>
+                        Please confirm the transaction and wait for the state of your contract to be changed.
+                    </div>
+                </MuiAlert>
+            </Snackbar>
         </div>
     )
 }

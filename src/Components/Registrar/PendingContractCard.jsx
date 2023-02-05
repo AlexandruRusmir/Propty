@@ -106,7 +106,7 @@ function PendingContractCard(props) {
                     </Row>
                     <Row className='centered'>
                         {
-                            props.account !== contractOwner ? 
+                            !contractOwner.includes(props.account.toLowerCase().slice(2)) ? 
                             <div className='centered mt-2'>
                                 <Button className='buy-contract-btn'  onClick={() =>  {setValidatePropertyOpen(true);}}>Validate Property</Button>
                                 <ValidatePropertyModal

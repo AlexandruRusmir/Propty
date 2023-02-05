@@ -12,6 +12,8 @@ import { checkIfNumberIsValid, getSellingPriceComponentsFromString } from '../..
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import { StyledTextField } from '../StyledTextField';
 import MenuItem from '@mui/material/MenuItem';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 function DeployTitleContract(props) {
     const titlesContract = useTitlesContract().current;
@@ -44,6 +46,9 @@ function DeployTitleContract(props) {
     const [apartmentNumberInvalidMessage, setApartmentNumberInvalidMessage] = useState('');
     const [squareMetersInvalidMessage, setSquareMetersInvalidMessage] = useState('');
     const [sellingPriceInvalidMessage, setSellingPriceInvalidMessage] = useState('');
+
+    const [contractBeingDeployed, setContractBeingDeployed] = useState(false);
+    const [contractBeingDeployedAlertOpen, setContractBeingDeployedAlertOpen] = useState(false);
 
     const checkIfInputsAreCompleted = () => {
         if (!housingTenure || !country || !city || !street || !streetNumber || !sellingPrice || !squareMeters || !apartmentNumber) {
@@ -195,6 +200,8 @@ function DeployTitleContract(props) {
             return;
         }
 
+        setContractBeingDeployed(true);
+        setContractBeingDeployedAlertOpen(true);
         let {sellingPriceIntegralPart, sellingPriceFractionalPart, sellingPriceFractionalPartLength} = getSellingPriceComponentsFromString(sellingPrice);
 
         const apartmentNumberToDeploy = apartmentNumber === '-' ? 0 : apartmentNumber;
@@ -214,11 +221,20 @@ function DeployTitleContract(props) {
             props.onAddNewContractHide();
             props.setDeployConfirmAlertOpen(true);
             props.loadMyProperties();
+            setContractBeingDeployed(false);
         }).catch((err) => {
+            setContractBeingDeployed(false);
             console.log(err.message);
             props.onAddNewContractHide();
-            props.setFailConfirmAlertOpen(true);
         });
+    }
+
+    const handleContractBeingDeployedAlertClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+      
+        setContractBeingDeployedAlertOpen(false);
     }
 
     return (
@@ -276,7 +292,8 @@ function DeployTitleContract(props) {
                     </Row>
                     <Row className='mx-2'>
                         <Col lg={6} md={12} className='mb-3'>
-                            <StyledTextField 
+                            <StyledTextField
+                                // autoComplete='new-password'
                                 error={!cityIsValid}
                                 fullWidth
                                 value={city} 
@@ -399,7 +416,7 @@ function DeployTitleContract(props) {
                 <Row>
                     <Col xs={12} className='mb-2'>
                     {
-                        valuesAreCompleted ?
+                        (valuesAreCompleted && !contractBeingDeployed) ?
                             <Button className='submit-btn' onClick={deployTitleContract}>
                                 Deploy Contract Request
                             </Button> :
@@ -413,6 +430,18 @@ function DeployTitleContract(props) {
                     </Col>
                 </Row>
             </Modal.Footer>
+            <Snackbar open={contractBeingDeployedAlertOpen} autoHideDuration={4000} onClose={handleContractBeingDeployedAlertClose}>
+                <MuiAlert
+                    variant="filled"
+                    onClose={handleContractBeingDeployedAlertClose}
+                    severity="info"
+                    sx={{ width: "700x" }}
+                >
+                    <div className='centered'>
+                        Please confirm the transaction and wait for your contract to be deployed.
+                    </div>
+                </MuiAlert>
+            </Snackbar>
         </Modal>
     )
 }
