@@ -9,6 +9,8 @@ import { useState, useEffect } from 'react';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import Web3 from 'web3';
 import { StyledTextField } from '../StyledTextField';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 function AddRegistrarModal(props) {
     const titlesContract = useTitlesContract().current;
@@ -17,7 +19,9 @@ function AddRegistrarModal(props) {
     const [errorMessage, setErrorMessage] = useState('');
     const [addressIsValid, setAddressIsValid] = useState(false);
 
-    
+    const [registrarAddProcessing, setRegistrarAddProcessing] = useState(false);
+    const [registrarIsBeingAddedAlertOpen, setRegistrarIsBeingAddedAlertOpen] = useState(false);
+
     useEffect(() => {
         validateNewRegistrarAddress();
     }, [newRegistrarAddress]);
@@ -71,14 +75,26 @@ function AddRegistrarModal(props) {
     }
 
     const addRegistrar = async () => {
+        setRegistrarAddProcessing(true);
+        setRegistrarIsBeingAddedAlertOpen(true);
         titlesContract.methods.addRegistrars([newRegistrarAddress]).send({ from: props.account }).then(() => {
             props.addNewRegistrar(newRegistrarAddress);
             props.onAddRegistrarHide();
             props.setAddedNewRegistrarAlertOpen(true);
+            setRegistrarAddProcessing(false);
         }).catch((err) => {
             props.onAddRegistrarHide();
+            setRegistrarAddProcessing(false);
             console.log(err.message);
         });
+    }
+
+    const handleRegistrarIsBeingAddedAlertClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+      
+        setRegistrarIsBeingAddedAlertOpen(false);
     }
 
     return (
@@ -113,7 +129,7 @@ function AddRegistrarModal(props) {
                     <Row>
                         <Col xs={12}>
                             {
-                                addressIsValid ?
+                                (addressIsValid && !registrarAddProcessing) ?
                                     <Button className='submit-btn' onClick={async () => {await requestRegistrarAdd();}}>
                                         Add as Registrar
                                     </Button> :
@@ -129,6 +145,18 @@ function AddRegistrarModal(props) {
                     </Row>
                 </Modal.Footer>
             </Modal>
+            <Snackbar open={registrarIsBeingAddedAlertOpen} autoHideDuration={4000} onClose={handleRegistrarIsBeingAddedAlertClose}>
+                <MuiAlert
+                    variant="filled"
+                    onClose={handleRegistrarIsBeingAddedAlertClose}
+                    severity="info"
+                    sx={{ width: "420px" }}
+                >
+                    <div className='centered'>
+                        Please confirm the transaction and wait patiently.
+                    </div>
+                </MuiAlert>
+            </Snackbar>
         </div>
     )
 }

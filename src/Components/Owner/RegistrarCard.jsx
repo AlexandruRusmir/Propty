@@ -11,11 +11,16 @@ import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 function RegistrarCard(props) {
     const titlesContract = useTitlesContract().current;
 
     const [isRegistrar, setIsRegistrar] = useState(props.isRegistrar);
+
+    const [registrarStateIsChanging, setRegistrarStateIsChanging] = useState(false);
+    const [registrarStateChangingAlertOpen, setRegistrarStateChangingAlertOpen] = useState(false);
 
     const removeRegistrarRole = async (address) => {
         return titlesContract.methods.removeRegistrarRole([address]).send({ from: props.account });
@@ -24,6 +29,15 @@ function RegistrarCard(props) {
     const addRegistrarRole = async (address) => {
         return titlesContract.methods.reactivateRegistrarRole([address]).send({ from: props.account });
     }
+
+    const handleRegistrarStateChangeAlertClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+      
+        setRegistrarStateChangingAlertOpen(false);
+    }
+
 
     return (
         <Card className='registrar-card mb-4'>
@@ -41,34 +55,70 @@ function RegistrarCard(props) {
                     <Col lg={3} md={12} className='centered'>
                         {
                             isRegistrar ?
-                            <Button className='remove-registrar-btn'
-                                onClick={() => {
-                                    removeRegistrarRole(props.address).then(async () => {
-                                        setIsRegistrar(false);
-                                        await props.loadCentralContractRegistrars();
-                                    }).catch(err => {
-                                        console.log(err);
-                                    })
-                                }}
-                            >
-                                Remove <img src={PersonRemove} /> 
-                            </Button> :
-                            <Button className='add-registrar-btn'
-                                onClick={() => {
-                                    addRegistrarRole(props.address).then(async () => {
-                                        setIsRegistrar(true);
-                                        await props.loadCentralContractRegistrars();
-                                    }).catch( err => {
-                                        console.log(err);
-                                    })
-                                }}
-                            >
-                                Add <img src={PersonAdd} /> 
-                            </Button>
+                            <>
+                            { 
+                                !registrarStateIsChanging ?
+                                    <Button className='remove-registrar-btn'
+                                        onClick={() => {
+                                            setRegistrarStateIsChanging(true);
+                                            setRegistrarStateChangingAlertOpen(true);
+                                            removeRegistrarRole(props.address).then(async () => {
+                                                setRegistrarStateIsChanging(false);
+                                                setIsRegistrar(false);
+                                                await props.loadCentralContractRegistrars();
+                                            }).catch(err => {
+                                                setRegistrarStateIsChanging(false);
+                                                console.log(err);
+                                            })
+                                        }}
+                                    >
+                                        Remove <img src={PersonRemove} /> 
+                                    </Button> :
+                                    <Button className='remove-registrar-btn disabled-btn'>
+                                        Remove <img src={PersonRemove} /> 
+                                    </Button>
+                            }
+                            </> :
+                            <>
+                            {
+                                !registrarStateIsChanging ?
+                                    <Button className='add-registrar-btn'
+                                        onClick={() => {
+                                            setRegistrarStateIsChanging(true);
+                                            setRegistrarStateChangingAlertOpen(true);
+                                            addRegistrarRole(props.address).then(async () => {
+                                                setRegistrarStateIsChanging(false);
+                                                setIsRegistrar(true);
+                                                await props.loadCentralContractRegistrars();
+                                            }).catch( err => {
+                                                setRegistrarStateIsChanging(false);
+                                                console.log(err);
+                                            })
+                                        }}
+                                    >
+                                        Add <img src={PersonAdd} /> 
+                                    </Button> :
+                                    <Button className='add-registrar-btn disabled-btn'>
+                                        Add <img src={PersonAdd} /> 
+                                    </Button>
+                            }
+                            </>
                         }
                     </Col>
                 </Row>
             </Card.Header>
+            <Snackbar open={registrarStateChangingAlertOpen} autoHideDuration={4000} onClose={handleRegistrarStateChangeAlertClose}>
+                <MuiAlert
+                    variant="filled"
+                    onClose={handleRegistrarStateChangeAlertClose}
+                    severity="info"
+                    sx={{ width: "640x" }}
+                >
+                    <div className='centered'>
+                        Please confirm the transaction and wait for the account's registrar role to be updated.
+                    </div>
+                </MuiAlert>
+            </Snackbar>
         </Card>
     );
 }
