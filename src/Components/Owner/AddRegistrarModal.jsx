@@ -145,7 +145,7 @@ function AddRegistrarModal(props) {
                     </Row>
                 </Modal.Footer>
             </Modal>
-            <Snackbar open={registrarIsBeingAddedAlertOpen} autoHideDuration={4000} onClose={handleRegistrarIsBeingAddedAlertClose}>
+            <Snackbar open={registrarIsBeingAddedAlertOpen} autoHideDuration={6000} onClose={handleRegistrarIsBeingAddedAlertClose}>
                 <MuiAlert
                     variant="filled"
                     onClose={handleRegistrarIsBeingAddedAlertClose}

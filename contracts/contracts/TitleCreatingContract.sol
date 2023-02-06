@@ -263,13 +263,13 @@ contract TitleCreatingContract {
     }
 
     function getForSaleContractsByAddress(string memory addressToSearchFor) public view returns (address[] memory) {
-        address[] memory contracts = new address[](getActiveContractsByAddressCount(addressToSearchFor));
+        address[] memory contracts = new address[](getForSaleContractsByAddressCount(addressToSearchFor));
 
-        address[] memory activeContracts = getActiveContracts();
+        address[] memory forSaleContracts = getForSaleContracts();
         uint256 k = 0;
-        for (uint256 i = 0; i < activeContracts.length; i++) {
-            if (stringContains(toLower(IAccessPropertyTitleMethods(activeContracts[i]).getFullPropertyAddress()), toLower(addressToSearchFor))) {
-                contracts[k++] = activeContracts[i];
+        for (uint256 i = 0; i < forSaleContracts.length; i++) {
+            if (stringContains(toLower(IAccessPropertyTitleMethods(forSaleContracts[i]).getFullPropertyAddress()), toLower(addressToSearchFor))) {
+                contracts[k++] = forSaleContracts[i];
             }
         }
 

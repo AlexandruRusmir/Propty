@@ -6,7 +6,6 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useState } from 'react';
-import { getCorrespondingContractStateMessage } from '../../Helpers/helpers';
 import { useContract } from '../../CustomHooks/useContract';
 import config from '../../Data/config';
 import Snackbar from "@mui/material/Snackbar";
@@ -28,6 +27,7 @@ function StateChangeModal(props) {
             props.onStateChangeHide();
             setContractStateIsBeingChanged(false);
             setContractStateIsBeingChangedAlertOpen(false);
+            props.openContractHasBeenChangedAlert();
         }).catch((err) => {
             console.log(err.message);
             setContractStateIsBeingChanged(false);
@@ -43,6 +43,7 @@ function StateChangeModal(props) {
             props.onStateChangeHide();
             setContractStateIsBeingChanged(false);
             setContractStateIsBeingChangedAlertOpen(false);
+            props.openContractHasBeenChangedAlert();
         }).catch((err) => {
             console.log(err.message);
             setContractStateIsBeingChanged(false);
@@ -58,6 +59,7 @@ function StateChangeModal(props) {
             props.onStateChangeHide();
             setContractStateIsBeingChanged(false);
             setContractStateIsBeingChangedAlertOpen(false);
+            props.openContractHasBeenChangedAlert();
         }).catch((err) => {
             console.log(err.message);
             setContractStateIsBeingChanged(false);

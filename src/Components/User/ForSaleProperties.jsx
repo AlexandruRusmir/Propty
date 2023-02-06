@@ -4,7 +4,7 @@ import '../../styles/style.css';
 import '../../styles/allPropertiesStyle.css';
 import { StyledTextField } from '../StyledTextField';
 import paginationLimits from '../../Data/paginationLimits';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import CustomPagination from '../CustomPagination';
 import { Link } from 'react-router-dom';

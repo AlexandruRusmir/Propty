@@ -14,6 +14,8 @@ import { FaEthereum } from 'react-icons/fa';
 import { MdOutlineSell, MdOutlineEditLocationAlt, MdRemoveDone } from 'react-icons/md';
 import { CgPlayListRemove } from 'react-icons/cg'
 import config from '../../Data/config';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 function PropertyCard(props) {
     const web3 = useWeb3().current;
@@ -41,6 +43,8 @@ function PropertyCard(props) {
 
     const [contractEditOpen, setContractEditOpen] = useState(false);
     const [stateChangeOpen, setStateChangeOpen] = useState(false);
+
+    const [contractHasBeenChangedAlertOpen, setContractHasBeenChangedAlertOpen] = useState(false);
 
     useEffect(() => {
         loadContract();
@@ -88,14 +92,25 @@ function PropertyCard(props) {
             'value': Number(sellingPrice).toString(16),
         }];
 
-        const result = await window.ethereum.request({method: 'eth_sendTransaction', params}).then( () => {
+        const result = await window.ethereum.request({method: 'eth_sendTransaction', params}).then((txHash) => {
             setContractOwner(props.account);
             setContractState(config.contractState.OWNED);
         }).catch( err => {
             console.log(err);
         });
 
-        console.log(result);
+    }
+
+    const handleContractHasBeenChangedAlertClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+      
+        setContractHasBeenChangedAlertOpen(false);
+    }
+
+    const openContractHasBeenChangedAlert = () => {
+        setContractHasBeenChangedAlertOpen(true);
     }
 
     return (
@@ -131,7 +146,6 @@ function PropertyCard(props) {
                                                         {
                                                             housingTenure == config.housingTenure.OWNER_OCCUPANCY || housingTenure == config.housingTenure.CONDOMIUM ?
                                                             <Button className='list-for-sale-btn' onClick={() => {
-                                                                console.log(contractAddress);
                                                                 setDesiredNewState(config.contractState.FOR_SALE);
                                                                 setStateChangeOpen(true);
                                                             }}>
@@ -163,6 +177,8 @@ function PropertyCard(props) {
                                                     onStateChangeHide={() => setStateChangeOpen(false)}
                                                     desiredNewState = {desiredNewState}
 
+                                                    openContractHasBeenChangedAlert={openContractHasBeenChangedAlert}
+
                                                     account = {props.account}
                                                     contractAddress = {contractAddress}
                                                     country = {country}
@@ -177,6 +193,7 @@ function PropertyCard(props) {
                                                 <PropertyDetailsModal
                                                     show={contractEditOpen}
                                                     onDetailsEditHide={() => setContractEditOpen(false)}
+                                                    openContractHasBeenChangedAlert={openContractHasBeenChangedAlert}
 
                                                     account = {props.account}
                                                     contractAddress = {contractAddress}
@@ -266,6 +283,18 @@ function PropertyCard(props) {
                     </div>
                 </Card.Body>
             </Card>
+            <Snackbar open={contractHasBeenChangedAlertOpen} autoHideDuration={3000} onClose={handleContractHasBeenChangedAlertClose}>
+                <MuiAlert
+                    variant="filled"
+                    onClose={handleContractHasBeenChangedAlertClose}
+                    severity="success"
+                    sx={{ width: "404px" }}
+                >
+                    <div className='centered'>
+                        The changes have been made to your contract!
+                    </div>
+                </MuiAlert>
+            </Snackbar>
         </div>
 	);
 }

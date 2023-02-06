@@ -10,6 +10,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { contractState, documentsProvidedMessage, documentsNotProvidedMessage } from '../../Data/config';
 import { getNumberOfTrailingCharacters } from '../../Helpers/helpers';
 import { loadPropertyRequiredDocumentsState } from '../../Helpers/externalDataProviders';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 function ValidatePropertyModal(props) {
     const web3 = useWeb3().current;
@@ -31,6 +33,9 @@ function ValidatePropertyModal(props) {
     const [allLeastOneDocumentValidatyChanged, setAllLeastOneDocumentValidatyChanged] = useState(false);
 
     const [propertyRequiredDocumentsState, setPropertyRequiredDocumentsState] = useState({});
+
+    const [contractStateBeingChanged, setContractStateBeingChanged] = useState(false);
+    const [contractStateBeingChangedAlertOpen, setContractStateBeingChangedAlertOpen] = useState(false);
 
     useEffect(() => {
         loadContract();
@@ -104,6 +109,8 @@ function ValidatePropertyModal(props) {
 
     const applyDocumentsStateChanges = async (activateContract = false) => {
         const newContractState = activateContract ? contractState.OWNED : contractState.PENDING
+        setContractStateBeingChanged(true);
+        setContractStateBeingChangedAlertOpen(true);
         contract.methods.setRequiredDocumentsStateAndContractState(
             proofOfIdentity ? documentsProvidedMessage : documentsNotProvidedMessage,
             propertyTitleDeeds ? documentsProvidedMessage : documentsNotProvidedMessage,
@@ -119,9 +126,21 @@ function ValidatePropertyModal(props) {
             setInitialUtilityBillsPaid(utilityBillsPaid);
             props.onValidatePropertyHide();
             props.loadNewContractsIfContractIsValidated(newContractState);
+            setContractStateBeingChanged(false);
+            setContractStateBeingChangedAlertOpen(false);
         }).catch((err) => {
             console.log(err.message);
+            setContractStateBeingChanged(false);
+            setContractStateBeingChangedAlertOpen(false);
         });
+    }
+
+    const handleContractStateBeingChangedAlertClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+      
+        setContractStateBeingChangedAlertOpen(false);
     }
 
     return (
@@ -253,7 +272,7 @@ function ValidatePropertyModal(props) {
                     <Row>
                         <Col xs={12} className='mt-2 mb-3 centered'>
                             {
-                                allLeastOneDocumentValidatyChanged
+                                allLeastOneDocumentValidatyChanged && !contractStateBeingChanged
                                     ?   <Button className='submit-btn'
                                             onClick={() => {applyDocumentsStateChanges(false);}}
                                         >
@@ -266,7 +285,7 @@ function ValidatePropertyModal(props) {
                         </Col>
                         <Col xs={12} className='mt-2 mb-3 centered'>
                             {
-                                allDocumentsAreValid 
+                                allDocumentsAreValid && !contractStateBeingChanged
                                     ?   <Button className='submit-btn'
                                             onClick={() => {applyDocumentsStateChanges(true);}}
                                         >
@@ -285,6 +304,18 @@ function ValidatePropertyModal(props) {
                     </Row>
                 </Modal.Footer>
             </Modal>
+            <Snackbar open={contractStateBeingChangedAlertOpen} autoHideDuration={6000} onClose={handleContractStateBeingChangedAlertClose}>
+                <MuiAlert
+                    variant="filled"
+                    onClose={handleContractStateBeingChangedAlertClose}
+                    severity="info"
+                    sx={{ width: "590px" }}
+                >
+                    <div className='centered'>
+                        Please confirm the transaction and wait for the contract state to be updated.
+                    </div>
+                </MuiAlert>
+            </Snackbar>
         </div>
     );
 }

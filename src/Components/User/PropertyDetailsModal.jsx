@@ -6,7 +6,6 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useState } from 'react';
-import { useWeb3 } from '../../CustomHooks/useWeb3';
 import { useContract } from '../../CustomHooks/useContract';
 import config from '../../Data/config';
 import { checkIfNumberIsValid, getSellingPriceComponentsFromString } from '../../Helpers/helpers';
@@ -16,9 +15,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
 import errorMessages from '../../Data/errorMessages';
 
-
 function PropertyDetailsModal(props) {
-    const web3 = useWeb3().current;
     const contract = useContract(props.contractAddress).current;
 
     const [sellingPrice, setSellingPrice] = useState(props.sellingPrice.toString());
@@ -67,6 +64,7 @@ function PropertyDetailsModal(props) {
             props.onDetailsEditHide();
             setContractStateIsBeingChanged(false);
             setContractStateIsBeingChangedAlertOpen(false);
+            props.openContractHasBeenChangedAlert();
         }).catch((err) => {
             console.log(err.message);
             setContractStateIsBeingChanged(false);
@@ -88,6 +86,7 @@ function PropertyDetailsModal(props) {
             props.onDetailsEditHide();
             setContractStateIsBeingChanged(false);
             setContractStateIsBeingChangedAlertOpen(false);
+            props.openContractHasBeenChangedAlert();
         }).catch((err) => {
             console.log(err.message);
             setContractStateIsBeingChanged(false);
@@ -114,6 +113,7 @@ function PropertyDetailsModal(props) {
             props.onDetailsEditHide();
             setContractStateIsBeingChanged(false);
             setContractStateIsBeingChangedAlertOpen(false);
+            props.openContractHasBeenChangedAlert();
         }).catch((err) => {
             console.log(err.message);
             setContractStateIsBeingChanged(false);
@@ -167,6 +167,7 @@ function PropertyDetailsModal(props) {
             props.onDetailsEditHide();
             setContractStateIsBeingChanged(false);
             setContractStateIsBeingChangedAlertOpen(false);
+            props.openContractHasBeenChangedAlert();
         }).catch((err) => {
             console.log(err.message);
             setContractStateIsBeingChanged(false);

@@ -430,7 +430,7 @@ function DeployTitleContract(props) {
                     </Col>
                 </Row>
             </Modal.Footer>
-            <Snackbar open={contractBeingDeployedAlertOpen} autoHideDuration={4000} onClose={handleContractBeingDeployedAlertClose}>
+            <Snackbar open={contractBeingDeployedAlertOpen} autoHideDuration={6000} onClose={handleContractBeingDeployedAlertClose}>
                 <MuiAlert
                     variant="filled"
                     onClose={handleContractBeingDeployedAlertClose}
