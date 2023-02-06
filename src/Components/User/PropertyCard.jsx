@@ -46,6 +46,11 @@ function PropertyCard(props) {
 
     const [contractHasBeenChangedAlertOpen, setContractHasBeenChangedAlertOpen] = useState(false);
 
+    const [contractIsBeingBought, setContractIsBeingBought] = useState(false);
+    const [contractIsBeingBoughtAlertOpen, setContractIsBeingBoughtAlertOpen] = useState(false);
+    const [contractHasBeenBoughtAlertOpen, setContractHasBeenBoughtAlertOpen] = useState(false);
+
+
     useEffect(() => {
         loadContract();
     }, []);
@@ -84,6 +89,9 @@ function PropertyCard(props) {
     const buyProperty = async () => {
         const sellingPrice = await getPropertySellingPrice();
 
+        setContractIsBeingBought(true);
+        setContractIsBeingBoughtAlertOpen(true);
+
         const params = [{
             'from': props.account,
             'to': props.contractAddress,
@@ -93,9 +101,26 @@ function PropertyCard(props) {
         }];
 
         const result = await window.ethereum.request({method: 'eth_sendTransaction', params}).then((txHash) => {
-            setContractOwner(props.account);
-            setContractState(config.contractState.OWNED);
+            const interval = setInterval(() => {
+                web3.eth.getTransactionReceipt(txHash, (err, rec) => {
+                    if (rec) {
+                        setContractOwner(props.account);
+                        setContractState(config.contractState.OWNED);
+                        clearInterval(interval);
+                        setContractIsBeingBought(false);
+                        setContractIsBeingBoughtAlertOpen(false);
+                        setContractHasBeenBoughtAlertOpen(true);
+                    }
+                    if (err) {
+                        clearInterval(interval);
+                        setContractIsBeingBought(false);
+                        setContractIsBeingBoughtAlertOpen(false);
+                    }
+                });
+            }, 1000);
         }).catch( err => {
+            setContractIsBeingBought(false);
+            setContractIsBeingBoughtAlertOpen(false);
             console.log(err);
         });
 
@@ -111,6 +136,22 @@ function PropertyCard(props) {
 
     const openContractHasBeenChangedAlert = () => {
         setContractHasBeenChangedAlertOpen(true);
+    }
+
+    const handleContractIsBeingBoughtAlertClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+      
+        setContractIsBeingBoughtAlertOpen(false);
+    }
+
+    const handleContractHasBeenBoughtAlertClose = (event, reason) => {
+        if (reason === "clickaway") {
+            return;
+        }
+      
+        setContractHasBeenBoughtAlertOpen(false);
     }
 
     return (
@@ -231,12 +272,18 @@ function PropertyCard(props) {
                                     contractState == config.contractState.FOR_SALE ?
                                         <Row>
                                             <Col>
-                                                <Button className='buy-contract-btn' onClick={buyProperty}>
-                                                    Buy Property <FaEthereum />
-                                                </Button>
+                                                {
+                                                    !contractIsBeingBought ?
+                                                        <Button className='buy-contract-btn' onClick={buyProperty}>
+                                                            Buy Property <FaEthereum />
+                                                        </Button> :
+                                                        <Button className='buy-contract-btn disabled-btn'>
+                                                            Buy Property <FaEthereum />
+                                                        </Button>
+                                                }
                                             </Col>
                                         </Row> :
-                                        ''
+                                        <></>
                                 }
                             </>
                     }
@@ -292,6 +339,30 @@ function PropertyCard(props) {
                 >
                     <div className='centered'>
                         The changes have been made to your contract!
+                    </div>
+                </MuiAlert>
+            </Snackbar>
+            <Snackbar open={contractIsBeingBoughtAlertOpen} autoHideDuration={3000} onClose={handleContractIsBeingBoughtAlertClose}>
+                <MuiAlert
+                    variant="filled"
+                    onClose={handleContractIsBeingBoughtAlertClose}
+                    severity="info"
+                    sx={{ width: "536px" }}
+                >
+                    <div className='centered'>
+                        Please confirm the contract purchase transaction and wait patiently.
+                    </div>
+                </MuiAlert>
+            </Snackbar>
+            <Snackbar open={contractHasBeenBoughtAlertOpen} autoHideDuration={3000} onClose={handleContractHasBeenBoughtAlertClose}>
+                <MuiAlert
+                    variant="filled"
+                    onClose={handleContractHasBeenBoughtAlertClose}
+                    severity="success"
+                    sx={{ width: "400px" }}
+                >
+                    <div className='centered'>
+                        You have successfully bought the contract!
                     </div>
                 </MuiAlert>
             </Snackbar>
