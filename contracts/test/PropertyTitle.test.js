@@ -59,7 +59,7 @@ contract('PropertyTitle', (accounts) => {
             assert.equal(documentsProvied, false, 'checkIfAllDocumentsAreProvided not working properly.')
         });
 
-        it('should calculate the selling price in wei', async () => {
+        it('should have a function that calculates the selling price in wei', async () => {
             const sellingPriceInWei = await this.propertyTitle.getPropertySellingPrice();
             assert.equal(
                 sellingPriceInWei.toString(), 
@@ -68,7 +68,7 @@ contract('PropertyTitle', (accounts) => {
             );
         });
 
-        it('should calculate the selling price in wei', async () => {
+        it('should have a function to get the full property address', async () => {
             const fullPropertyAddress = await this.propertyTitle.getFullPropertyAddress();
             assert.equal(
                 fullPropertyAddress, 
