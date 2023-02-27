@@ -1,7 +1,9 @@
 const { expectRevert, ether } = require('@openzeppelin/test-helpers');
 const { web3 } = require('@openzeppelin/test-helpers/src/setup');
+const assert = require('assert');
 const propertyTitleBuild = require('contracts/PropertyTitle.json');
 const TitleCreatingContract = artifacts.require('TitleCreatingContract');
+const PropertyTitle = artifacts.require('PropertyTitle');
 
 contract('TitleCreatingContract', (accounts) => {
     const onlyCreatorRevertMessage = "Only the creator of the Contract has access to this!";
@@ -303,6 +305,32 @@ contract('TitleCreatingContract', (accounts) => {
                 providedText,
                 '1',
             ).send({ from: thirdAccount });
+
+            const titleCreatingContractAddress = await titleCreatingContract.address;
+            this.propertyTitle = await PropertyTitle.new(
+                titleCreatingContractAddress,
+                firstAccount,
+                country,
+                city,
+                street,
+                streetNumber,
+                apartmentNumber,
+                squareMeters,
+                '0',
+                sellingPriceFractionalPart,
+                sellingPriceFractionalPartLength,
+                { from: firstAccount }
+            );
+
+            await this.propertyTitle.setRequiredDocumentsStateAndContractState(
+                providedText,
+                providedText,
+                providedText,
+                providedText,
+                providedText,
+                '1',
+                { from: thirdAccount }
+            );
         });
 
         it('should allow the owner to change the selling price of the owned property title contract', async () => {
@@ -373,7 +401,7 @@ contract('TitleCreatingContract', (accounts) => {
             ).send({ from: thirdAccount });
         });
 
-        it('should allow the owner to list the contract for sale or unlist it', async () => {
+        it('should allow the owner to list the a property title contract for sale or unlist it', async () => {
             const thirdTitleContractAddress = await titleCreatingContract.titleContracts(2);
             const propertyTitleContract = new web3.eth.Contract(propertyTitleBuild.abi, thirdTitleContractAddress);
 
@@ -386,7 +414,7 @@ contract('TitleCreatingContract', (accounts) => {
             assert.equal(web3.utils.hexToNumber(contractStateAfterSecondUpdate), 1, 'contract state does not change');
         });
 
-        it('should prevent the owner from making any modifications once the contract is set to no longer relevant', async () => {
+        it('should prevent the owner from making any modifications once the a property title contract is set to no longer relevant', async () => {
             const thirdTitleContractAddress = await titleCreatingContract.titleContracts(2);
             const propertyTitleContract = new web3.eth.Contract(propertyTitleBuild.abi, thirdTitleContractAddress);
             await propertyTitleContract.methods.modifyContractState("3").send({ from: fifthAccount });
@@ -398,7 +426,7 @@ contract('TitleCreatingContract', (accounts) => {
             );
         });
 
-        it('should prevent the registrar from validating the contract once it is set to no longer relevant', async () => {
+        it('should prevent a registrar from validating a property title contract once it is set to no longer relevant', async () => {
             const thirdTitleContractAddress = await titleCreatingContract.titleContracts(2);
             const propertyTitleContract = new web3.eth.Contract(propertyTitleBuild.abi, thirdTitleContractAddress);
 
@@ -415,22 +443,28 @@ contract('TitleCreatingContract', (accounts) => {
             );
         });
 
-        // it('should prevent the contract from being bought if it is not for sale', async () => {
-        //     const thirdTitleContractAddress = await titleCreatingContract.titleContracts(2);
-        //     const propertyTitleContract = new web3.eth.Contract(propertyTitleBuild.abi, thirdTitleContractAddress);
+        it('should prevent a property title contract from being bought if it is not for sale', async () => {
+            return expectRevert(
+                this.propertyTitle.sendTransaction({value: ether(sellingPriceIntegralPart + '.' + sellingPriceFractionalPart), from: thirdAccount}), 
+                onlyForSaleRevertMessage
+            );
+        });
 
-        //     const params = [{
-        //         'from': thirdAccount,
-        //         'to': thirdTitleContractAddress,
-        //         'gas': Number(2100000).toString(16),
-        //         'gasPrice': Number(250000000).toString(16),
-        //         'value': Number(8.32).toString(16),
-        //     }];
-            
-        //     return expectRevert(
-        //         window.ethereum.request({method: 'eth_sendTransaction', params}).send({ from: thirdAccount }), onlyForSaleRevertMessage
-        //     );
-        // });
+        it('should allow other users to buy a property title contract if it is for sale and previous owner should receive the ether', async () => {
+            await this.propertyTitle.modifyContractState("2", { from: firstAccount });
+
+            const firstAccountBalanceBeforePurchase = await web3.eth.getBalance(firstAccount);
+            const propertyTitleContractSellingPrice = await this.propertyTitle.getPropertySellingPrice();
+            await this.propertyTitle.sendTransaction({value: ether('0' + '.' + sellingPriceFractionalPart), from: accounts[9]});
+            const newOwner = await this.propertyTitle.owner();
+            assert.equal(newOwner, accounts[9], 'contract owner did not change after the transaction');
+
+            const firstAccountBalanceAfterPurchase = await web3.eth.getBalance(firstAccount);
+            assert.equal(
+                Math.floor((firstAccountBalanceAfterPurchase - firstAccountBalanceBeforePurchase) / 100), 
+                Math.floor(propertyTitleContractSellingPrice / 100),
+                'the ether has not been transferred to the previous owner');
+        });
     });
 
 
