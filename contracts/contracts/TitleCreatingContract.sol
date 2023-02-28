@@ -10,6 +10,11 @@ interface IAccessPropertyTitleMethods {
 }
 
 contract TitleCreatingContract {
+    event NewTitleContract(
+        address indexed ownerAddress,
+        address indexed titleContractAddress
+    );
+
     address[] public owners;
     mapping (address => bool) public isOwner;
 
@@ -77,6 +82,8 @@ contract TitleCreatingContract {
         );
         titleContracts.push(address(propertyTitle));
         propertyTitleContractsValidity[address(propertyTitle)] = false;
+
+        emit NewTitleContract(_owner, address(propertyTitle));
     }
 
     function validatePropertyTitleContract(address _contractAddress) public onlyRegistrar {

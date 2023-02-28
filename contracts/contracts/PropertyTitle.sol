@@ -43,6 +43,11 @@ struct SellingPrice {
 
 
 contract PropertyTitle {
+    event NewPropertyTitleOwner(
+        address indexed newOwnerAddress,
+        uint256 paidPrice
+    );
+
     PropertyTitleContractState public contractState;
     SellingPrice public sellingPrice;
     address public creator;
@@ -91,6 +96,7 @@ contract PropertyTitle {
         payable(owner).transfer(msg.value);
         contractState = PropertyTitleContractState.OWNED;
         owner = payable(msg.sender);
+        emit NewPropertyTitleOwner(msg.sender, getPropertySellingPrice());
     }
 
     function modifyContractStateAndOwner(
