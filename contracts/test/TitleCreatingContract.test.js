@@ -1,4 +1,4 @@
-const { expectRevert, ether } = require('@openzeppelin/test-helpers');
+const { expectRevert, ether, expectEvent } = require('@openzeppelin/test-helpers');
 const { web3 } = require('@openzeppelin/test-helpers/src/setup');
 const assert = require('assert');
 const propertyTitleBuild = require('contracts/PropertyTitle.json');
@@ -14,6 +14,7 @@ contract('TitleCreatingContract', (accounts) => {
     const onlyRegistrarRevertMessage = "Only a registered registrar has access to this action.";
     const onlyNotOwnerRevertMessage = "You can not validate your own property";
     const onlyRelevantPropertyRevertMessage = "This Property Title Contract is no longer relavant";
+    const offsetGreaterThanListLengthRevertMessage = "Offset greater than list length";
 
     const firstAccount = accounts[0], secondAccount = accounts[1], thirdAccount = accounts[2], fourthAccount = accounts[3], fifthAccount = accounts[4], sixthAccount = accounts[5];
     const country = 'Romania', city = 'Timisoara', street = 'Strada Liberatii', streetNumber = '31A', apartmentNumber = '7', squareMeters = '128';
@@ -155,7 +156,14 @@ contract('TitleCreatingContract', (accounts) => {
                 { from: sixthAccount }
             );
 
-            await titleCreatingContract.deployNewPropertyTitle(
+            const firstTitleContractsArrayElementAfterTitleDeploy = await titleCreatingContract.titleContracts(0);
+            assert.equal(!!(firstTitleContractsArrayElementAfterTitleDeploy), true, 'there should be one titleContracts element');
+            const firstTitleContractValidity = await titleCreatingContract.propertyTitleContractsValidity(firstTitleContractsArrayElementAfterTitleDeploy);
+            assert.equal(firstTitleContractValidity, false, 'this title contract should not yet be valid');
+        });
+
+        it('should emit an event when a property title contract is deployed through this contract', async () => {
+            const tx = await titleCreatingContract.deployNewPropertyTitle(
                 thirdAccount,
                 country,
                 city,
@@ -168,15 +176,12 @@ contract('TitleCreatingContract', (accounts) => {
                 sellingPriceFractionalPartLength,
                 { from: thirdAccount }
             );
+            const secondTitleContractsArrayElementAfterTitleDeploy = await titleCreatingContract.titleContracts(1);
 
-            const firstTitleContractsArrayElementAfterTitleDeploy = await titleCreatingContract.titleContracts(0);
-            assert.equal(!!(firstTitleContractsArrayElementAfterTitleDeploy), true, 'there should be one titleContracts element');
-            const secondTitleContractsArrayElementAfterTitleDeploy = await titleCreatingContract.titleContracts(0);
-            assert.equal(!!(secondTitleContractsArrayElementAfterTitleDeploy), true, 'there should be one titleContracts element');
-            const firstTitleContractValidity = await titleCreatingContract.propertyTitleContractsValidity(firstTitleContractsArrayElementAfterTitleDeploy);
-            assert.equal(firstTitleContractValidity, false, 'this title contract should not yet be valid');
-            const secondTitleContractValidity = await titleCreatingContract.propertyTitleContractsValidity(secondTitleContractsArrayElementAfterTitleDeploy);
-            assert.equal(secondTitleContractValidity, false, 'this title contract should not yet be valid');
+            expectEvent(tx, 'NewTitleContract', {
+                ownerAddress: thirdAccount,
+                titleContractAddress: secondTitleContractsArrayElementAfterTitleDeploy
+            });
         });
 
         it('should prevent anyone who is not a registrar from modifying deployed title contracts documents state', async () => {
@@ -251,7 +256,7 @@ contract('TitleCreatingContract', (accounts) => {
         });
     });
 
-    describe('Title creating contract deployed and active property title contracts functionality', () => {
+    describe('Deployed property title contracts functionality', () => {
         before(async () => {
             await titleCreatingContract.deployNewPropertyTitle(
                 fifthAccount,
@@ -279,6 +284,20 @@ contract('TitleCreatingContract', (accounts) => {
                 '3',
                 '1',
                 { from: firstAccount }
+            );
+
+            await titleCreatingContract.deployNewPropertyTitle(
+                accounts[8],
+                'USA',
+                'Successtown',
+                'Confident Street',
+                'C1',
+                '13',
+                '89',
+                '7',
+                '3',
+                '1',
+                { from: accounts[8] }
             );
 
             const thirdTitleContractAddress = await titleCreatingContract.titleContracts(2);
@@ -414,7 +433,7 @@ contract('TitleCreatingContract', (accounts) => {
             assert.equal(web3.utils.hexToNumber(contractStateAfterSecondUpdate), 1, 'contract state does not change');
         });
 
-        it('should prevent the owner from making any modifications once the a property title contract is set to no longer relevant', async () => {
+        it('should prevent the owner from making any modifications once the property title contract is set to no longer relevant', async () => {
             const thirdTitleContractAddress = await titleCreatingContract.titleContracts(2);
             const propertyTitleContract = new web3.eth.Contract(propertyTitleBuild.abi, thirdTitleContractAddress);
             await propertyTitleContract.methods.modifyContractState("3").send({ from: fifthAccount });
@@ -463,7 +482,103 @@ contract('TitleCreatingContract', (accounts) => {
             assert.equal(
                 Math.floor((firstAccountBalanceAfterPurchase - firstAccountBalanceBeforePurchase) / 100), 
                 Math.floor(propertyTitleContractSellingPrice / 100),
-                'the ether has not been transferred to the previous owner');
+                'the ether has not been transferred to the previous owner'
+            );
+        });
+
+        it('should emit an event when a contract that is for sale is bought by an account', async () => {
+            await this.propertyTitle.modifyContractState("2", { from: accounts[9] });
+
+            const propertyTitleContractSellingPrice = await this.propertyTitle.getPropertySellingPrice();
+            const tx = await this.propertyTitle.sendTransaction({value: ether('0' + '.' + sellingPriceFractionalPart), from: accounts[8]});
+            expectEvent(tx, 'NewPropertyTitleOwner', {
+                newOwnerAddress: accounts[8],
+                paidPrice: propertyTitleContractSellingPrice
+            });
+        });
+
+        it('should provide a list of all pending title contracts', async () => {
+            const titleContractAddress = await titleCreatingContract.titleContracts(4);
+            const pendingTitleContracts = await titleCreatingContract.getPendingContracts();
+
+            assert.equal(pendingTitleContracts.length, 1, 'wrong pending title contracts array count');
+            assert.equal(pendingTitleContracts[0], titleContractAddress, 'wrong pending title contract address');
+        });
+
+        it('should provide a list of pending title contracts when filtered by offset and limit', async () => {
+            const titleContractAddress = await titleCreatingContract.titleContracts(4);
+            const pendingTitleContracts = await titleCreatingContract.getPendingContractsByOffsetAndLimit(0, 1);
+
+            assert.equal(pendingTitleContracts.length, 1, 'wrong pending title contracts array count');
+            assert.equal(pendingTitleContracts[0], titleContractAddress, 'wrong pending title contract address');
+        });
+
+        it('should revert if a list of pending title contracts filtered by offset and limit has offset larger than the full pending contracts list length', async () => {
+            return expectRevert(
+                titleCreatingContract.getPendingContractsByOffsetAndLimit(2, 4),
+                offsetGreaterThanListLengthRevertMessage
+            );
+        });
+
+        it('should provide a list of all active title contracts', async () => {
+            const titleContractAddress = await titleCreatingContract.titleContracts(0);
+            const secondTitleContractAddress = await titleCreatingContract.titleContracts(1);
+            const thirdContractAddress = await titleCreatingContract.titleContracts(3);
+            const activeTitleContracts = await titleCreatingContract.getActiveContracts();
+
+            assert.equal(activeTitleContracts.length, 3, 'wrong active title contracts array count');
+            assert.equal(activeTitleContracts[0], titleContractAddress, 'wrong active title contract address');
+            assert.equal(activeTitleContracts[1], secondTitleContractAddress, 'wrong active title contract address');
+            assert.equal(activeTitleContracts[2], thirdContractAddress, 'wrong active title contract address');
+        });
+
+        it('should provide a list of active title contracts when filtered by full address text, offset and limit', async () => {
+            const titleContractAddress = await titleCreatingContract.titleContracts(0);
+            const secondContractAddress = await titleCreatingContract.titleContracts(1);
+            const activeTitleContracts = await titleCreatingContract.getActiveContractsByAddressAndOffsetAndLimit(street.toLowerCase(), 0, 3);
+
+            assert.equal(activeTitleContracts.length, 2, 'wrong active title contracts array count');
+            assert.equal(activeTitleContracts[0], titleContractAddress, 'wrong active title contract address');
+            assert.equal(activeTitleContracts[1], secondContractAddress, 'wrong active title contract address');
+        });
+
+        it('should revert if a list of active title contracts is filtered by address and offset and limit has offset larger than the active contracts list length', async () => {
+            return expectRevert(
+                titleCreatingContract.getActiveContractsByAddressAndOffsetAndLimit('', 6, 9),
+                offsetGreaterThanListLengthRevertMessage
+            );
+        });
+
+        it('should provide a list of all title contracts that are for sale', async () => {
+            const firstTitleContractAddress = await titleCreatingContract.titleContracts(0);
+            const secondPropertyTitleContract = new web3.eth.Contract(propertyTitleBuild.abi, firstTitleContractAddress);
+            await secondPropertyTitleContract.methods.modifyContractState("2").send({ from: sixthAccount });
+
+            const fourthTitleContractAddress = await titleCreatingContract.titleContracts(3);
+            const propertyTitleContract = new web3.eth.Contract(propertyTitleBuild.abi, fourthTitleContractAddress);
+            await propertyTitleContract.methods.modifyContractState("2").send({ from: firstAccount });
+
+            const forSaleTitleContracts = await titleCreatingContract.getForSaleContracts();
+
+            assert.equal(forSaleTitleContracts.length, 2, 'wrong for sale title contracts array count');
+            assert.equal(forSaleTitleContracts[0], firstTitleContractAddress, 'wrong for sale title contract address');
+            assert.equal(forSaleTitleContracts[1], fourthTitleContractAddress, 'wrong for sale title contract address');
+        });
+
+        it('should provide a list of title contracts that are for sale when filtered by full address text, offset and limit', async () => {
+            const firstTitleContractAddress = await titleCreatingContract.titleContracts(0);
+            const fourthTitleContractAddress = await titleCreatingContract.titleContracts(3);
+            const forSaleTitleContracts = await titleCreatingContract.getActiveContractsByAddressAndOffsetAndLimit('confident', 0, 3);
+
+            assert.equal(forSaleTitleContracts.length, 1, 'wrong active title contracts array count');
+            assert.equal(forSaleTitleContracts[0], fourthTitleContractAddress, 'wrong for sale title contract address');
+        });
+
+        it('should revert if a list of title contracts that are for sale and filtered by address and offset and limit has offset larger than the full for sale contracts list length', async () => {
+            return expectRevert(
+                titleCreatingContract.getForSaleContractsByAddressAndOffsetAndLimit('', 6, 9),
+                offsetGreaterThanListLengthRevertMessage
+            );
         });
     });
 
