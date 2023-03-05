@@ -77,7 +77,7 @@ function PropertyOwnersHistory(props) {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className='text-center'>
-                    <Row className='mb-4'>
+                    <Row className='mb-5'>
                         <Col lg={6} sm={12}>
                             <b>Initial Owner:</b> <br></br> {initialOwnerData.initialOwnerAddress}
                         </Col>
@@ -87,7 +87,7 @@ function PropertyOwnersHistory(props) {
                     </Row>
                     {
                         previousOwners.length > 0 && previousOwners.map(previousOwner => (
-                                <Row className='mb-4'>
+                                <Row className='mb-5'>
                                     <Col lg={6} sm={12}>
                                         <b>Buyer Address:</b> <br></br> {previousOwner.buyerAddress}
                                     </Col>

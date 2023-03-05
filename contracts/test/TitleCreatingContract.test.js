@@ -1,7 +1,8 @@
-const { expectRevert, ether, expectEvent } = require('@openzeppelin/test-helpers');
+const { expectRevert, ether, expectEvent, BN } = require('@openzeppelin/test-helpers');
 const { web3 } = require('@openzeppelin/test-helpers/src/setup');
 const assert = require('assert');
 const propertyTitleBuild = require('contracts/PropertyTitle.json');
+const titleCreatingContractBuild = require('contracts/TitleCreatingContract.json');
 const TitleCreatingContract = artifacts.require('TitleCreatingContract');
 const PropertyTitle = artifacts.require('PropertyTitle');
 
@@ -158,8 +159,6 @@ contract('TitleCreatingContract', (accounts) => {
 
             const firstTitleContractsArrayElementAfterTitleDeploy = await titleCreatingContract.titleContracts(0);
             assert.equal(!!(firstTitleContractsArrayElementAfterTitleDeploy), true, 'there should be one titleContracts element');
-            const firstTitleContractValidity = await titleCreatingContract.propertyTitleContractsValidity(firstTitleContractsArrayElementAfterTitleDeploy);
-            assert.equal(firstTitleContractValidity, false, 'this title contract should not yet be valid');
         });
 
         it('should emit an event when a property title contract is deployed through this contract', async () => {
@@ -178,10 +177,17 @@ contract('TitleCreatingContract', (accounts) => {
             );
             const secondTitleContractsArrayElementAfterTitleDeploy = await titleCreatingContract.titleContracts(1);
 
-            expectEvent(tx, 'NewTitleContract', {
+            return expectEvent(tx, 'NewTitleContract', {
                 ownerAddress: thirdAccount,
                 titleContractAddress: secondTitleContractsArrayElementAfterTitleDeploy
             });
+        });
+
+        it('should save the block number of the event when a title contract is emitted', async () => {
+            const firstTitleContractAddress = await titleCreatingContract.titleContracts(0);
+            const deployBlock = await titleCreatingContract.propertyTitleDeployBlockNumber(firstTitleContractAddress);
+
+            assert.equal(!!deployBlock, true, 'property title deploy block number not saved');
         });
 
         it('should prevent anyone who is not a registrar from modifying deployed title contracts documents state', async () => {
@@ -491,10 +497,15 @@ contract('TitleCreatingContract', (accounts) => {
 
             const propertyTitleContractSellingPrice = await this.propertyTitle.getPropertySellingPrice();
             const tx = await this.propertyTitle.sendTransaction({value: ether('0' + '.' + sellingPriceFractionalPart), from: accounts[8]});
-            expectEvent(tx, 'NewPropertyTitleOwner', {
+            return expectEvent(tx, 'NewPropertyTitleOwner', {
                 newOwnerAddress: accounts[8],
                 paidPrice: propertyTitleContractSellingPrice
             });
+        });
+
+        it('should provide an array containing the numbers of blocks which contain the property title buying transaction', async () => {
+            const newOwnerEventBlockNumbers = await this.propertyTitle.getContractNewOwnerBlockNumbers();
+            assert.equal(newOwnerEventBlockNumbers.length, 2, "wrong number of property title contract buyers");
         });
 
         it('should provide a list of all pending title contracts', async () => {
@@ -566,7 +577,6 @@ contract('TitleCreatingContract', (accounts) => {
         });
 
         it('should provide a list of title contracts that are for sale when filtered by full address text, offset and limit', async () => {
-            const firstTitleContractAddress = await titleCreatingContract.titleContracts(0);
             const fourthTitleContractAddress = await titleCreatingContract.titleContracts(3);
             const forSaleTitleContracts = await titleCreatingContract.getActiveContractsByAddressAndOffsetAndLimit('confident', 0, 3);
 

@@ -418,10 +418,10 @@ function DeployTitleContract(props) {
                     {
                         (valuesAreCompleted && !contractBeingDeployed) ?
                             <Button className='submit-btn' onClick={deployTitleContract}>
-                                Deploy Contract Request
+                                Deploy Title Contract
                             </Button> :
                             <Button className='submit-btn disabled-btn'>
-                                Deploy Contract Request
+                                Deploy Title Contract
                             </Button> 
                     }
                     </Col>
