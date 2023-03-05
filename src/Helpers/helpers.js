@@ -130,3 +130,10 @@ export const getApartmentNumberToDisplay = (apartmentNumber) => {
     }
     return apartmentNumber;
 }
+
+export const unixToDateString = (unixTimestamp, timestampFormat = 'ro-RO') => {
+    const millisecondsTime = unixTimestamp * 1000;
+    const dateObject = new Date(millisecondsTime);
+
+    return dateObject.toLocaleString(timestampFormat);
+}

@@ -20,6 +20,27 @@
     box-shadow: 0 0 11px rgba(33,33,33,.2);
 }
 
+.owners-info-btn {
+    width: 150px;
+    text-align: center;
+    outline: none;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.75);
+    color:#1976d2;
+    cursor: pointer;
+    border: none;
+    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    outline: none;
+    border: 1px solid rgba(25, 118, 210, 0.5);
+    margin-bottom: 8px;
+}
+
+.owners-info-btn:hover, .owners-info-btn:focus {
+    background-color: rgba(255, 255, 255, 0.9);
+    color:#1976d2;
+    box-shadow: 0 0 11px rgba(33,33,33,.1);
+}
+
 .list-for-sale-btn {
     width: 200px;
     padding: 6px 10px;

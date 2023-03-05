@@ -10,12 +10,13 @@ import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContrac
 import { getTitleContractDetails } from '../../Helpers/contractDataProviders';
 import { useWeb3 } from '../../CustomHooks/useWeb3';
 import { useContract } from '../../CustomHooks/useContract';
-import { FaEthereum } from 'react-icons/fa';
+import { FaEthereum, FaHouseUser } from 'react-icons/fa';
 import { MdOutlineSell, MdOutlineEditLocationAlt, MdRemoveDone } from 'react-icons/md';
 import { CgPlayListRemove } from 'react-icons/cg'
 import config from '../../Data/config';
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import PropertyOwnersHistory from './PropertyOwnersHistory';
 
 function PropertyCard(props) {
     const web3 = useWeb3().current;
@@ -43,6 +44,7 @@ function PropertyCard(props) {
 
     const [contractEditOpen, setContractEditOpen] = useState(false);
     const [stateChangeOpen, setStateChangeOpen] = useState(false);
+    const [ownersHistoryOpen, setOwnersHistoryOpen] = useState(false);
 
     const [contractHasBeenChangedAlertOpen, setContractHasBeenChangedAlertOpen] = useState(false);
 
@@ -163,6 +165,13 @@ function PropertyCard(props) {
                 variant='light'
             >
                 <Card.Header className='text-center'>
+                    <Row className='justify-content-end'>
+                        <Button className='owners-info-btn mx-3 my-2' onClick={() => {
+                            setOwnersHistoryOpen(true);
+                        }}>
+                            <FaHouseUser /> Owners Info
+                        </Button>
+                    </Row>
                     {
                         contractOwner.includes(props.account.toLowerCase().slice(2)) ?
                             <>
@@ -287,6 +296,13 @@ function PropertyCard(props) {
                                 }
                             </>
                     }
+                    <PropertyOwnersHistory
+                        show={ownersHistoryOpen}
+                        onOwnersHistoryHide={() => setOwnersHistoryOpen(false)}
+
+                        account = {props.account}
+                        contractAddress = {contractAddress}
+                    />
                 </Card.Header>
                 <Card.Body>
                     <Row>

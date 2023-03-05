@@ -12,7 +12,8 @@ interface IAccessPropertyTitleMethods {
 contract TitleCreatingContract {
     event NewTitleContract(
         address indexed ownerAddress,
-        address indexed titleContractAddress
+        address indexed titleContractAddress,
+        uint256 timestamp
     );
 
     address[] public owners;
@@ -22,7 +23,7 @@ contract TitleCreatingContract {
     mapping (address => bool) public isRegistrar;
 
     address[] public titleContracts;
-    mapping (address => bool) public propertyTitleContractsValidity;
+    mapping (address => uint256) public propertyTitleDeployBlockNumber;
 
     constructor(address[] memory _owners)
     {
@@ -81,13 +82,8 @@ contract TitleCreatingContract {
             _sellingPriceFractionalPartLength
         );
         titleContracts.push(address(propertyTitle));
-        propertyTitleContractsValidity[address(propertyTitle)] = false;
-
-        emit NewTitleContract(_owner, address(propertyTitle));
-    }
-
-    function validatePropertyTitleContract(address _contractAddress) public onlyRegistrar {
-        propertyTitleContractsValidity[_contractAddress] = true;
+        emit NewTitleContract(_owner, address(propertyTitle), block.timestamp);
+        propertyTitleDeployBlockNumber[address(propertyTitle)] = block.number;
     }
 
     function checkIfUserIsOwner(address userAddress) public view returns (bool) {

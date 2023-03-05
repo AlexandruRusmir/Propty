@@ -51,12 +51,6 @@ function App() {
 			console.log(err);
 		});
 
-		// if (!animationEnd) {
-		// 	setTimeout(() => {
-		// 		setAnimationEnd(true);
-		// 	}, 3000)
-		// }
-
 		return () => {
 			console.log('destructed');
 			window.ethereum.removeListener('accountsChanged', accountsChangeFunction);
