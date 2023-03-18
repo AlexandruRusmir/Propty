@@ -103,6 +103,14 @@ export const getMessageForRequiredDocuments = (boolValue) => {
     return 'Invalid bool value'; 
 }
 
+export const normalizeAccountAddress = (address) => {
+    if (address.length < 66) {
+        return address;
+    }
+
+    return address.substring(0, 2) + address.substring(26, address.length);
+}
+
 export const checkIfNumberIsValid = (inputValue) => {
     if (inputValue.length === 0) {
         return true;

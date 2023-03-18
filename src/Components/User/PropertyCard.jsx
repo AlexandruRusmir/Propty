@@ -6,7 +6,7 @@ import { Col, Row, Card, Accordion, Button } from 'react-bootstrap';
 import PropertyDetailsModal from './PropertyDetailsModal';
 import StateChangeModal from './StateChangeModal';
 import { useState, useEffect } from 'react';
-import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContractStateMessage, getCorrespondingHousingTenure, getApartmentNumberToDisplay } from '../../Helpers/helpers';
+import { getNumberOfTrailingCharacters, getSellingPrice, getCorrespondingContractStateMessage, getCorrespondingHousingTenure, getApartmentNumberToDisplay, normalizeAccountAddress } from '../../Helpers/helpers';
 import { getTitleContractDetails } from '../../Helpers/contractDataProviders';
 import { useWeb3 } from '../../CustomHooks/useWeb3';
 import { useContract } from '../../CustomHooks/useContract';
@@ -69,7 +69,7 @@ function PropertyCard(props) {
                 )
         );
         setContractCreator(titleContractData.contractCreator);
-        setContractOwner(titleContractData.contractOwner);
+        setContractOwner(normalizeAccountAddress(titleContractData.contractOwner));
         setHousingTenure(web3.utils.hexToNumber(titleContractData.housingTenure))
         setCountry(web3.utils.hexToString(titleContractData.country).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.country))));
         setCity(web3.utils.hexToString(titleContractData.city).slice(0, -getNumberOfTrailingCharacters(web3.utils.hexToString(titleContractData.city))));
