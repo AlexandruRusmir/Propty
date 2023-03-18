@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/colors.css';
 import '../styles/style.css';
-import Web3 from 'web3';
-import propertyTitleBuild from 'contracts/PropertyTitle.json';
 import { Navbar, NavDropdown, Nav, Container, Popover, OverlayTrigger, Toast, NavLink } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 

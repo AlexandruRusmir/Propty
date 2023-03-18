@@ -64,9 +64,9 @@ function PropertyOwnersHistory(props) {
         <div>
             <Modal
                 show={props.show}
+                key={'propertyOwnerHistory' + contractAddress}
                 onHide = {props.onOwnersHistoryHide}
                 size = 'lg'
-                key={'ownersHistrory' + props.contractAddress}
                 centered
             >
                 <Modal.Header closeButton>
