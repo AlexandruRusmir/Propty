@@ -13,6 +13,7 @@ import { useTitlesContract } from './CustomHooks/useTitlesContract';
 import HandleContractRequests from './Components/Registrar/HandleContractRequests';
 import { getCentralContractOwners, checkIfUserIsRegistrar } from './Helpers/contractDataProviders'
 import ForSaleProperties from './Components/User/ForSaleProperties';
+import DeactivateContracts from './Components/Registrar/DeactivateContracts';
 
 function App() {
 	const web3 = useWeb3().current;
@@ -133,6 +134,11 @@ function App() {
 					<Route path="/contract-requests" element={
 						<Container>
 							<HandleContractRequests account={account} balance={balance} network={network} isRegistrar={isRegistrar}/>
+						</Container>
+					} />
+					<Route path="/deactivate-contracts" element={
+						<Container>
+							<DeactivateContracts account={account} balance={balance} network={network} isRegistrar={isRegistrar}/>
 						</Container>
 					} />
 				</Routes>

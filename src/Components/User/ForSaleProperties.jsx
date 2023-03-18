@@ -62,7 +62,7 @@ function ForSaleProperties(props) {
                     />
                 </Col>
                 <Col className='d-flex justify-content-end align-items-end mx-5'>
-                    <Link to='/all-properties' className='see-all-properties-btn text-dark nav-link for-sale-or-all-properties-link'>Back to All</Link>
+                    <Link to='/all-properties' className='see-all-properties-btn text-dark nav-link for-sale-or-all-properties-link'>View all active</Link>
                 </Col>
             </Row>
             <Row className='properties-search-box'>

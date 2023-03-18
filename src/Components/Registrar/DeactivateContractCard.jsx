@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import '../../styles/style.css';
+import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
+import { useContract } from '../../CustomHooks/useContract';
 import { getTitleContractDetails } from '../../Helpers/contractDataProviders';
 import { getNumberOfTrailingCharacters, getSellingPrice, getApartmentNumberToDisplay, getCorrespondingHousingTenure, normalizeAccountAddress } from '../../Helpers/helpers';
 import { useWeb3 } from '../../CustomHooks/useWeb3';
-import { Col, Row, Card, Button } from 'react-bootstrap';
+import { Col, Row, Card, Accordion, Button } from 'react-bootstrap';
 import config  from '../../Data/config';
-import ValidatePropertyModal from './ValidatePropertyModal';
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+import DeactivateContractModal from './DeactivateContractModal';
 
-function PendingContractCard(props) {
+function DeactivateContractCard(props) {
     const web3 = useWeb3().current;
 
     const [contractOwner, setContractOwner] = useState('');
@@ -22,10 +24,9 @@ function PendingContractCard(props) {
     const [apartmentNumber, setApartmentNumber] = useState('');
     const [squareMeters, setSquareMeters] = useState('');
 
-    const [validatePropertyOpen, setValidatePropertyOpen] = useState(false);
+    const [deactivatePropertyOpen, setDeactivatePropertyOpen] = useState(false);
 
-    const [changesMadeAlertOpen, setChangesMadeAlertOpen] = useState(false);
-    const [validatedContractAlertOpen, setValidatedContractAlertOpen] = useState(false);
+    const [deactivatedContractAlertOpen, setDeactivatedContractAlertOpen] = useState(false);
 
     useEffect( () => {
         loadContract();
@@ -51,29 +52,17 @@ function PendingContractCard(props) {
         setSquareMeters(web3.utils.hexToNumber(titleContractData.squareMeters));
     }
 
-    const loadNewContractsIfContractIsValidated = (newState) => {
-        if (newState == config.contractState.OWNED) {
-            props.loadNewContracts();
-            setValidatedContractAlertOpen(true);
-            return;
-        }
-        setChangesMadeAlertOpen(true);
+    const loadNewContracts = () => {
+        props.loadNewContracts();
+        setDeactivatedContractAlertOpen(true);
     }
 
-    const handleChangesMadeAlertClose = (event, reason) => {
+    const handleDeactivatedContractAlertClose = (event, reason) => {
         if (reason === "clickaway") {
             return;
         }
       
-        setChangesMadeAlertOpen(false);
-    }
-
-    const handleValidatedContractAlertClose = (event, reason) => {
-        if (reason === "clickaway") {
-            return;
-        }
-      
-        setValidatedContractAlertOpen(false);
+        setDeactivatedContractAlertOpen(false);
     }
 
     return (
@@ -103,48 +92,29 @@ function PendingContractCard(props) {
                         </Col>
                     </Row>
                     <Row className='centered'>
-                        {
-                            !contractOwner.includes(props.account.toLowerCase().slice(2)) ? 
-                            <div className='centered mt-2'>
-                                <Button className='buy-contract-btn'  onClick={() =>  {setValidatePropertyOpen(true);}}>Validate Property</Button>
-                                <ValidatePropertyModal
-                                    account={props.account}
-                                    key={'validateProperty' + props.contractAddress}
-                                    show={validatePropertyOpen}
-                                    onValidatePropertyHide={() => {setValidatePropertyOpen(false);}}
-                                    contractAddress={props.contractAddress}
-                                    loadNewContractsIfContractIsValidated={loadNewContractsIfContractIsValidated}
-                                />
-                            </div> :
-                            <div className='text-center mt-3'>
-                                <p className='small-text'>This property belongs to you, you can not validate it's documents</p>
-                            </div>
-                        }
-                        
+                        <div className='centered mt-2'>
+                            <Button className='buy-contract-btn'  onClick={() =>  {setDeactivatePropertyOpen(true);}}>Invalidate Property</Button>
+                            <DeactivateContractModal
+                                account={props.account}
+                                key={'deactivateProperty' + props.contractAddress}
+                                show={deactivatePropertyOpen}
+                                onDeactivatePropertyHide={() => {setDeactivatePropertyOpen(false);}}
+                                contractAddress={props.contractAddress}
+                                loadNewContracts={loadNewContracts}
+                            />
+                        </div>
                     </Row>
                 </Card.Body>
             </Card>
-            <Snackbar open={changesMadeAlertOpen} autoHideDuration={4000} onClose={handleChangesMadeAlertClose}>
+            <Snackbar open={deactivatedContractAlertOpen} autoHideDuration={4000} onClose={handleDeactivatedContractAlertClose}>
                 <MuiAlert
                     variant="filled"
-                    onClose={handleChangesMadeAlertClose}
-                    severity="success"
-                    sx={{ width: "360px" }}
-                >
-                    <div className='centered'>
-                        Documents state successfully changed!
-                    </div>
-                </MuiAlert>
-            </Snackbar>
-            <Snackbar open={validatedContractAlertOpen} autoHideDuration={4000} onClose={handleValidatedContractAlertClose}>
-                <MuiAlert
-                    variant="filled"
-                    onClose={handleValidatedContractAlertClose}
+                    onClose={handleDeactivatedContractAlertClose}
                     severity="success"
                     sx={{ width: "330px" }}
                 >
                     <div className='centered'>
-                        Contract successfully activated!
+                        The contract has been deactivated, making it necessary for the documents to be validated again.
                     </div>
                 </MuiAlert>
             </Snackbar>
@@ -152,4 +122,4 @@ function PendingContractCard(props) {
     );
 }
 
-export default PendingContractCard;
+export default DeactivateContractCard;

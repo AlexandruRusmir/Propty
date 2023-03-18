@@ -22,7 +22,10 @@ function NavBar(props) {
                     }
                     {
                         props.isRegistrar === true ?
-                        <Link to="/contract-requests" className='nav-link'>Contract Requests</Link> :
+                        <>
+                            <Link to="/contract-requests" className='nav-link'>Contract Requests</Link>
+                            <Link to="/deactivate-contracts" className='nav-link'>Deactivate Contracts</Link>
+                        </>:
                         ''
                     }
                     <Link to="/all-properties" className='nav-link'>All Properties</Link>

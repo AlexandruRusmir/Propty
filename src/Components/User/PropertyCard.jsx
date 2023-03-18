@@ -297,6 +297,7 @@ function PropertyCard(props) {
                             </>
                     }
                     <PropertyOwnersHistory
+                        key={'propertyOwnerHistory' + contractAddress}
                         show={ownersHistoryOpen}
                         onOwnersHistoryHide={() => setOwnersHistoryOpen(false)}
 

@@ -222,10 +222,11 @@ function DeployTitleContract(props) {
             props.setDeployConfirmAlertOpen(true);
             props.loadMyProperties();
             setContractBeingDeployed(false);
+            setContractBeingDeployedAlertOpen(false);
         }).catch((err) => {
             setContractBeingDeployed(false);
+            setContractBeingDeployedAlertOpen(false);
             console.log(err.message);
-            props.onAddNewContractHide();
         });
     }
 
