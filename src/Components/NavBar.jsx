@@ -5,29 +5,31 @@ import { Navbar, NavDropdown, Nav, Container, Popover, OverlayTrigger, Toast, Na
 import { Link } from 'react-router-dom';
 
 function NavBar(props) {
+    const [activePage, setActivePage] = useState('');
+
     return (
         <Navbar bg="dark"  variant="dark" expand="lg" sticky="top">
             <Container>
-                <Link to="/" className='navbar-brand'>Propty</Link>
+                <Link to="/" className='navbar-brand' onClick={() => {setActivePage('')}}>Propty</Link>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                    <Link to="/" className='nav-link'>Home</Link>
+                    <Link to="/" className={'nav-link' + (activePage === '' ? ' active' : '')} onClick={() => {setActivePage('')}}>Home</Link>
                     {
                         props.isAdmin === true ?
-                        <Link to="/handle-registrars" className='nav-link'>Handle Registrars</Link> :
+                        <Link to="/handle-registrars" className={'nav-link' + (activePage === 'handle-registrars' ? ' active' : '')} onClick={() => {setActivePage('handle-registrars')}}>Handle Registrars</Link> :
                         ''
                     }
                     {
                         props.isRegistrar === true ?
                         <>
-                            <Link to="/contract-requests" className='nav-link'>Contract Requests</Link>
-                            <Link to="/deactivate-contracts" className='nav-link'>Deactivate Contracts</Link>
+                            <Link to="/contract-requests" className={'nav-link' + (activePage === 'contract-requests' ? ' active' : '')} onClick={() => {setActivePage('contract-requests')}}>Contract Requests</Link>
+                            <Link to="/deactivate-contracts" className={'nav-link' + (activePage === 'deactivate-contracts' ? ' active' : '')} onClick={() => {setActivePage('deactivate-contracts')}}>Deactivate Contracts</Link>
                         </>:
                         ''
                     }
-                    <Link to="/all-properties" className='nav-link'>All Properties</Link>
-                    <Link to="/my-properties" className='nav-link'>My Properties</Link>
+                    <Link to="/all-properties" className={'nav-link' + (activePage === 'all-properties' ? ' active' : '')} onClick={() => {setActivePage('all-properties')}}>All Properties</Link>
+                    <Link to="/my-properties" className={'nav-link' + (activePage === 'my-properties' ? ' active' : '')} onClick={() => {setActivePage('my-properties')}}>My Properties</Link>
                     <OverlayTrigger
                         trigger="click"
                         key='bottom'
