@@ -4,14 +4,18 @@ import '../../styles/style.css';
 import '../../styles/allPropertiesStyle.css';
 import { StyledTextField } from '../StyledTextField';
 import paginationLimits from '../../Data/paginationLimits';
+import { StyledSwitch } from '../StyledSwitch';
 import { Col, Row } from 'react-bootstrap';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import CustomPagination from '../CustomPagination';
-import { Link } from 'react-router-dom';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import SearchingLocationSvg from '../../assets/searching_location.svg';
+import { useNavigate } from 'react-router-dom';
+import { Switch } from '@mui/material';
 
 function AllProperties(props) {
     const titlesContract = useTitlesContract().current;
+    const navigate = useNavigate();
 
     const [searchText, setSearchText] = useState('');
 
@@ -69,7 +73,10 @@ function AllProperties(props) {
                     />
                 </Col>
                 <Col className='d-flex justify-content-end align-items-end mx-5'>
-                    <Link to='/for-sale-properties' className='add-new-registrar-btn text-light nav-link for-sale-or-all-properties-link'>Only For Sale</Link>
+                    <FormControlLabel control={<Switch
+                    onChange={() => {
+                        navigate('/for-sale-properties');
+                    }}/>} label="Only For Sale Properties" />
                 </Col>
             </Row>
             <Row className='properties-search-box'>

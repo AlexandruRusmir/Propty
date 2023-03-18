@@ -7,11 +7,15 @@ import paginationLimits from '../../Data/paginationLimits';
 import { Col, Row } from 'react-bootstrap';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import CustomPagination from '../CustomPagination';
-import { Link } from 'react-router-dom';
+import { StyledSwitch } from '../StyledSwitch';
 import SearchingSvg from '../../assets/searching.svg';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { useNavigate } from 'react-router-dom';
+import { Switch } from '@mui/material';
 
 function ForSaleProperties(props) {
     const titlesContract = useTitlesContract().current;
+    const navigate = useNavigate();
 
     const [searchText, setSearchText] = useState('');
 
@@ -62,7 +66,11 @@ function ForSaleProperties(props) {
                     />
                 </Col>
                 <Col className='d-flex justify-content-end align-items-end mx-5'>
-                    <Link to='/all-properties' className='see-all-properties-btn text-dark nav-link for-sale-or-all-properties-link'>View all active</Link>
+                    <FormControlLabel control={<Switch 
+                     defaultChecked 
+                     onChange={() => {
+                        navigate('/all-properties');
+                    }}/>} label="Only For Sale Properties" />
                 </Col>
             </Row>
             <Row className='properties-search-box'>

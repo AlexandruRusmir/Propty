@@ -46,7 +46,7 @@
     padding: 6px 10px;
     margin: 0 auto;
     text-align: center;
-    background: #3CB371;
+    background: #2e7d32;
     font-weight: 700;
     outline: none;
     border-radius: 6px;
@@ -59,7 +59,7 @@
 }
 
 .list-for-sale-btn:hover, .list-for-sale-btn:focus {
-    background: #37a569;
+    background: #27692a;
     border-color: transparent;
     box-shadow: 0 0 11px rgba(33,33,33,.2);
     transform: translateY(-2px);
@@ -70,7 +70,7 @@
     padding: 6px 10px;
     margin: 0 auto;
     text-align: center;
-    background: #12a4d9;
+    background: #1976d2;
     font-weight: 700;
     outline: none;
     border-radius: 6px;
@@ -83,7 +83,7 @@
 }
 
 .remove-listing-btn:hover, .remove-listing-btn:focus {
-    background: #1295c5;
+    background: #176bbe;
     border-color: transparent;
     box-shadow: 0 0 11px rgba(33,33,33,.2);
     transform: translateY(-2px);
