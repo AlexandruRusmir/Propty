@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import PendingContractCard from './PendingContractCard';
 import paginationLimits from '../../Data/paginationLimits';
 import CustomPagination from '../CustomPagination';
+import NotarySearchSvg from '../../assets/notary_search.svg';
 
 function HandleContractRequests(props) {
     const titlesContract = useTitlesContract().current;
@@ -60,6 +61,13 @@ function HandleContractRequests(props) {
         <>
             <div>
                 <h1 className='text-center my-5 title-text'>Title Contracts Requests</h1>
+            </div>
+            <div className='d-flex justify-content-begin align-items-begin mx-5'>
+                <img
+                    className="d-block w-100 top-image"
+                    src={NotarySearchSvg}
+                    alt="First slide"
+                />
             </div>
             <div>
                 {

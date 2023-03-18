@@ -6,7 +6,6 @@ import paginationLimits from '../../Data/paginationLimits';
 import { Col, Row } from 'react-bootstrap';
 import { useTitlesContract } from '../../CustomHooks/useTitlesContract';
 import CustomPagination from '../CustomPagination';
-import NotarySearchSvg from '../../assets/notary_search.svg';
 import DeactivateContractCard from './DeactivateContractCard';
 
 function InvalidateActiveContracts(props) {
@@ -59,13 +58,6 @@ function InvalidateActiveContracts(props) {
     return (
         <div className='mt-5'>
             <h1 className='text-center title-text'>Invalidate active Properties</h1>
-            <div className='d-flex justify-content-begin align-items-begin mx-5'>
-                <img
-                    className="d-block w-100 top-image"
-                    src={NotarySearchSvg}
-                    alt="First slide"
-                />
-            </div>
             <Row className='properties-search-box'>
                 <Col xs={12}>
                     <StyledTextField 
