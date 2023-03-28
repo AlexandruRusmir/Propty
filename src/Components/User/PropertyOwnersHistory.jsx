@@ -27,12 +27,12 @@ function PropertyOwnersHistory(props) {
 
 
     const loadOwnersData = async () => {
-        const deployBlockNumber = await titlesContract.methods.propertyTitleDeployBlockNumber(contractAddress).call();
         titlesContract.getPastEvents(
             'NewTitleContract',
             {
-                fromBlock: deployBlockNumber,
-                toBlock: deployBlockNumber
+                filter: {titleContractAddress: contractAddress},
+                fromBlock: 0,
+                toBlock: 'latest'
             }, (err, events) => {
                 setInitialOwnerData({
                     initialOwnerAddress: events[0].returnValues.ownerAddress,
@@ -41,24 +41,27 @@ function PropertyOwnersHistory(props) {
             }
         );
 
-        const newOwnerBlockNumbers = await contract.methods.getContractNewOwnerBlockNumbers().call();
-        const newOwnersArray = newOwnerBlockNumbers.map(blockNumber => {
-            const previousOwner = {};
-            contract.getPastEvents(
-                'NewPropertyTitleOwner',
-                {
-                    fromBlock: blockNumber,
-                    toBlock: blockNumber
-                }, (err, events) => {
-                    previousOwner.buyerAddress = events[0].returnValues.newOwnerAddress;
-                    previousOwner.paidPrice = web3.utils.fromWei(String(events[0].returnValues.paidPrice), 'ether');
-                    previousOwner.buyingTime = unixToDateString(events[0].returnValues.timestamp);
-                }
-            );
-            return previousOwner;
-        });
-        setPreviousOwners(newOwnersArray);
-    }
+        let newOwnersArray = [];
+        contract.getPastEvents(
+            'NewPropertyTitleOwner',
+            {
+                filter: {titleContractAddress: contractAddress},
+                fromBlock: 0,
+                toBlock: 'latest',
+            }, (err, events) => {
+                newOwnersArray = events.map(event => {
+                    const previousOwner = {};
+                    previousOwner.buyerAddress = event.returnValues.newOwnerAddress;
+                    previousOwner.paidPrice = web3.utils.fromWei(String(event.returnValues.paidPrice), 'ether');
+                    previousOwner.buyingTime = unixToDateString(event.returnValues.timestamp);
+
+                    return previousOwner;
+                });
+                setPreviousOwners(newOwnersArray);
+            }
+        );
+    };
+    
 
     return (
         <div>
@@ -87,7 +90,7 @@ function PropertyOwnersHistory(props) {
                     </Row>
                     {
                         previousOwners.length > 0 && previousOwners.map(previousOwner => (
-                                <Row className='mb-5'>
+                                <Row className='mb-5' key={previousOwner.buyingTime}>
                                     <Col lg={6} sm={12}>
                                         <b>Buyer Address:</b> <br></br> {previousOwner.buyerAddress}
                                     </Col>

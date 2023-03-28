@@ -44,6 +44,7 @@ struct SellingPrice {
 
 contract PropertyTitle {
     event NewPropertyTitleOwner(
+        address indexed titleContractAddress,
         address indexed newOwnerAddress,
         uint256 paidPrice,
         uint256 timestamp
@@ -55,7 +56,6 @@ contract PropertyTitle {
     address public owner;
     PropertyDetails public propertyDetails;
     RequiredPropertyDocuments public requiredDocuments;
-    uint256[] public newOwnerEventBlockNumbers;
 
     constructor(
         address _creator,
@@ -97,8 +97,7 @@ contract PropertyTitle {
         require(msg.sender.balance >= sellingPriceWeiValue, 'Insufficient funds');
         payable(owner).transfer(msg.value);
         contractState = PropertyTitleContractState.OWNED;
-        emit NewPropertyTitleOwner(msg.sender, getPropertySellingPrice(), block.timestamp);
-        newOwnerEventBlockNumbers.push(block.number);
+        emit NewPropertyTitleOwner(address(this), msg.sender, getPropertySellingPrice(), block.timestamp);
         owner = payable(msg.sender);
     }
 
@@ -201,10 +200,6 @@ contract PropertyTitle {
         requiredDocuments.extensionsAndAlterationsDocumentationState = _extensionsAndAlterationsDocumentation;
         requiredDocuments.utilityBillsPaidState = _utilityBillsPaid;
         contractState = _contractState;
-    }
-
-    function getContractNewOwnerBlockNumbers() public view returns (uint256[] memory) {
-        return newOwnerEventBlockNumbers;
     }
 
     function getPropertySellingPrice() public view returns (uint256) {

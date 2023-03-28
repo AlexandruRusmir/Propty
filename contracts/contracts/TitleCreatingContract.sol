@@ -23,7 +23,6 @@ contract TitleCreatingContract {
     mapping (address => bool) public isRegistrar;
 
     address[] public titleContracts;
-    mapping (address => uint256) public propertyTitleDeployBlockNumber;
 
     constructor(address[] memory _owners)
     {
@@ -83,7 +82,6 @@ contract TitleCreatingContract {
         );
         titleContracts.push(address(propertyTitle));
         emit NewTitleContract(_owner, address(propertyTitle), block.timestamp);
-        propertyTitleDeployBlockNumber[address(propertyTitle)] = block.number;
     }
 
     function checkIfUserIsOwner(address userAddress) public view returns (bool) {
