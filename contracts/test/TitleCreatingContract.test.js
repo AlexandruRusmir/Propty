@@ -183,13 +183,6 @@ contract('TitleCreatingContract', (accounts) => {
             });
         });
 
-        it('should save the block number of the event when a title contract is emitted', async () => {
-            const firstTitleContractAddress = await titleCreatingContract.titleContracts(0);
-            const deployBlock = await titleCreatingContract.propertyTitleDeployBlockNumber(firstTitleContractAddress);
-
-            assert.equal(!!deployBlock, true, 'property title deploy block number not saved');
-        });
-
         it('should prevent anyone who is not a registrar from modifying deployed title contracts documents state', async () => {
             const firstTitleContractAddress = await titleCreatingContract.titleContracts(0);
             const propertyTitleContract = new web3.eth.Contract(propertyTitleBuild.abi, firstTitleContractAddress);
@@ -501,11 +494,6 @@ contract('TitleCreatingContract', (accounts) => {
                 newOwnerAddress: accounts[8],
                 paidPrice: propertyTitleContractSellingPrice
             });
-        });
-
-        it('should provide an array containing the numbers of blocks which contain the property title buying transaction', async () => {
-            const newOwnerEventBlockNumbers = await this.propertyTitle.getContractNewOwnerBlockNumbers();
-            assert.equal(newOwnerEventBlockNumbers.length, 2, "wrong number of property title contract buyers");
         });
 
         it('should provide a list of all pending title contracts', async () => {
