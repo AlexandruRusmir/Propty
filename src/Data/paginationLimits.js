@@ -1,6 +1,6 @@
 const paginationLimits = {
-    'pendingTitleContractsLimit': 3,
-    'activeTitleContractsLimit': 1,
+    'pendingTitleContractsLimit': 10,
+    'activeTitleContractsLimit': 10,
 }
 
 module.exports = paginationLimits
