@@ -4,7 +4,7 @@
 
 Other repositories linked to the same project: https://github.com/AlexandruRusmir/MyPrivateBlockchain, https://github.com/AlexandruRusmir/ProptyAPI, https://github.com/AlexandruRusmir/ProptyScalingTestScripts.
 
-The two created smart contracts interaction:
+Smart contracts interaction:
 ![propertyTitleAndTitleCreatingContract](https://github.com/AlexandruRusmir/Propty/assets/73962944/1d434716-8bba-45c7-a766-4471527b98b1)
 
 Defined structures:
