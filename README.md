@@ -2,7 +2,7 @@
 
 ## Property Handling Decentralized Application on Ethereum: React and Solidity
 
-[Youtube demo here](https://www.youtube.com/watch?v=Wts06EqrsUM&t=4s&ab_channel=AlexandruRusmir)
+[Youtube demo here!](https://youtu.be/Wts06EqrsUM)
 
 Other repositories linked to the same project: https://github.com/AlexandruRusmir/MyPrivateBlockchain, https://github.com/AlexandruRusmir/ProptyAPI, https://github.com/AlexandruRusmir/ProptyScalingTestScripts.
 
